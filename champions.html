@@ -17,16 +17,16 @@
   </header>
 
   <nav class="top-nav">
-  <a href="index.html">Home</a>
-  <a href="teams.html">Teams</a>
-  <a href="champions.html">Champions</a>
-  <a href="records.html">Records</a>
-  <a href="seasons.html">Seasons</a>
-  <a href="draft.html">Draft</a>
-  <a href="trophy-room.html">Trophy Room</a>
-  <a href="the-sco.html">The Sco</a>
-  <a href="uniforms.html">Uniforms</a>
-</nav>
+    <a href="index.html">Home</a>
+    <a href="teams.html">Teams</a>
+    <a href="champions.html">Champions</a>
+    <a href="records.html">Records</a>
+    <a href="seasons.html">Seasons</a>
+    <a href="draft.html">Draft</a>
+    <a href="trophy-room.html">Trophy Room</a>
+    <a href="the-sco.html">The Sco</a>
+    <a href="uniforms.html">Uniforms</a>
+  </nav>
 
   <main class="page">
 
@@ -34,13 +34,15 @@
 
       <div class="current-champion-card">
         <p class="section-label">Current Champion</p>
+
         <div class="champion-logo-large">
           <img src="images/team-primary-logo-placeholder.png" alt="Current champion logo">
         </div>
-        <h2>2025 Champion</h2>
-        <h3>Team Name TBD</h3>
-        <p>
-          Championship recap goes here. Add the title game opponent, final score, and a short storyline from the season.
+
+        <h2 id="current-champion-year">Current Champion</h2>
+        <h3 id="current-champion-team">Loading...</h3>
+        <p id="current-champion-details">
+          Championship details will load from the champions CSV.
         </p>
       </div>
 
@@ -48,49 +50,12 @@
         <p class="section-label">Championship Summary</p>
         <h2>League Title Count</h2>
 
-        <div class="title-count-list title-count-sorted">
-
-  <div class="title-count-item">
-    <span>The Commish</span>
-    <strong>TBD</strong>
-  </div>
-
-  <div class="title-count-item">
-    <span>Cincinnati Harambes</span>
-    <strong>TBD</strong>
-  </div>
-
-  <div class="title-count-item">
-    <span>Committed Not Addicted</span>
-    <strong>TBD</strong>
-  </div>
-
-  <div class="title-count-item">
-    <span>Jakes Brothers and Sisters</span>
-    <strong>TBD</strong>
-  </div>
-
-  <div class="title-count-item">
-    <span>Life Sucks then You Die</span>
-    <strong>TBD</strong>
-  </div>
-
-  <div class="title-count-item">
-    <span>Most Valuable Potheads</span>
-    <strong>TBD</strong>
-  </div>
-
-  <div class="title-count-item">
-    <span>The Fantasy Football Team</span>
-    <strong>TBD</strong>
-  </div>
-
-  <div class="title-count-item">
-    <span>Trin Coll Pest Control</span>
-    <strong>TBD</strong>
-  </div>
-
-</div>
+        <div class="title-count-list title-count-sorted" id="title-count-list">
+          <div class="title-count-item">
+            <span>Loading title counts...</span>
+            <strong>—</strong>
+          </div>
+        </div>
       </div>
 
     </section>
@@ -103,44 +68,12 @@
         </div>
       </div>
 
-      <div class="championship-banner-grid">
-
+      <div class="championship-banner-grid" id="championship-banner-grid">
         <article class="championship-banner-card">
-          <span>2025</span>
-          <h3>Team Name TBD</h3>
-          <p>Defeated TBD · Final Score TBD</p>
+          <span>Loading</span>
+          <h3>Champions CSV</h3>
+          <p>Banner history will load here.</p>
         </article>
-
-        <article class="championship-banner-card">
-          <span>2024</span>
-          <h3>Team Name TBD</h3>
-          <p>Defeated TBD · Final Score TBD</p>
-        </article>
-
-        <article class="championship-banner-card">
-          <span>2023</span>
-          <h3>Team Name TBD</h3>
-          <p>Defeated TBD · Final Score TBD</p>
-        </article>
-
-        <article class="championship-banner-card">
-          <span>2022</span>
-          <h3>Team Name TBD</h3>
-          <p>Defeated TBD · Final Score TBD</p>
-        </article>
-
-        <article class="championship-banner-card">
-          <span>2021</span>
-          <h3>Team Name TBD</h3>
-          <p>Defeated TBD · Final Score TBD</p>
-        </article>
-
-        <article class="championship-banner-card">
-          <span>2020</span>
-          <h3>Team Name TBD</h3>
-          <p>Defeated TBD · Final Score TBD</p>
-        </article>
-
       </div>
     </section>
 
@@ -151,76 +84,34 @@
         <h2>Championship History</h2>
 
         <div class="table-wrap">
-  <table>
-    <thead>
-      <tr>
-        <th>Year</th>
-        <th>Champion</th>
-        <th>Runner-Up</th>
-        <th>Final Score</th>
-        <th>Champion Record</th>
-      </tr>
-    </thead>
+          <table>
+            <thead>
+              <tr>
+                <th>Year</th>
+                <th>Champion</th>
+                <th>Runner-Up</th>
+                <th>Final Score</th>
+                <th>Champion Record</th>
+              </tr>
+            </thead>
 
-    <tbody>
-      <tr>
-        <td>2025</td>
-        <td><strong>TBD</strong></td>
-        <td>TBD</td>
-        <td>TBD</td>
-        <td>TBD</td>
-      </tr>
-
-      <tr>
-        <td>2024</td>
-        <td><strong>TBD</strong></td>
-        <td>TBD</td>
-        <td>TBD</td>
-        <td>TBD</td>
-      </tr>
-
-      <tr>
-        <td>2023</td>
-        <td><strong>TBD</strong></td>
-        <td>TBD</td>
-        <td>TBD</td>
-        <td>TBD</td>
-      </tr>
-
-      <tr>
-        <td>2022</td>
-        <td><strong>TBD</strong></td>
-        <td>TBD</td>
-        <td>TBD</td>
-        <td>TBD</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+            <tbody id="championship-history-body">
+              <tr>
+                <td colspan="5">Loading championship history...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
       <div class="content-card champion-notes-card">
         <p class="section-label">Almost Glory</p>
         <h2>Runner-Up Count</h2>
 
-        <div class="records-list">
+        <div class="records-list" id="runner-up-count-list">
           <div class="record-item">
-            <strong>Most Runner-Up Finishes</strong>
-            <span>TBD</span>
-          </div>
-
-          <div class="record-item">
-            <strong>Most Championship Appearances</strong>
-            <span>TBD</span>
-          </div>
-
-          <div class="record-item">
-            <strong>Best Title Game Performance</strong>
-            <span>TBD</span>
-          </div>
-
-          <div class="record-item">
-            <strong>Worst Title Game Loss</strong>
-            <span>TBD</span>
+            <strong>Loading runner-up counts...</strong>
+            <span>Data will load from champions.csv.</span>
           </div>
         </div>
       </div>
@@ -273,5 +164,7 @@
     <p>Krusty Krab League · Champions</p>
   </footer>
 
+  <script src="data-loader.js"></script>
+  <script src="champions.js"></script>
 </body>
 </html>
