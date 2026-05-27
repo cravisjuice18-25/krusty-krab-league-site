@@ -17,16 +17,16 @@
   </header>
 
   <nav class="top-nav">
-  <a href="index.html">Home</a>
-  <a href="teams.html">Teams</a>
-  <a href="champions.html">Champions</a>
-  <a href="records.html">Records</a>
-  <a href="seasons.html">Seasons</a>
-  <a href="draft.html">Draft</a>
-  <a href="trophy-room.html">Trophy Room</a>
-  <a href="the-sco.html">The Sco</a>
-  <a href="uniforms.html">Uniforms</a>
-</nav>
+    <a href="index.html">Home</a>
+    <a href="teams.html">Teams</a>
+    <a href="champions.html">Champions</a>
+    <a href="records.html">Records</a>
+    <a href="seasons.html">Seasons</a>
+    <a href="draft.html">Draft</a>
+    <a href="trophy-room.html">Trophy Room</a>
+    <a href="the-sco.html">The Sco</a>
+    <a href="uniforms.html">Uniforms</a>
+  </nav>
 
   <main class="page">
 
@@ -34,28 +34,28 @@
 
       <div class="draft-feature-card draft-feature-dark">
         <p class="section-label">Most Recent Draft</p>
-        <h2>2025 Draft</h2>
-        <strong>Windham, NY</strong>
-        <span>In person · Labor Day 2025</span>
+        <h2 id="draft-feature-year">Loading...</h2>
+        <strong id="draft-feature-location">Loading...</strong>
+        <span id="draft-feature-details">Draft details will load from CSV.</span>
       </div>
 
       <div class="draft-feature-card">
         <p class="section-label">First Overall Pick</p>
-        <h2>2025 1.01</h2>
-        <strong>Bijan Robinson</strong>
-        <span>The Fantasy Football Team</span>
+        <h2 id="draft-feature-first-pick-year">Loading...</h2>
+        <strong id="draft-feature-first-pick-player">Loading...</strong>
+        <span id="draft-feature-first-pick-team">Team will load from CSV.</span>
       </div>
 
       <div class="draft-feature-card">
         <p class="section-label">Draft Style</p>
         <h2>Live Draft Archive</h2>
         <strong>Pick #1 - Pick #8</strong>
-        <span>Every season stores full draft order and player picks.</span>
+        <span>Every season stores draft location, format, and first overall pick.</span>
       </div>
 
       <div class="draft-feature-card">
         <p class="section-label">Future Build</p>
-        <h2>Draft Records</h2>
+        <h2>Full Draft Boards</h2>
         <strong>Coming Later</strong>
         <span>Best pick, worst pick, steals, busts, and draft grades.</span>
       </div>
@@ -83,8 +83,8 @@
         <p class="section-label">Draft Archive</p>
         <h2>How This Page Works</h2>
         <p>
-          Each draft year shows the draft location, draft format, draft order, and the first-round board.
-          Later, we can expand each year to include the full draft board from your CSV.
+          This page pulls draft year, location, format, and first overall pick from
+          <strong>data/drafts.csv</strong>. Later, we can add a second CSV for full pick-by-pick draft boards.
         </p>
       </div>
 
@@ -92,186 +92,29 @@
         <p class="section-label">Future Upgrade</p>
         <h2>Full Draft Boards</h2>
         <p>
-          Your CSV has every pick by slot, so this page can eventually show every round for every year.
-          For now, the page is built as a clean draft archive with first-round highlights.
+          Your draft history can eventually show every pick by round. For now, this page is built as a clean draft archive
+          with quick year cards and first-pick history.
         </p>
       </div>
 
     </section>
 
-    <section class="content-card draft-block" id="draft-2025">
-      <div class="draft-block-header">
+    <section class="content-card">
+      <div class="card-header">
         <div>
-          <p class="section-label">Draft Archive</p>
-          <h2>2025 Draft</h2>
+          <p class="section-label">Draft History</p>
+          <h2>Draft Archive by Year</h2>
         </div>
-        <div class="draft-pill">Windham, NY · In Person</div>
       </div>
 
-      <div class="draft-summary-strip">
-        <div><span>Date</span><strong>Labor Day 2025</strong></div>
-        <div><span>Location</span><strong>Windham, NY</strong></div>
-        <div><span>Format</span><strong>In Person</strong></div>
-        <div><span>First Pick</span><strong>Bijan Robinson</strong></div>
+      <div class="draft-season-grid" id="draft-season-grid">
+        <article class="draft-season-card">
+          <span>Loading</span>
+          <h3>Draft CSV</h3>
+          <p>Draft history will load here.</p>
+          <strong>File: data/drafts.csv</strong>
+        </article>
       </div>
-
-      <h3 class="draft-subhead">Draft Order</h3>
-
-      <div class="draft-order-grid">
-        <div><span>Pick #1</span><strong>The Fantasy Football Team</strong></div>
-        <div><span>Pick #2</span><strong>Life Sucks then You Die</strong></div>
-        <div><span>Pick #3</span><strong>Cincinnati Harambes</strong></div>
-        <div><span>Pick #4</span><strong>Committed Not Addicted</strong></div>
-        <div><span>Pick #5</span><strong>The Commish</strong></div>
-        <div><span>Pick #6</span><strong>Bard Top Hunter Bottom</strong></div>
-        <div><span>Pick #7</span><strong>Most Valuable Potheads</strong></div>
-        <div><span>Pick #8</span><strong>Jakes Brothers and Sisters</strong></div>
-      </div>
-
-      <h3 class="draft-subhead">First Round</h3>
-
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Pick</th>
-              <th>Team</th>
-              <th>Player</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr>
-              <td>1.01</td>
-              <td>The Fantasy Football Team</td>
-              <td><strong>Bijan Robinson</strong> · ATL RB</td>
-            </tr>
-
-            <tr>
-              <td>1.02</td>
-              <td>Life Sucks then You Die</td>
-              <td><strong>Ja'Marr Chase</strong> · CIN WR</td>
-            </tr>
-
-            <tr>
-              <td>1.03</td>
-              <td>Cincinnati Harambes</td>
-              <td><strong>Justin Jefferson</strong> · MIN WR</td>
-            </tr>
-
-            <tr>
-              <td>1.04</td>
-              <td>Committed Not Addicted</td>
-              <td><strong>Saquon Barkley</strong> · PHI RB</td>
-            </tr>
-
-            <tr>
-              <td>1.05</td>
-              <td>The Commish</td>
-              <td><strong>CeeDee Lamb</strong> · DAL WR</td>
-            </tr>
-
-            <tr>
-              <td>1.06</td>
-              <td>Bard Top Hunter Bottom</td>
-              <td><strong>Jahmyr Gibbs</strong> · DET RB</td>
-            </tr>
-
-            <tr>
-              <td>1.07</td>
-              <td>Most Valuable Potheads</td>
-              <td><strong>Malik Nabers</strong> · NYG WR</td>
-            </tr>
-
-            <tr>
-              <td>1.08</td>
-              <td>Jakes Brothers and Sisters</td>
-              <td><strong>Ashton Jeanty</strong> · LV RB</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section class="draft-season-grid">
-
-      <article class="draft-season-card" id="draft-2024">
-        <span>2024</span>
-        <h3>Cape Cod</h3>
-        <p>In Person · Hunts birthday weekend</p>
-        <strong>1.01 Christian McCaffrey</strong>
-      </article>
-
-      <article class="draft-season-card" id="draft-2023">
-        <span>2023</span>
-        <h3>Wells, VT</h3>
-        <p>In Person · Labor Day 2023</p>
-        <strong>1.01 Justin Jefferson</strong>
-      </article>
-
-      <article class="draft-season-card" id="draft-2022">
-        <span>2022</span>
-        <h3>Port Deposit, MD</h3>
-        <p>Draft archive</p>
-        <strong>1.01 Jonathan Taylor</strong>
-      </article>
-
-      <article class="draft-season-card" id="draft-2021">
-        <span>2021</span>
-        <h3>Sco's DC Patio</h3>
-        <p>Draft archive</p>
-        <strong>1.01 Christian McCaffrey</strong>
-      </article>
-
-      <article class="draft-season-card" id="draft-2020">
-        <span>2020</span>
-        <h3>Bard's Backyard</h3>
-        <p>Draft archive</p>
-        <strong>1.01 Christian McCaffrey</strong>
-      </article>
-
-      <article class="draft-season-card" id="draft-2019">
-        <span>2019</span>
-        <h3>Gary's Garage</h3>
-        <p>Draft archive</p>
-        <strong>1.01 Saquon Barkley</strong>
-      </article>
-
-      <article class="draft-season-card" id="draft-2018">
-        <span>2018</span>
-        <h3>Gary's Backyard</h3>
-        <p>Draft archive</p>
-        <strong>1.01 Todd Gurley II</strong>
-      </article>
-
-      <article class="draft-season-card" id="draft-2017">
-        <span>2017</span>
-        <h3>Bard's Backyard</h3>
-        <p>In Person</p>
-        <strong>1.01 Le'Veon Bell</strong>
-      </article>
-
-      <article class="draft-season-card" id="draft-2016">
-        <span>2016</span>
-        <h3>Bard's Backyard</h3>
-        <p>Online</p>
-        <strong>1.01 Todd Gurley</strong>
-      </article>
-
-      <article class="draft-season-card" id="draft-2015">
-        <span>2015</span>
-        <h3>Muffin's Home</h3>
-        <p>In Person</p>
-        <strong>1.01 Adrian Peterson</strong>
-      </article>
-
-      <article class="draft-season-card" id="draft-2014">
-        <span>2014</span>
-        <h3>TBD</h3>
-        <p>Online</p>
-        <strong>1.01 Adrian Peterson</strong>
-      </article>
-
     </section>
 
     <section class="content-card">
@@ -311,5 +154,7 @@
     <p>Krusty Krab League · Draft</p>
   </footer>
 
+  <script src="data-loader.js"></script>
+  <script src="draft.js"></script>
 </body>
 </html>
