@@ -1,13 +1,13 @@
-year	champion	runner_up	final_score	champion_record
-2014	Bard	Muffin	149-148	12-3
-2015	Sabella	Bard	144-118	11-5
-2016	Jake	Bard	179-99	12-3
-2017	Bard	Muffin	139-115	12-4
-2018	Muff	Sco	151-143	8-8
-2019	Jake	Miner	163-157	11-5
-2020	Sco	Bard	174-126	12-4
-2021	Sco	Bard	152-93	11-7
-2022	No Winner	Sco/Miner	NA	NA
-2023	Jake	Muffin	155-131	8-9
-2024	Muff	Bard	166-149	12-3
-2025	Gary	Hunter	164-93	10-6
+year,team,final_record,final_finish,points_for
+2014,Hunter,4-12,8,126.25
+2015,Charlie,5-11,8,110.89
+2016,Miner,4-12,8,120.09
+2017,Gary,5-11,8,114.50
+2018,Gary,5-11,8,120.07
+2019,Hunter,5-11,8,121.00
+2020,Muffin,5-11,8,125.71
+2021,Gary,4-12,8,118.29
+2022,Kyle,6-10,8,117.00
+2023,Hunter,5-11,8,114.86
+2024,Sco,5-11,8,113.57
+2025,Miner,5-11,8,107.07
