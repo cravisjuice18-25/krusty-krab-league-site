@@ -1,46 +1,230 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Krusty Krab League</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css" />
 </head>
+
 <body>
 
-  <header class="hero">
-    <h1>Krusty Krab League</h1>
-    <p>Fantasy Football History, Records, Champions, and League Lore</p>
+  <header class="site-hero">
+    <div class="hero-overlay">
+      <p class="eyebrow">Fantasy Football League Archive</p>
+      <h1>Krusty Krab League</h1>
+      <p class="hero-subtitle">
+        Historical stats, champions, records, rivalries, uniforms, draft history, and league lore.
+      </p>
+    </div>
   </header>
 
-  <nav class="nav">
+  <nav class="top-nav">
+    <a href="index.html">Home</a>
     <a href="teams.html">Teams</a>
     <a href="seasons.html">Seasons</a>
     <a href="records.html">Records</a>
     <a href="champions.html">Champions</a>
+    <a href="draft.html">Draft</a>
   </nav>
 
-  <main class="container">
+  <main class="page">
 
-    <section class="card">
-      <h2>Current Champion</h2>
-      <p>Add the current champion here.</p>
+    <section class="hub-grid">
+
+      <a class="hub-tile" href="standings.html">
+        <span>Standings</span>
+        <small>Current and all-time rankings</small>
+      </a>
+
+      <a class="hub-tile" href="champions.html">
+        <span>Champions</span>
+        <small>Title winners and finals history</small>
+      </a>
+
+      <a class="hub-tile" href="records.html">
+        <span>Records</span>
+        <small>Highest scores, blowouts, streaks</small>
+      </a>
+
+      <a class="hub-tile" href="draft.html">
+        <span>Draft</span>
+        <small>Draft boards and pick history</small>
+      </a>
+
+      <a class="hub-tile" href="teams.html">
+        <span>Teams</span>
+        <small>Franchise pages and owner history</small>
+      </a>
+
+      <a class="hub-tile" href="seasons.html">
+        <span>Seasons</span>
+        <small>Year-by-year league archive</small>
+      </a>
+
+      <a class="hub-tile" href="rivalries.html">
+        <span>Rivalries</span>
+        <small>Head-to-head history</small>
+      </a>
+
+      <a class="hub-tile" href="trophy-room.html">
+        <span>Trophy Room</span>
+        <small>Awards, medals, and league lore</small>
+      </a>
+
+      <a class="hub-tile" href="constitution.html">
+        <span>Constitution</span>
+        <small>Rules, punishments, payouts</small>
+      </a>
+
+      <a class="hub-tile" href="uniforms.html">
+        <span>Uniforms</span>
+        <small>Team jerseys and logos</small>
+      </a>
+
+      <a class="hub-tile" href="the-sco.html">
+        <span>The Sco</span>
+        <small>Last-place history</small>
+      </a>
+
+      <a class="hub-tile" href="league-map.html">
+        <span>League Map</span>
+        <small>Franchise locations</small>
+      </a>
+
     </section>
 
-    <section class="card">
-      <h2>All-Time Leaders</h2>
-      <ul>
-        <li>Most Championships: TBD</li>
-        <li>Best Win Percentage: TBD</li>
-        <li>Most Points Scored: TBD</li>
-        <li>Most Playoff Wins: TBD</li>
-      </ul>
+    <section class="feature-grid">
+
+      <div class="feature-card champion-card">
+        <p class="section-label">Current Champion</p>
+        <h2 id="current-champion">Loading...</h2>
+        <p id="current-champion-details">Loading championship details...</p>
+      </div>
+
+      <div class="feature-card">
+        <p class="section-label">League Snapshot</p>
+
+        <div class="mini-stat-list">
+          <div>
+            <strong id="total-teams">—</strong>
+            <span>Franchises</span>
+          </div>
+
+          <div>
+            <strong id="total-seasons">—</strong>
+            <span>Seasons Logged</span>
+          </div>
+
+          <div>
+            <strong id="most-titles">—</strong>
+            <span>Most Titles</span>
+          </div>
+
+          <div>
+            <strong id="best-win-pct">—</strong>
+            <span>Best Win %</span>
+          </div>
+        </div>
+      </div>
+
     </section>
 
-    <section class="card">
-      <h2>League Archive</h2>
-      <p>Browse team histories, season results, record books, and championship moments.</p>
+    <section class="content-row">
+
+      <div class="content-card large-card">
+        <div class="card-header">
+          <div>
+            <p class="section-label">All-Time Standings</p>
+            <h2>Franchise Leaderboard</h2>
+          </div>
+          <a href="standings.html" class="text-link">View All</a>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Team</th>
+                <th>Owner</th>
+                <th>Record</th>
+                <th>Win %</th>
+                <th>Titles</th>
+              </tr>
+            </thead>
+            <tbody id="standings-table">
+              <tr>
+                <td colspan="6">Loading standings...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="content-card">
+        <div class="card-header">
+          <div>
+            <p class="section-label">Recent Updates</p>
+            <h2>League News</h2>
+          </div>
+        </div>
+
+        <div id="updates-list" class="updates-list">
+          Loading updates...
+        </div>
+      </div>
+
+    </section>
+
+    <section class="content-card">
+      <div class="card-header">
+        <div>
+          <p class="section-label">Franchises</p>
+          <h2>Team Directory</h2>
+        </div>
+        <a href="teams.html" class="text-link">View Teams</a>
+      </div>
+
+      <div id="team-grid" class="team-grid">
+        Loading teams...
+      </div>
+    </section>
+
+    <section class="content-row">
+
+      <div class="content-card">
+        <div class="card-header">
+          <div>
+            <p class="section-label">Record Book</p>
+            <h2>Featured Records</h2>
+          </div>
+          <a href="records.html" class="text-link">View Records</a>
+        </div>
+
+        <div id="records-list" class="records-list">
+          Loading records...
+        </div>
+      </div>
+
+      <div class="content-card dark-card">
+        <p class="section-label">League Hub</p>
+        <h2>Built for history, trash talk, and receipts.</h2>
+        <p>
+          This site is powered by CSV files, which means your Excel history can become live standings,
+          champion pages, team records, season archives, and franchise profiles.
+        </p>
+      </div>
+
     </section>
 
   </main>
 
+  <footer class="footer">
+    <p>Krusty Krab League · Fantasy Football Archive</p>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
