@@ -1720,3 +1720,175 @@ td strong {
     grid-template-columns: 1fr;
   }
 }
+.cleaned-team-stat-grid {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.danger-stat {
+  border-top-color: #7f1d1d;
+}
+
+.compact-records-list {
+  grid-template-columns: 1fr;
+}
+
+.compact-player-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.compact-player-card {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  gap: 14px;
+  align-items: center;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  padding: 14px;
+}
+
+.compact-player-image {
+  width: 92px;
+  height: 92px;
+  border-radius: 16px;
+  background: #e5e7eb;
+  overflow: hidden;
+}
+
+.compact-player-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.compact-player-info span {
+  background: #111827;
+  color: #facc15;
+  display: inline-block;
+  padding: 5px 9px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 900;
+  margin-bottom: 7px;
+}
+
+.compact-player-info h3 {
+  margin: 0 0 5px;
+  font-size: 18px;
+}
+
+.compact-player-info p {
+  margin: 0 0 5px;
+  color: #4b5563;
+}
+
+.compact-player-info strong {
+  font-size: 14px;
+}
+
+.compact-extras-row {
+  grid-template-columns: 1fr 1fr;
+}
+
+.compact-summary-list {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.compact-summary-list div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 12px 14px;
+}
+
+.compact-summary-list span {
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.compact-summary-list strong {
+  font-size: 18px;
+}
+
+.side-competition-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.side-competition-item {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 14px;
+}
+
+.side-competition-item span {
+  display: block;
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 7px;
+}
+
+.side-competition-item strong {
+  display: block;
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.side-competition-item p {
+  color: #4b5563;
+  margin: 0;
+  font-size: 14px;
+}
+
+@media (max-width: 1100px) {
+  .cleaned-team-stat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .compact-player-grid,
+  .compact-extras-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .cleaned-team-stat-grid,
+  .compact-player-grid,
+  .side-competition-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .compact-player-card {
+    grid-template-columns: 72px 1fr;
+  }
+
+  .compact-player-image {
+    width: 72px;
+    height: 72px;
+  }
+
+  .compact-summary-list div {
+    display: block;
+  }
+
+  .compact-summary-list strong {
+    display: block;
+    margin-top: 5px;
+  }
+}
