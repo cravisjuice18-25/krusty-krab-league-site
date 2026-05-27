@@ -3026,3 +3026,181 @@ td strong {
     border-radius: 22px;
   }
 }
+.uniforms-hero {
+  background:
+    linear-gradient(rgba(0, 19, 43, 0.86), rgba(0, 19, 43, 0.86)),
+    url("images/uniforms-hero.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.uniform-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.uniform-feature-card {
+  background: white;
+  border-radius: 22px;
+  padding: 24px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+  min-height: 210px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.uniform-feature-dark {
+  background: linear-gradient(135deg, #001f3f, #111827);
+  color: white;
+}
+
+.uniform-feature-card h2 {
+  margin: 0 0 12px;
+  font-size: 24px;
+}
+
+.uniform-feature-card strong {
+  display: block;
+  font-size: 22px;
+  margin-bottom: 7px;
+}
+
+.uniform-feature-card span {
+  color: #6b7280;
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.uniform-feature-dark span {
+  color: #d1d5db;
+}
+
+.uniform-locker-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.uniform-locker-card {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-top: 8px solid var(--team-color);
+  border-radius: 22px;
+  overflow: hidden;
+}
+
+.uniform-locker-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: flex-start;
+  padding: 20px 20px 14px;
+}
+
+.uniform-locker-header h3 {
+  margin: 0;
+  font-size: 26px;
+}
+
+.uniform-color-chip {
+  width: 28px;
+  height: 28px;
+  background: var(--team-color);
+  border-radius: 999px;
+  box-shadow: 0 0 0 4px white;
+  flex: 0 0 auto;
+}
+
+.uniform-image-panel {
+  min-height: 300px;
+  background:
+    radial-gradient(circle at top right, rgba(17, 24, 39, 0.08), transparent 35%),
+    #ffffff;
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+}
+
+.uniform-image-panel img {
+  width: 100%;
+  height: 100%;
+  max-height: 360px;
+  object-fit: contain;
+}
+
+.uniform-logo-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+.uniform-logo-row div {
+  padding: 16px;
+  background: white;
+  border-right: 1px solid #e5e7eb;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+}
+
+.uniform-logo-row div:last-child {
+  border-right: none;
+}
+
+.uniform-logo-row span {
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.uniform-logo-row img {
+  width: 100%;
+  max-width: 100px;
+  height: 90px;
+  object-fit: contain;
+}
+
+@media (max-width: 980px) {
+  .uniform-feature-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .uniform-locker-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .uniform-feature-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .uniform-locker-header {
+    display: block;
+  }
+
+  .uniform-color-chip {
+    margin-top: 12px;
+  }
+
+  .uniform-logo-row {
+    grid-template-columns: 1fr;
+  }
+
+  .uniform-logo-row div {
+    border-right: none;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .uniform-logo-row div:last-child {
+    border-bottom: none;
+  }
+}
