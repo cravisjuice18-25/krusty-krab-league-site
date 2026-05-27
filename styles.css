@@ -3399,3 +3399,15 @@ td strong {
     margin-top: 4px;
   }
 }
+.franchise-card {
+  border-top: 7px solid var(--primary-color);
+}
+
+.franchise-card-top {
+  background:
+    linear-gradient(135deg, var(--primary-color), #111827);
+}
+
+.franchise-color-dot {
+  background: var(--decal-color);
+}
