@@ -57,7 +57,7 @@ function buildCurrentSco(scoHistory) {
   document.getElementById("current-sco-team").textContent = latest.team;
 
   document.getElementById("current-sco-details").textContent =
-    `${latest.team} finished ${latest.final_finish} with a ${latest.final_record} record and ${latest.points_for} points for.`;
+    `${latest.team} finished ${latest.final_finish} with a ${latest.final_record} record and ${latest.avg_points_for} avg points for.`;
 }
 
 function buildScoBanners(scoHistory) {
