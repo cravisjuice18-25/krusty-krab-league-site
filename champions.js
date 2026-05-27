@@ -1,15 +1,31 @@
 async function buildChampionsPage() {
-  const champions = await loadCSV("data/champions.csv");
+  try {
+    const champions = await loadCSV("data/champions.csv");
 
-  const sortedChampions = [...champions].sort((a, b) => {
-    return Number(b.year) - Number(a.year);
-  });
+    const sortedChampions = [...champions].sort((a, b) => {
+      return Number(b.year) - Number(a.year);
+    });
 
-  buildCurrentChampion(sortedChampions);
-  buildChampionshipBanners(sortedChampions);
-  buildChampionshipHistory(sortedChampions);
-  buildTitleCounts(champions);
-  buildRunnerUpCounts(champions);
+    buildCurrentChampion(sortedChampions);
+    buildChampionshipBanners(sortedChampions);
+    buildChampionshipHistory(sortedChampions);
+    buildTitleCounts(champions);
+    buildRunnerUpCounts(champions);
+    buildTitleGameRecords(champions);
+
+  } catch (error) {
+    console.error("Champions page error:", error);
+
+    document.getElementById("current-champion-team").textContent = "Error loading champions.csv";
+    document.getElementById("current-champion-details").textContent =
+      "Check champions.csv, data-loader.js, and champions.js.";
+
+    document.getElementById("championship-history-body").innerHTML = `
+      <tr>
+        <td colspan="5">Error loading championship history.</td>
+      </tr>
+    `;
+  }
 }
 
 function buildCurrentChampion(champions) {
@@ -131,6 +147,82 @@ function buildRunnerUpCounts(champions) {
 
     list.appendChild(item);
   });
+}
+
+function parseScore(scoreText) {
+  if (!scoreText || scoreText === "TBD" || scoreText === "NA") return null;
+
+  const numbers = scoreText.match(/\d+(\.\d+)?/g);
+
+  if (!numbers || numbers.length < 2) return null;
+
+  const scoreA = Number(numbers[0]);
+  const scoreB = Number(numbers[1]);
+
+  if (Number.isNaN(scoreA) || Number.isNaN(scoreB)) return null;
+
+  return {
+    championScore: scoreA,
+    runnerUpScore: scoreB,
+    margin: Math.abs(scoreA - scoreB),
+    total: scoreA + scoreB
+  };
+}
+
+function buildTitleGameRecords(champions) {
+  const games = champions
+    .map(row => {
+      const parsedScore = parseScore(row.final_score);
+
+      if (!parsedScore) return null;
+
+      return {
+        ...row,
+        ...parsedScore
+      };
+    })
+    .filter(Boolean);
+
+  if (games.length === 0) {
+    setTitleGameRecordText("highest-championship-score", "No score data yet.");
+    setTitleGameRecordText("lowest-championship-score", "No score data yet.");
+    setTitleGameRecordText("closest-championship-game", "No score data yet.");
+    setTitleGameRecordText("biggest-championship-blowout", "No score data yet.");
+    return;
+  }
+
+  const highestChampionScore = [...games].sort((a, b) => b.championScore - a.championScore)[0];
+  const lowestChampionScore = [...games].sort((a, b) => a.championScore - b.championScore)[0];
+  const closestGame = [...games].sort((a, b) => a.margin - b.margin)[0];
+  const biggestBlowout = [...games].sort((a, b) => b.margin - a.margin)[0];
+
+  setTitleGameRecordText(
+    "highest-championship-score",
+    `${highestChampionScore.champion} · ${highestChampionScore.championScore} points · ${highestChampionScore.year}`
+  );
+
+  setTitleGameRecordText(
+    "lowest-championship-score",
+    `${lowestChampionScore.champion} · ${lowestChampionScore.championScore} points · ${lowestChampionScore.year}`
+  );
+
+  setTitleGameRecordText(
+    "closest-championship-game",
+    `${closestGame.champion} defeated ${closestGame.runner_up} by ${closestGame.margin.toFixed(2)} points · ${closestGame.year}`
+  );
+
+  setTitleGameRecordText(
+    "biggest-championship-blowout",
+    `${biggestBlowout.champion} defeated ${biggestBlowout.runner_up} by ${biggestBlowout.margin.toFixed(2)} points · ${biggestBlowout.year}`
+  );
+}
+
+function setTitleGameRecordText(id, text) {
+  const element = document.getElementById(id);
+
+  if (element) {
+    element.textContent = text;
+  }
 }
 
 buildChampionsPage();
