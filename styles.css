@@ -1127,3 +1127,138 @@ td strong {
     height: 135px;
   }
 }
+.franchise-directory-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.franchise-card {
+  background: white;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+  border-top: 7px solid var(--team-color);
+  display: flex;
+  flex-direction: column;
+}
+
+.franchise-card-top {
+  min-height: 120px;
+  background:
+    linear-gradient(135deg, rgba(17, 24, 39, 0.95), rgba(17, 24, 39, 0.78)),
+    radial-gradient(circle at top right, var(--team-color), transparent 45%);
+  padding: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.franchise-logo {
+  width: 78px;
+  height: 78px;
+  background: white;
+  border-radius: 18px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.franchise-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.franchise-color-dot {
+  width: 22px;
+  height: 22px;
+  background: var(--team-color);
+  border: 3px solid white;
+  border-radius: 999px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.24);
+}
+
+.franchise-card-body {
+  padding: 18px 18px 8px;
+}
+
+.franchise-card-body h3 {
+  font-size: 23px;
+  margin: 0 0 6px;
+}
+
+.franchise-location {
+  margin: 0 0 10px;
+  color: #6b7280;
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.franchise-tagline {
+  color: #4b5563;
+  line-height: 1.45;
+  margin: 0;
+  font-size: 14px;
+}
+
+.franchise-mini-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+  margin-top: 14px;
+}
+
+.franchise-mini-stats div {
+  padding: 13px 10px;
+  text-align: center;
+  border-right: 1px solid #e5e7eb;
+}
+
+.franchise-mini-stats div:last-child {
+  border-right: none;
+}
+
+.franchise-mini-stats span {
+  display: block;
+  color: #6b7280;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.franchise-mini-stats strong {
+  font-size: 15px;
+}
+
+.franchise-button {
+  display: block;
+  text-align: center;
+  margin: 16px 18px 18px;
+  padding: 11px 14px;
+  border-radius: 999px;
+  background: #111827;
+  color: white;
+  text-decoration: none;
+  font-weight: 900;
+}
+
+.franchise-button:hover {
+  background: var(--team-color);
+}
+
+@media (max-width: 1100px) {
+  .franchise-directory-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .franchise-directory-grid {
+    grid-template-columns: 1fr;
+  }
+}
