@@ -2006,3 +2006,173 @@ td strong {
     height: 82px;
   }
 }
+.champions-hero {
+  background:
+    linear-gradient(rgba(0, 19, 43, 0.84), rgba(0, 19, 43, 0.84)),
+    url("images/champions-hero.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.champions-feature-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.current-champion-card,
+.champions-summary-card {
+  background: white;
+  border-radius: 22px;
+  padding: 24px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+.current-champion-card {
+  background: linear-gradient(135deg, #001f3f, #111827);
+  color: white;
+}
+
+.champion-logo-large {
+  width: 120px;
+  height: 120px;
+  background: white;
+  border-radius: 24px;
+  padding: 14px;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.champion-logo-large img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.current-champion-card h2 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.current-champion-card h3 {
+  margin: 8px 0 12px;
+  font-size: 38px;
+}
+
+.current-champion-card p:last-child {
+  color: #e5e7eb;
+  line-height: 1.55;
+}
+
+.title-count-list {
+  display: grid;
+  gap: 10px;
+}
+
+.title-count-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: center;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 12px 14px;
+}
+
+.title-count-item span {
+  font-weight: 800;
+  color: #374151;
+}
+
+.title-count-item strong {
+  background: #111827;
+  color: #facc15;
+  min-width: 38px;
+  text-align: center;
+  padding: 7px 10px;
+  border-radius: 999px;
+}
+
+.championship-banner-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.championship-banner-card {
+  min-height: 190px;
+  background:
+    linear-gradient(135deg, rgba(0, 31, 63, 0.96), rgba(17, 24, 39, 0.96)),
+    radial-gradient(circle at top right, rgba(250, 204, 21, 0.32), transparent 38%);
+  color: white;
+  border-radius: 22px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+  position: relative;
+  overflow: hidden;
+}
+
+.championship-banner-card::before {
+  content: "CHAMPION";
+  position: absolute;
+  top: 18px;
+  right: -34px;
+  background: #facc15;
+  color: #111827;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  padding: 7px 38px;
+  transform: rotate(35deg);
+}
+
+.championship-banner-card span {
+  color: #facc15;
+  font-weight: 900;
+  letter-spacing: 2px;
+  font-size: 14px;
+}
+
+.championship-banner-card h3 {
+  font-size: 28px;
+  margin: 8px 0;
+}
+
+.championship-banner-card p {
+  color: #d1d5db;
+  margin: 0;
+}
+
+.champion-notes-card {
+  border-top: 7px solid #facc15;
+}
+
+@media (max-width: 980px) {
+  .champions-feature-grid,
+  .championship-banner-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .champions-feature-grid,
+  .championship-banner-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .current-champion-card h3 {
+    font-size: 30px;
+  }
+
+  .champion-logo-large {
+    width: 96px;
+    height: 96px;
+  }
+}
