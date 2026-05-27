@@ -90,7 +90,7 @@ function buildScoHistoryTable(scoHistory) {
       <td><strong>${row.team}</strong></td>
       <td>${row.final_record}</td>
       <td>${row.final_finish}</td>
-      <td>${row.points_for}</td>
+      <td>${row.avg_points_for}</td>
     `;
 
     tableBody.appendChild(tableRow);
