@@ -3411,3 +3411,42 @@ td strong {
 .franchise-color-dot {
   background: var(--decal-color);
 }
+.franchise-card {
+  border-top: 7px solid var(--primary-color, var(--team-color));
+}
+
+.franchise-card-top {
+  background:
+    linear-gradient(135deg, var(--primary-color, #111827), rgba(17, 24, 39, 0.86)),
+    radial-gradient(circle at top right, var(--decal-color, #facc15), transparent 45%);
+}
+
+.franchise-color-stack {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.franchise-color-dot {
+  width: 22px;
+  height: 22px;
+  border: 3px solid white;
+  border-radius: 999px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.24);
+}
+
+.primary-dot {
+  background: var(--primary-color, #001f3f);
+}
+
+.secondary-dot {
+  background: var(--secondary-color, #ffffff);
+}
+
+.decal-dot {
+  background: var(--decal-color, #facc15);
+}
+
+.franchise-button:hover {
+  background: var(--primary-color, #111827);
+}
