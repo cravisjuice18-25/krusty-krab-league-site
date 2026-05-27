@@ -2719,3 +2719,173 @@ td strong {
     border-radius: 22px;
   }
 }
+.sco-hero {
+  background:
+    linear-gradient(rgba(38, 15, 8, 0.88), rgba(17, 24, 39, 0.9)),
+    url("images/sco-hero.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.sco-feature-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.current-sco-card,
+.sco-summary-card {
+  background: white;
+  border-radius: 22px;
+  padding: 24px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+.current-sco-card {
+  background: linear-gradient(135deg, #3f1d12, #111827);
+  color: white;
+}
+
+.sco-logo-large {
+  width: 120px;
+  height: 120px;
+  background: white;
+  border-radius: 24px;
+  padding: 14px;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sco-logo-large img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.current-sco-card h2 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.current-sco-card h3 {
+  margin: 8px 0 12px;
+  font-size: 38px;
+}
+
+.current-sco-card p:last-child {
+  color: #e5e7eb;
+  line-height: 1.55;
+}
+
+.sco-count-list {
+  display: grid;
+  gap: 10px;
+}
+
+.sco-count-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: center;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 12px 14px;
+}
+
+.sco-count-item span {
+  font-weight: 800;
+  color: #374151;
+}
+
+.sco-count-item strong {
+  background: #3f1d12;
+  color: #facc15;
+  min-width: 38px;
+  text-align: center;
+  padding: 7px 10px;
+  border-radius: 999px;
+}
+
+.sco-banner-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.sco-banner-card {
+  min-height: 190px;
+  background:
+    linear-gradient(135deg, rgba(63, 29, 18, 0.96), rgba(17, 24, 39, 0.96)),
+    radial-gradient(circle at top right, rgba(250, 204, 21, 0.22), transparent 38%);
+  color: white;
+  border-radius: 22px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+  position: relative;
+  overflow: hidden;
+}
+
+.sco-banner-card::before {
+  content: "THE SCO";
+  position: absolute;
+  top: 18px;
+  right: -34px;
+  background: #facc15;
+  color: #111827;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  padding: 7px 38px;
+  transform: rotate(35deg);
+}
+
+.sco-banner-card span {
+  color: #facc15;
+  font-weight: 900;
+  letter-spacing: 2px;
+  font-size: 14px;
+}
+
+.sco-banner-card h3 {
+  font-size: 28px;
+  margin: 8px 0;
+}
+
+.sco-banner-card p {
+  color: #d1d5db;
+  margin: 0;
+}
+
+.sco-notes-card {
+  border-top: 7px solid #3f1d12;
+}
+
+@media (max-width: 980px) {
+  .sco-feature-grid,
+  .sco-banner-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .sco-feature-grid,
+  .sco-banner-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .current-sco-card h3 {
+    font-size: 30px;
+  }
+
+  .sco-logo-large {
+    width: 96px;
+    height: 96px;
+  }
+}
