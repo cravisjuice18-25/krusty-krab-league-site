@@ -2236,3 +2236,80 @@ td strong {
 .season-block td:nth-child(12) {
   min-width: 90px;
 }
+.hall-of-fame-section {
+  margin-top: 28px;
+}
+
+.hall-of-fame-intro {
+  max-width: 850px;
+  color: #4b5563;
+  line-height: 1.6;
+  margin: 0 0 20px;
+}
+
+.hall-of-fame-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.hall-of-fame-card {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
+}
+
+.hall-of-fame-image {
+  height: 180px;
+  background: #111827;
+  overflow: hidden;
+}
+
+.hall-of-fame-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hall-of-fame-content {
+  padding: 16px;
+}
+
+.hall-of-fame-content span {
+  display: inline-block;
+  background: #111827;
+  color: #facc15;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  margin-bottom: 10px;
+}
+
+.hall-of-fame-content h3 {
+  margin: 0 0 8px;
+  font-size: 19px;
+}
+
+.hall-of-fame-content p {
+  margin: 0;
+  color: #4b5563;
+  line-height: 1.45;
+  font-size: 14px;
+}
+
+@media (max-width: 980px) {
+  .hall-of-fame-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .hall-of-fame-grid {
+    grid-template-columns: 1fr;
+  }
+}
