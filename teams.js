@@ -45,7 +45,7 @@ function buildActiveTeams(activeTeams) {
     const primaryColor = cleanColor(team.primary_color, "#001f3f");
     const secondaryColor = cleanColor(team.secondary_color, "#ffffff");
     const decalColor = cleanColor(team.decal_color, "#facc15");
-    const teamPage = cleanText(team.team_page) || "team-template.html";
+    const teamPage = cleanText(team.team_page) || `team.html?team=${cleanText(team.team_id)}`;
 
     const card = document.createElement("article");
     card.className = "franchise-card";
