@@ -1,19 +1,22 @@
+const UPCOMING_DRAFT_DATE = "2026-09-05T12:00:00";
+const UPCOMING_DRAFT_LOCATION = "Sparrow Bush, NY";
+
 async function buildHomePage() {
   try {
     const champions = await loadCSV("data/champions.csv");
     const scoHistory = await loadCSV("data/the-sco.csv");
     const teams = await loadCSV("data/teams.csv");
-    const drafts = await loadCSV("data/drafts.csv");
     const standings = await loadCSV("data/standings.csv");
 
     buildLatestChampion(champions);
     buildLatestSco(scoHistory);
-    buildDraftCard(drafts);
     buildTeamsCount(teams);
     buildLatestSeasonSnapshot(standings);
+    buildDraftCountdown();
 
   } catch (error) {
     console.error("Home page error:", error);
+    buildDraftCountdown();
   }
 }
 
@@ -39,27 +42,16 @@ function buildLatestSco(scoHistory) {
   setText("home-latest-sco-link", "View last-place history");
 }
 
-function buildDraftCard(drafts) {
-  const sorted = [...drafts].sort((a, b) => Number(b.year) - Number(a.year));
-  const latest = sorted[0];
-
-  if (!latest) return;
-
-  setText("home-draft-title", `${latest.year} Draft`);
-  setText("home-draft-details", `${latest.location || "TBD"} · 1.01 ${latest.first_pick || "TBD"}`);
-  setText("home-draft-link", "View draft history");
-}
-
 function buildTeamsCount(teams) {
   const activeTeams = teams.filter(team => {
     return cleanText(team.status).toLowerCase() === "active";
   });
 
-  setText("home-active-team-count", `${activeTeams.length} Active Franchises`);
+  setText("home-active-team-count", `${activeTeams.length} active franchises, owners, defunct teams, and future franchise pages.`);
 }
 
 function buildLatestSeasonSnapshot(standings) {
-  const years = [...new Set(standings.map(row => row.year))]
+  const years = [...new Set(standings.map(row => cleanText(row.year)))]
     .filter(Boolean)
     .sort((a, b) => Number(b) - Number(a));
 
@@ -68,22 +60,53 @@ function buildLatestSeasonSnapshot(standings) {
   if (!latestYear) return;
 
   const latestStandings = standings
-    .filter(row => row.year === latestYear)
+    .filter(row => cleanText(row.year) === latestYear)
     .sort((a, b) => Number(a.rank) - Number(b.rank));
 
   const firstPlace = latestStandings[0];
+
   const topScoringTeam = [...latestStandings].sort((a, b) => {
     return Number(b.points_for) - Number(a.points_for);
   })[0];
 
   if (firstPlace) {
-    setText("home-season-title", `${latestYear} Season`);
-    setText("home-season-details", `1st Place: ${firstPlace.team || "TBD"}`);
+    setText("home-season-title", `${latestYear} Season Snapshot`);
+    setText("home-season-details", `Latest season: ${firstPlace.team || "TBD"} finished 1st`);
+    setText("home-season-details-expanded", `${firstPlace.team || "TBD"} · ${firstPlace.record || "TBD"} · 1st Place`);
   }
 
   if (topScoringTeam) {
     setText("home-record-book-summary", `Latest points leader: ${topScoringTeam.team || "TBD"}`);
+    setText("home-season-points-leader", `${topScoringTeam.team || "TBD"} · ${formatNumber(topScoringTeam.points_for)} points`);
   }
+}
+
+function buildDraftCountdown() {
+  updateDraftCountdown();
+
+  setInterval(updateDraftCountdown, 60000);
+}
+
+function updateDraftCountdown() {
+  const draftDate = new Date(UPCOMING_DRAFT_DATE);
+  const now = new Date();
+  const difference = draftDate - now;
+
+  if (difference <= 0) {
+    setText("countdown-days", "0");
+    setText("countdown-hours", "0");
+    setText("countdown-minutes", "0");
+    return;
+  }
+
+  const totalMinutes = Math.floor(difference / 1000 / 60);
+  const days = Math.floor(totalMinutes / 60 / 24);
+  const hours = Math.floor((totalMinutes / 60) % 24);
+  const minutes = Math.floor(totalMinutes % 60);
+
+  setText("countdown-days", days);
+  setText("countdown-hours", hours);
+  setText("countdown-minutes", minutes);
 }
 
 function setText(id, value) {
@@ -96,6 +119,19 @@ function setText(id, value) {
 
 function cleanText(value) {
   return String(value || "").trim();
+}
+
+function formatNumber(value) {
+  const number = Number(value);
+
+  if (Number.isNaN(number)) {
+    return cleanText(value) || "TBD";
+  }
+
+  return number.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
 }
 
 buildHomePage();
