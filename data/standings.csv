@@ -1,6 +1,6 @@
-year,rank,team,team_rating,record,win_pct,points_for,avg_for,points_against,avg_against,point_margin,moves
+year,rank,team,team_rating,record,win_pct,points_for,avg_for,points_against,avg_against,point_margin,avg_point_margin,moves
 2025,1,Life Sucks then You Die,1.56,10-4,0.714,1788.00,127.71,1637.00,116.92,151,10.78,10
-2025,2,The Commish,1.542,9-5,0.64,1822.00,130.14,1883.00,134.5,-61,-4.35,29
+2025,2,The Commish,1.54,9-5,0.640,1822.00,130.14,1883.00,134.5,-61,-4.35,29
 2025,3,The Fantasy Football Team,0.99,8-6,0.571,1790.00,127.85,1639.00,117.07,151,10.78,18
 2025,4,Most Valuable Potheads,1.48,7-7,0.5,1868.00,133.42,1672.00,119.42,196,14.,18
 2025,5,Committed Not Addicted,1.53,7-7,0.5,1801.00,128.64,1729.00,123.5,72,5.14,29
