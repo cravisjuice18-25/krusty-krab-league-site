@@ -24,7 +24,7 @@ async function buildTeamsPage() {
         <article class="franchise-card" style="--team-color: #111827; --primary-color: #111827; --secondary-color: #f9fafb; --decal-color: #facc15;">
           <div class="franchise-card-body">
             <p class="section-label">Error</p>
-            <h3>Teams CSV Not Loaded</h3>
+            <h3>Teams Not Loaded</h3>
             <p class="franchise-tagline">Check data/teams.csv, data-loader.js, and teams.js.</p>
           </div>
         </article>
@@ -45,6 +45,7 @@ function buildActiveTeams(activeTeams) {
     const primaryColor = cleanColor(team.primary_color, "#001f3f");
     const secondaryColor = cleanColor(team.secondary_color, "#ffffff");
     const decalColor = cleanColor(team.decal_color, "#facc15");
+    const teamPage = cleanText(team.team_page) || "team-template.html";
 
     const card = document.createElement("article");
     card.className = "franchise-card";
@@ -91,7 +92,7 @@ function buildActiveTeams(activeTeams) {
         </div>
       </div>
 
-      <a class="franchise-button" href="team-template.html">View Franchise</a>
+      <a class="franchise-button" href="${teamPage}">View Franchise</a>
     `;
 
     activeGrid.appendChild(card);
