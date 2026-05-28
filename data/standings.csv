@@ -1,4 +1,4 @@
-year,rank,team,rating,record,win_pct,points_for,avg_for,points_against,avg_against,point_margin,moves
+year,rank,team,team_rating,record,win_pct,points_for,avg_for,points_against,avg_against,point_margin,moves
 2025,1,Life Sucks then You Die,1.568,10-4,0.714,1788.00,127.71,1637.00,116.92,151,10.78,10
 2025,2,The Commish,1.542,9-5,0.642857142857143,1822.00,130.142857142857,1883.00,134.5,-61,-4.35714285714286,29
 2025,3,The Fantasy Football Team,0.995714285714286,8-6,0.571428571428571,1790.00,127.857142857143,1639.00,117.071428571429,151,10.7857142857143,18
