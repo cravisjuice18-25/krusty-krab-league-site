@@ -13,20 +13,20 @@
   <header class="page-hero small-hero seasons-hero">
     <p class="eyebrow">Year-by-Year Archive</p>
     <h1>Seasons</h1>
-    <p>Every league year, final standings, playoff picture, champion, The Sco, scoring leaders, and season history.</p>
+    <p>Every league year, final standings, scoring leaders, The Sco, point margins, moves, and season history.</p>
   </header>
 
   <nav class="top-nav">
-  <a href="index.html">Home</a>
-  <a href="teams.html">Teams</a>
-  <a href="champions.html">Champions</a>
-  <a href="records.html">Records</a>
-  <a href="seasons.html">Seasons</a>
-  <a href="draft.html">Draft</a>
-  <a href="trophy-room.html">Trophy Room</a>
-  <a href="the-sco.html">The Sco</a>
-  <a href="uniforms.html">Uniforms</a>
-</nav>
+    <a href="index.html">Home</a>
+    <a href="teams.html">Teams</a>
+    <a href="champions.html">Champions</a>
+    <a href="records.html">Records</a>
+    <a href="seasons.html">Seasons</a>
+    <a href="draft.html">Draft</a>
+    <a href="trophy-room.html">Trophy Room</a>
+    <a href="the-sco.html">The Sco</a>
+    <a href="uniforms.html">Uniforms</a>
+  </nav>
 
   <main class="page">
 
@@ -34,46 +34,36 @@
 
       <div class="season-feature-card season-feature-dark">
         <p class="section-label">Most Recent Season</p>
-        <h2>2024 Season</h2>
-        <strong>Life Sucks then You Die</strong>
-        <span>1st Place · 10-4 Regular Season Record</span>
+        <h2 id="season-feature-year">Loading...</h2>
+        <strong id="season-feature-winner">Loading...</strong>
+        <span id="season-feature-winner-details">Season winner will load from CSV.</span>
       </div>
 
       <div class="season-feature-card">
         <p class="section-label">Top Scoring Team</p>
-        <h2>2024 Points Leader</h2>
-        <strong>Most Valuable Potheads</strong>
-        <span>1,868.00 points · 133.43 average</span>
+        <h2>Points Leader</h2>
+        <strong id="season-feature-points-team">Loading...</strong>
+        <span id="season-feature-points-details">Points leader will load from CSV.</span>
       </div>
 
       <div class="season-feature-card">
         <p class="section-label">The Sco</p>
-        <h2>2024 Last Place</h2>
-        <strong>Jakes Brothers and Sisters</strong>
-        <span>8th Place · 5-9 Regular Season Record</span>
+        <h2>Last Place</h2>
+        <strong id="season-feature-sco-team">Loading...</strong>
+        <span id="season-feature-sco-details">The Sco will load from CSV.</span>
       </div>
 
       <div class="season-feature-card">
         <p class="section-label">Deep Dive</p>
         <h2>Greatest Seasons</h2>
         <strong>Coming Next</strong>
-        <span>GOAT season rankings will get their own page.</span>
+        <span>GOAT season rankings will get their own page later.</span>
       </div>
 
     </section>
 
-    <section class="season-category-nav">
-      <a href="#season-2024">2024</a>
-      <a href="#season-2023">2023</a>
-      <a href="#season-2022">2022</a>
-      <a href="#season-2021">2021</a>
-      <a href="#season-2020">2020</a>
-      <a href="#season-2019">2019</a>
-      <a href="#season-2018">2018</a>
-      <a href="#season-2017">2017</a>
-      <a href="#season-2016">2016</a>
-      <a href="#season-2015">2015</a>
-      <a href="#season-2014">2014</a>
+    <section class="season-category-nav" id="season-year-nav">
+      <a href="#">Loading years...</a>
     </section>
 
     <section class="content-row">
@@ -82,8 +72,7 @@
         <p class="section-label">Archive Style</p>
         <h2>How This Page Works</h2>
         <p>
-          This page is built to browse the league year by year. Each season block shows the final standings,
-          regular season records, points for, points against, point margin, and roster moves.
+          This page pulls final standings from <strong>data/standings.csv</strong> and automatically groups each team under the correct season.
         </p>
       </div>
 
@@ -98,270 +87,20 @@
 
     </section>
 
-    <section class="content-card season-block" id="season-2024">
-      <div class="season-block-header">
-        <div>
-          <p class="section-label">Season Archive</p>
-          <h2>2024 Final Standings</h2>
+    <div id="season-blocks">
+      <section class="content-card season-block">
+        <div class="season-block-header">
+          <div>
+            <p class="section-label">Loading</p>
+            <h2>Season standings are loading...</h2>
+          </div>
         </div>
-        <div class="season-pill">Most Recent Season</div>
-      </div>
 
-      <div class="season-summary-strip">
-        <div><span>1st Place</span><strong>Life Sucks then You Die</strong></div>
-        <div><span>Top Points</span><strong>Most Valuable Potheads</strong></div>
-        <div><span>The Sco</span><strong>Jakes Brothers and Sisters</strong></div>
-        <div><span>League Avg.</span><strong>123.17 PPG</strong></div>
-      </div>
-
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Rank</th>
-              <th>Team</th>
-              <th>Record</th>
-              <th>Win %</th>
-              <th>Points For</th>
-              <th>Avg.</th>
-              <th>Points Against</th>
-              <th>Avg.</th>
-              <th>Point Margin</th>
-              <th>Moves</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr>
-              <td>*1</td>
-              <td><strong>Life Sucks then You Die</strong></td>
-              <td>10-4</td>
-              <td>.714</td>
-              <td>1,788.00</td>
-              <td>127.71</td>
-              <td>1,637.00</td>
-              <td>116.93</td>
-              <td>151.00</td>
-              <td>10</td>
-            </tr>
-
-            <tr>
-              <td>*2</td>
-              <td><strong>The Commish</strong></td>
-              <td>9-5</td>
-              <td>.643</td>
-              <td>1,822.00</td>
-              <td>130.14</td>
-              <td>1,883.00</td>
-              <td>134.50</td>
-              <td>-61.00</td>
-              <td>29</td>
-            </tr>
-
-            <tr>
-              <td>*3</td>
-              <td><strong>The Fantasy Football Team</strong></td>
-              <td>8-6</td>
-              <td>.571</td>
-              <td>1,790.00</td>
-              <td>127.86</td>
-              <td>1,639.00</td>
-              <td>117.07</td>
-              <td>151.00</td>
-              <td>18</td>
-            </tr>
-
-            <tr>
-              <td>*4</td>
-              <td><strong>Most Valuable Potheads</strong></td>
-              <td>7-7</td>
-              <td>.500</td>
-              <td>1,868.00</td>
-              <td>133.43</td>
-              <td>1,672.00</td>
-              <td>119.43</td>
-              <td>196.00</td>
-              <td>18</td>
-            </tr>
-
-            <tr>
-              <td>5</td>
-              <td><strong>Committed Not Addicted</strong></td>
-              <td>7-7</td>
-              <td>.500</td>
-              <td>1,801.00</td>
-              <td>128.64</td>
-              <td>1,729.00</td>
-              <td>123.50</td>
-              <td>72.00</td>
-              <td>29</td>
-            </tr>
-
-            <tr>
-              <td>6</td>
-              <td><strong>Bard Top Hunter Bottom</strong></td>
-              <td>5-9</td>
-              <td>.357</td>
-              <td>1,680.00</td>
-              <td>120.00</td>
-              <td>1,833.00</td>
-              <td>130.93</td>
-              <td>-153.00</td>
-              <td>17</td>
-            </tr>
-
-            <tr>
-              <td>7</td>
-              <td><strong>Cincinnati Harambes</strong></td>
-              <td>5-9</td>
-              <td>.357</td>
-              <td>1,547.00</td>
-              <td>110.50</td>
-              <td>1,704.00</td>
-              <td>121.71</td>
-              <td>-157.00</td>
-              <td>23</td>
-            </tr>
-
-            <tr>
-              <td>8</td>
-              <td><strong>Jakes Brothers and Sisters</strong></td>
-              <td>5-9</td>
-              <td>.357</td>
-              <td>1,499.00</td>
-              <td>107.07</td>
-              <td>1,698.00</td>
-              <td>121.29</td>
-              <td>-199.00</td>
-              <td>22</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section class="content-card season-block" id="season-2023">
-      <div class="season-block-header">
-        <div>
-          <p class="section-label">Season Archive</p>
-          <h2>2023 Final Standings</h2>
-        </div>
-        <div class="season-pill">Placeholder</div>
-      </div>
-
-      <p class="season-placeholder-text">
-        Add the 2023 standings here using the same structure as the 2024 table. Once this layout is approved,
-        we can either manually paste the rest of the seasons or convert the standings CSV into generated HTML.
-      </p>
-    </section>
-
-    <section class="content-card season-block" id="season-2022">
-      <div class="season-block-header">
-        <div>
-          <p class="section-label">Season Archive</p>
-          <h2>2022 Final Standings</h2>
-        </div>
-        <div class="season-pill">Placeholder</div>
-      </div>
-
-      <p class="season-placeholder-text">2022 standings section coming next.</p>
-    </section>
-
-    <section class="content-card season-block" id="season-2021">
-      <div class="season-block-header">
-        <div>
-          <p class="section-label">Season Archive</p>
-          <h2>2021 Final Standings</h2>
-        </div>
-        <div class="season-pill">Placeholder</div>
-      </div>
-
-      <p class="season-placeholder-text">2021 standings section coming next.</p>
-    </section>
-
-    <section class="content-card season-block" id="season-2020">
-      <div class="season-block-header">
-        <div>
-          <p class="section-label">Season Archive</p>
-          <h2>2020 Final Standings</h2>
-        </div>
-        <div class="season-pill">Placeholder</div>
-      </div>
-
-      <p class="season-placeholder-text">2020 standings section coming next.</p>
-    </section>
-
-    <section class="content-card season-block" id="season-2019">
-      <div class="season-block-header">
-        <div>
-          <p class="section-label">Season Archive</p>
-          <h2>2019 Final Standings</h2>
-        </div>
-        <div class="season-pill">Placeholder</div>
-      </div>
-
-      <p class="season-placeholder-text">2019 standings section coming next.</p>
-    </section>
-
-    <section class="content-card season-block" id="season-2018">
-      <div class="season-block-header">
-        <div>
-          <p class="section-label">Season Archive</p>
-          <h2>2018 Final Standings</h2>
-        </div>
-        <div class="season-pill">Placeholder</div>
-      </div>
-
-      <p class="season-placeholder-text">2018 standings section coming next.</p>
-    </section>
-
-    <section class="content-card season-block" id="season-2017">
-      <div class="season-block-header">
-        <div>
-          <p class="section-label">Season Archive</p>
-          <h2>2017 Final Standings</h2>
-        </div>
-        <div class="season-pill">Placeholder</div>
-      </div>
-
-      <p class="season-placeholder-text">2017 standings section coming next.</p>
-    </section>
-
-    <section class="content-card season-block" id="season-2016">
-      <div class="season-block-header">
-        <div>
-          <p class="section-label">Season Archive</p>
-          <h2>2016 Final Standings</h2>
-        </div>
-        <div class="season-pill">Placeholder</div>
-      </div>
-
-      <p class="season-placeholder-text">2016 standings section coming next.</p>
-    </section>
-
-    <section class="content-card season-block" id="season-2015">
-      <div class="season-block-header">
-        <div>
-          <p class="section-label">Season Archive</p>
-          <h2>2015 Final Standings</h2>
-        </div>
-        <div class="season-pill">Placeholder</div>
-      </div>
-
-      <p class="season-placeholder-text">2015 standings section coming next.</p>
-    </section>
-
-    <section class="content-card season-block" id="season-2014">
-      <div class="season-block-header">
-        <div>
-          <p class="section-label">Season Archive</p>
-          <h2>2014 Final Standings</h2>
-        </div>
-        <div class="season-pill">Placeholder</div>
-      </div>
-
-      <p class="season-placeholder-text">2014 standings section coming next.</p>
-    </section>
+        <p class="season-placeholder-text">
+          If this stays visible, check data/standings.csv, data-loader.js, and seasons.js.
+        </p>
+      </section>
+    </div>
 
   </main>
 
@@ -369,5 +108,7 @@
     <p>Krusty Krab League · Seasons</p>
   </footer>
 
+  <script src="data-loader.js"></script>
+  <script src="seasons.js"></script>
 </body>
 </html>
