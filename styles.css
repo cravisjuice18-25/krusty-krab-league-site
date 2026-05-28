@@ -3623,3 +3623,95 @@ td strong {
     grid-template-columns: 1fr;
   }
 }
+/* ---------- Trophy Room + Card Alignment Fixes ---------- */
+
+/* Prevent normal page sections/cards from overlapping each other */
+.content-card {
+  height: auto;
+  margin-bottom: 24px;
+}
+
+/* Keep grid cards equal-height only inside actual grids */
+.home-feature-grid .home-feature-card,
+.home-hub-grid .home-hub-card,
+.trophy-feature-grid .trophy-feature-card,
+.award-cabinet-grid .award-cabinet-card,
+.record-feature-grid .record-feature-card,
+.season-feature-grid .season-feature-card,
+.draft-feature-grid .draft-feature-card,
+.uniform-feature-grid .uniform-feature-card {
+  height: 100%;
+}
+
+/* Add safer spacing between major Trophy Room sections */
+.trophy-feature-grid,
+.trophy-category-nav,
+#major-awards,
+#season-awards,
+#year-by-year-awards,
+#fun-awards {
+  margin-bottom: 28px;
+}
+
+/* Make the top Trophy Room cards line up better */
+.trophy-feature-card {
+  justify-content: flex-start;
+  min-height: 245px;
+}
+
+.trophy-feature-card .section-label {
+  min-height: 18px;
+}
+
+.trophy-feature-card .trophy-icon {
+  display: block;
+  height: 44px;
+  line-height: 44px;
+  margin: 14px 0 18px;
+}
+
+.trophy-feature-card h2 {
+  min-height: 56px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.trophy-feature-card strong {
+  margin-top: auto;
+  line-height: 1.35;
+}
+
+/* Make award cards inside Trophy Room align cleaner too */
+.award-cabinet-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 230px;
+}
+
+.award-cabinet-card span {
+  height: 42px;
+  line-height: 42px;
+}
+
+.award-cabinet-card h3 {
+  min-height: 48px;
+}
+
+.award-cabinet-card p {
+  flex: 1;
+}
+
+.award-cabinet-card strong {
+  margin-top: auto;
+}
+
+/* Safer spacing for content rows */
+.content-row {
+  margin-bottom: 28px;
+  align-items: stretch;
+}
+
+/* Prevent table/cards from visually sitting too tight to the next section */
+.table-wrap {
+  margin-bottom: 4px;
+}
