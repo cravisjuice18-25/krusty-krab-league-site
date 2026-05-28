@@ -38,30 +38,30 @@
 
       <a class="home-feature-card home-feature-dark" href="champions.html">
         <p class="section-label">Latest Champion</p>
-        <h2>2024 Champion</h2>
-        <strong>TBD</strong>
-        <span>View championship history</span>
+        <h2 id="home-latest-champion-year">Loading Champion</h2>
+        <strong id="home-latest-champion-team">Loading...</strong>
+        <span id="home-latest-champion-link">View championship history</span>
       </a>
 
       <a class="home-feature-card" href="records.html">
         <p class="section-label">Record Book</p>
         <h2>Hall of Records</h2>
-        <strong>Career, season, playoff, and player records</strong>
+        <strong id="home-record-book-summary">Career, season, playoff, and player records</strong>
         <span>View league records</span>
       </a>
 
       <a class="home-feature-card" href="the-sco.html">
         <p class="section-label">The Basement</p>
-        <h2>The Sco</h2>
-        <strong>2024: Jakes Brothers and Sisters</strong>
-        <span>View last-place history</span>
+        <h2 id="home-latest-sco-title">The Sco</h2>
+        <strong id="home-latest-sco-team">Loading...</strong>
+        <span id="home-latest-sco-link">View last-place history</span>
       </a>
 
       <a class="home-feature-card" href="draft.html">
         <p class="section-label">Draft War Room</p>
-        <h2>Draft Archive</h2>
-        <strong>Locations, draft orders, and first-round boards</strong>
-        <span>View draft history</span>
+        <h2 id="home-draft-title">Draft Archive</h2>
+        <strong id="home-draft-details">Loading...</strong>
+        <span id="home-draft-link">View draft history</span>
       </a>
 
     </section>
@@ -80,7 +80,7 @@
 
         <a class="home-hub-card" href="teams.html">
           <span>Teams</span>
-          <small>Active franchises, owners, defunct teams, and future franchise pages.</small>
+          <small id="home-active-team-count">Active franchises, owners, defunct teams, and future franchise pages.</small>
         </a>
 
         <a class="home-hub-card" href="champions.html">
@@ -95,7 +95,7 @@
 
         <a class="home-hub-card" href="seasons.html">
           <span>Seasons</span>
-          <small>Year-by-year final standings, points, records, and season archive.</small>
+          <small id="home-season-details">Year-by-year final standings, points, records, and season archive.</small>
         </a>
 
         <a class="home-hub-card" href="draft.html">
@@ -144,8 +144,8 @@
         <p class="section-label">Site Status</p>
         <h2>Archive Buildout</h2>
         <p>
-          The site is currently being built as a static league archive. Core pages are in place,
-          and the next major step will be replacing placeholders with real Excel/CSV data.
+          The site is currently being built as a static league archive with CSV-powered sections.
+          Core pages are in place, and the next major step is replacing more placeholders with real data.
         </p>
       </div>
 
@@ -210,5 +210,7 @@
     <p>Krusty Krab League · Fantasy Football Archive</p>
   </footer>
 
+  <script src="data-loader.js"></script>
+  <script src="home.js"></script>
 </body>
 </html>
