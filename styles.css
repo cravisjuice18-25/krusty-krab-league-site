@@ -3475,3 +3475,18 @@ td strong {
 .uniform-color-stack .decal-chip {
   background: var(--decal-color, #facc15);
 }
+.social-feed-card {
+  overflow: hidden;
+}
+
+.x-feed-wrap {
+  margin-top: 14px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #111827;
+  min-height: 420px;
+}
+
+.x-feed-wrap .twitter-timeline {
+  display: block;
+}
