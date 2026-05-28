@@ -20,7 +20,7 @@ async function buildSeasonsPage() {
           <div class="season-block-header">
             <div>
               <p class="section-label">Error</p>
-              <h2>Standings CSV Not Loaded</h2>
+              <h2>Standings Not Loaded</h2>
             </div>
           </div>
 
@@ -146,6 +146,7 @@ function buildSeasonBlocks(standingsByYear, years) {
               <th>Points Against</th>
               <th>Avg.</th>
               <th>Point Margin</th>
+              <th>Avg. Margin</th>
               <th>Moves</th>
             </tr>
           </thead>
@@ -174,6 +175,7 @@ function buildStandingRow(row) {
       <td>${formatNumber(row.points_against)}</td>
       <td>${cleanText(row.avg_against)}</td>
       <td>${formatNumber(row.point_margin)}</td>
+      <td>${cleanText(row.avg_point_margin) || "TBD"}</td>
       <td>${cleanText(row.moves)}</td>
     </tr>
   `;
