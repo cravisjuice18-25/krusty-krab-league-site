@@ -4,34 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Franchise Profile | Krusty Krab League</title>
+  <title>Teams | Krusty Krab League</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
 
-  <header class="team-hero" id="team-hero" style="--team-color: #001f3f;">
-    <div class="team-hero-overlay">
-
-      <div class="team-hero-logo">
-        <img id="team-primary-logo" src="images/team-primary-logo-placeholder.png" alt="Team logo">
-      </div>
-
-      <div class="team-hero-text">
-        <p class="eyebrow">Franchise Profile</p>
-        <h1 id="team-name">Loading Team</h1>
-        <p class="team-tagline" id="team-tagline">
-          Franchise details will load here.
-        </p>
-
-        <div class="team-meta">
-          <span id="team-owner">Owner: Loading</span>
-          <span id="team-location">Location: TBD</span>
-          <span id="team-status">Active Franchise</span>
-        </div>
-      </div>
-
-    </div>
+  <header class="page-hero small-hero">
+    <p class="eyebrow">Franchise Directory</p>
+    <h1>Teams</h1>
+    <p>Every active franchise, former member, owner, logo, colorway, record, and league identity.</p>
   </header>
 
   <nav class="top-nav">
@@ -48,291 +30,71 @@
 
   <main class="page">
 
-    <section class="content-card team-story-card">
-      <p class="section-label">Franchise Story</p>
-      <h2 id="team-story-title">About This Franchise</h2>
-      <p id="team-story">
-        Franchise story will load here. This section can eventually be powered by the teams CSV or a separate franchise story CSV.
+    <section class="teams-intro-strip">
+
+  <div>
+    <p class="section-label">Active League</p>
+    <h2>8 Franchises</h2>
+    <p>The official active team directory for the Krusty Krab League.</p>
+  </div>
+
+  <div>
+    <p class="section-label">Franchise Archive</p>
+    <h2>Team Profiles</h2>
+    <p>Each franchise has its own identity, colorway, history, records, playoff moments, and group chat evidence.</p>
+  </div>
+
+</section>
+
+    <section class="content-card">
+      <div class="card-header">
+        <div>
+          <p class="section-label">Active Franchises</p>
+          <h2>Team Directory</h2>
+        </div>
+      </div>
+
+      <div class="franchise-directory-grid" id="active-teams-grid">
+        <article class="franchise-card" style="--team-color: #001f3f;">
+          <div class="franchise-card-body">
+            <p class="section-label">Loading</p>
+            <h3>Teams</h3>
+            <p class="franchise-tagline">Active franchises will load here.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="content-card inactive-franchise-section">
+      <div class="card-header">
+        <div>
+          <p class="section-label">League Alumni</p>
+          <h2>Defunct Franchises</h2>
+        </div>
+      </div>
+
+      <p class="inactive-intro">
+        Not every franchise survived the grind. These former members are no longer active,
+        but their teams remain part of league history.
       </p>
-    </section>
 
-    <section class="team-stat-grid cleaned-team-stat-grid">
-
-      <div class="team-stat-card">
-        <span>Lifetime Record</span>
-        <strong id="team-lifetime-record">TBD</strong>
-      </div>
-
-      <div class="team-stat-card">
-        <span>Win %</span>
-        <strong id="team-win-pct">TBD</strong>
-      </div>
-
-      <div class="team-stat-card">
-        <span>Championships</span>
-        <strong id="team-titles">TBD</strong>
-      </div>
-
-      <div class="team-stat-card">
-        <span>Playoff Appearances</span>
-        <strong id="team-playoffs">TBD</strong>
-      </div>
-
-      <div class="team-stat-card danger-stat">
-        <span>The Sco Finishes</span>
-        <strong id="team-sco-finishes">TBD</strong>
-      </div>
-
-      <div class="team-stat-card">
-        <span>Average Finish</span>
-        <strong id="team-average-finish">TBD</strong>
-      </div>
-
-      <div class="team-stat-card">
-        <span>All-Play Record</span>
-        <strong id="team-all-play-record">TBD</strong>
-      </div>
-
-      <div class="team-stat-card">
-        <span>Top Team of the Week</span>
-        <strong id="team-top-week-count">TBD</strong>
-      </div>
-
-    </section>
-
-    <section class="content-card">
-      <div class="card-header">
-        <div>
-          <p class="section-label">Season History</p>
-          <h2>Year-by-Year Results</h2>
-        </div>
-      </div>
-
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Year</th>
-              <th>Team Name</th>
-              <th>Finish</th>
-              <th>Record</th>
-              <th>Points For</th>
-              <th>Team Rating</th>
-              <th>Playoffs</th>
-              <th>Result</th>
-            </tr>
-          </thead>
-
-          <tbody id="team-season-history-body">
-            <tr>
-              <td colspan="8">Season history will load here.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section class="content-row">
-
-      <div class="content-card">
-        <p class="section-label">Best & Worst Seasons</p>
-        <h2>Franchise Highs and Lows</h2>
-
-        <div class="records-list">
-          <div class="record-item">
-            <strong>Best Season</strong>
-            <span id="team-best-season">TBD</span>
-          </div>
-
-          <div class="record-item">
-            <strong>Best Scoring Season</strong>
-            <span id="team-best-scoring-season">TBD</span>
-          </div>
-
-          <div class="record-item">
-            <strong>Most Painful Finish</strong>
-            <span id="team-most-painful-finish">TBD</span>
-          </div>
-
-          <div class="record-item">
-            <strong>Worst Season</strong>
-            <span id="team-worst-season">TBD</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="content-card">
-        <p class="section-label">Top Player Seasons</p>
-        <h2>Franchise Bests</h2>
-
-        <div class="records-list" id="team-top-player-list">
-          <div class="record-item">
-            <strong>Best QB Season</strong>
-            <span>TBD</span>
-          </div>
-
-          <div class="record-item">
-            <strong>Best RB Season</strong>
-            <span>TBD</span>
-          </div>
-
-          <div class="record-item">
-            <strong>Best WR Season</strong>
-            <span>TBD</span>
-          </div>
-
-          <div class="record-item">
-            <strong>Best TE Season</strong>
-            <span>TBD</span>
-          </div>
-        </div>
-      </div>
-
-    </section>
-
-    <section class="content-card">
-      <div class="card-header">
-        <div>
-          <p class="section-label">Record vs League</p>
-          <h2>Head-to-Head Archive</h2>
-        </div>
-      </div>
-
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Opponent</th>
-              <th>Record</th>
-              <th>Win %</th>
-              <th>Points For</th>
-              <th>Points Against</th>
-              <th>Best Win</th>
-              <th>Worst Loss</th>
-            </tr>
-          </thead>
-
-          <tbody id="team-h2h-body">
-            <tr>
-              <td colspan="7">Head-to-head history will load here.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section class="content-row">
-
-      <div class="content-card">
-        <p class="section-label">Trophy Case</p>
-        <h2>Franchise Hardware</h2>
-
-        <div class="records-list">
-          <div class="record-item">
-            <strong>Championships</strong>
-            <span id="team-trophy-championships">TBD</span>
-          </div>
-
-          <div class="record-item">
-            <strong>Runner-Up Finishes</strong>
-            <span id="team-runner-ups">TBD</span>
-          </div>
-
-          <div class="record-item">
-            <strong>Regular Season Titles</strong>
-            <span id="team-regular-season-titles">TBD</span>
-          </div>
-
-          <div class="record-item">
-            <strong>Most Points Seasons</strong>
-            <span id="team-most-points-seasons">TBD</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="content-card pain-card">
-        <p class="section-label">Pain Case</p>
-        <h2>Franchise Lowlights</h2>
-
-        <div class="records-list">
-          <div class="record-item">
-            <strong>The Sco Finishes</strong>
-            <span id="team-pain-sco-finishes">TBD</span>
-          </div>
-
-          <div class="record-item">
-            <strong>Championship Losses</strong>
-            <span id="team-championship-losses">TBD</span>
-          </div>
-
-          <div class="record-item">
-            <strong>Worst Bad Beat</strong>
-            <span id="team-worst-bad-beat">TBD</span>
-          </div>
-
-          <div class="record-item">
-            <strong>Most Painful Collapse</strong>
-            <span id="team-most-painful-collapse">TBD</span>
-          </div>
-        </div>
-      </div>
-
-    </section>
-
-    <section class="content-row">
-
-      <div class="content-card">
-        <p class="section-label">Records Held</p>
-        <h2>League Records Owned</h2>
-
-        <div class="records-list" id="team-records-held-list">
-          <div class="record-item">
-            <strong>Records will load here</strong>
-            <span>TBD</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="content-card">
-        <p class="section-label">Brand & Uniforms</p>
-        <h2>Franchise Identity</h2>
-
-        <div class="brand-logo-row">
-          <div>
-            <span>Primary Logo</span>
-            <img id="team-brand-primary-logo" src="images/team-primary-logo-placeholder.png" alt="Primary logo">
-          </div>
-
-          <div>
-            <span>Secondary Logo</span>
-            <img id="team-brand-secondary-logo" src="images/team-secondary-logo-placeholder.png" alt="Secondary logo">
-          </div>
-        </div>
-      </div>
-
-    </section>
-
-    <section class="content-card uniform-showcase-card">
-      <div class="card-header">
-        <div>
-          <p class="section-label">Uniform</p>
-          <h2 id="team-uniform-title">Franchise Uniform</h2>
-        </div>
-        <a class="text-link" href="uniforms.html">View Uniforms</a>
-      </div>
-
-      <div class="uniform-image-wrap">
-        <img id="team-uniform-image" src="images/team-uniform-placeholder.png" alt="Team uniform">
+      <div class="inactive-franchise-grid" id="inactive-teams-grid">
+        <article class="inactive-franchise-card">
+          <div class="inactive-badge">Loading</div>
+          <h3>Inactive Teams</h3>
+          <p>Former Owner: TBD</p>
+          <span>Defunct franchises will load here.</span>
+        </article>
       </div>
     </section>
 
   </main>
 
   <footer class="footer">
-    <p id="team-footer">Krusty Krab League · Franchise Profile</p>
+    <p>Krusty Krab League · Teams</p>
   </footer>
 
   <script src="data-loader.js"></script>
-  <script src="team.js"></script>
+  <script src="teams.js"></script>
 </body>
 </html>
