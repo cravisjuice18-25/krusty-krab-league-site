@@ -3490,3 +3490,136 @@ td strong {
 .x-feed-wrap .twitter-timeline {
   display: block;
 }
+.home-feature-grid,
+.home-hub-grid,
+.home-status-grid {
+  align-items: stretch;
+}
+
+.home-feature-card,
+.home-hub-card,
+.content-card {
+  height: 100%;
+}
+
+.draft-countdown-card {
+  border-top: 7px solid #facc15;
+}
+
+.countdown-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 9px;
+  margin: 12px 0 10px;
+}
+
+.countdown-grid div {
+  background: #111827;
+  color: white;
+  border-radius: 14px;
+  padding: 10px 8px;
+  text-align: center;
+}
+
+.countdown-grid span {
+  display: block;
+  color: #facc15;
+  font-size: 24px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.countdown-grid small {
+  display: block;
+  margin-top: 5px;
+  color: #d1d5db;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.countdown-note {
+  margin-top: auto;
+}
+
+.home-clean-row {
+  align-items: stretch;
+}
+
+.nfl-links-card p {
+  color: #d1d5db;
+}
+
+.quick-link-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.quick-link-list a {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.14);
+  color: white;
+  text-decoration: none;
+  border-radius: 14px;
+  padding: 12px;
+  font-weight: 900;
+  text-align: center;
+}
+
+.quick-link-list a:hover {
+  background: #facc15;
+  color: #111827;
+}
+
+.home-season-card {
+  margin-top: 24px;
+}
+
+.home-season-snapshot-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.home-season-snapshot-grid div {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.home-season-snapshot-grid span {
+  display: block;
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 8px;
+}
+
+.home-season-snapshot-grid strong {
+  display: block;
+  font-size: 17px;
+}
+
+.home-season-snapshot-grid a {
+  color: #111827;
+  text-decoration: none;
+}
+
+.home-season-snapshot-grid a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 780px) {
+  .home-season-snapshot-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-link-list {
+    grid-template-columns: 1fr;
+  }
+}
