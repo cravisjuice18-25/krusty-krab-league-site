@@ -2176,3 +2176,63 @@ td strong {
     grid-template-columns: 1fr;
   }
 }
+
+/* ---------- Seasons table spacing fix ---------- */
+
+.season-block .table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.season-block table {
+  min-width: 1180px;
+  table-layout: auto;
+}
+
+.season-block th,
+.season-block td {
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.season-block th {
+  line-height: 1.15;
+}
+
+/* Let team names wrap, but keep everything else one line */
+.season-block th:nth-child(2),
+.season-block td:nth-child(2) {
+  white-space: normal;
+  min-width: 190px;
+}
+
+.season-block th:nth-child(1),
+.season-block td:nth-child(1) {
+  min-width: 48px;
+}
+
+.season-block th:nth-child(3),
+.season-block td:nth-child(3) {
+  min-width: 90px;
+}
+
+.season-block th:nth-child(4),
+.season-block td:nth-child(4),
+.season-block th:nth-child(5),
+.season-block td:nth-child(5),
+.season-block th:nth-child(6),
+.season-block td:nth-child(6),
+.season-block th:nth-child(7),
+.season-block td:nth-child(7),
+.season-block th:nth-child(8),
+.season-block td:nth-child(8),
+.season-block th:nth-child(9),
+.season-block td:nth-child(9),
+.season-block th:nth-child(10),
+.season-block td:nth-child(10),
+.season-block th:nth-child(11),
+.season-block td:nth-child(11),
+.season-block th:nth-child(12),
+.season-block td:nth-child(12) {
+  min-width: 90px;
+}
