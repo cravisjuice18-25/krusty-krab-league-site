@@ -138,14 +138,14 @@ function buildSeasonBlocks(standingsByYear, years) {
             <tr>
               <th>Rank</th>
               <th>Team</th>
-              <th>Team Rating</th>
+              <th>Rating</th>
               <th>Record</th>
               <th>Win %</th>
-              <th>Points For</th>
+              <th>PF</th>
               <th>Avg.</th>
-              <th>Points Against</th>
+              <th>PA</th>
               <th>Avg.</th>
-              <th>Point Margin</th>
+              <th>Margin</th>
               <th>Avg. Margin</th>
               <th>Moves</th>
             </tr>
