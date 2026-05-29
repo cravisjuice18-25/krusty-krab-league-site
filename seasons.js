@@ -65,6 +65,7 @@ function buildSeasonFeatureCards(standingsByYear, years) {
   const latestStandings = standingsByYear[latestYear];
   const firstPlace = latestStandings[0];
   const lastPlace = latestStandings[latestStandings.length - 1];
+
   const topScoringTeam = [...latestStandings].sort((a, b) => {
     return Number(b.points_for) - Number(a.points_for);
   })[0];
@@ -74,7 +75,7 @@ function buildSeasonFeatureCards(standingsByYear, years) {
   setText("season-feature-winner-details", `1st Place · ${cleanText(firstPlace.record)} Regular Season Record`);
 
   setText("season-feature-points-team", cleanText(topScoringTeam.team));
-  setText("season-feature-points-details", `${formatNumber(topScoringTeam.points_for)} points · ${cleanText(topScoringTeam.avg_for)} average`);
+  setText("season-feature-points-details", `${formatNumber(topScoringTeam.points_for)} points · ${formatNumber(topScoringTeam.avg_for)} average`);
 
   setText("season-feature-sco-team", cleanText(lastPlace.team));
   setText("season-feature-sco-details", `${ordinal(latestStandings.length)} Place · ${cleanText(lastPlace.record)} Regular Season Record`);
@@ -106,6 +107,7 @@ function buildSeasonBlocks(standingsByYear, years) {
     const standings = standingsByYear[year];
     const firstPlace = standings[0];
     const lastPlace = standings[standings.length - 1];
+
     const topScoringTeam = [...standings].sort((a, b) => {
       return Number(b.points_for) - Number(a.points_for);
     })[0];
@@ -137,6 +139,7 @@ function buildSeasonBlocks(standingsByYear, years) {
           <thead>
             <tr>
               <th>Rank</th>
+              <th>Owner</th>
               <th>Team</th>
               <th>Rating</th>
               <th>Record</th>
@@ -166,16 +169,17 @@ function buildStandingRow(row) {
   return `
     <tr>
       <td>${cleanText(row.rank)}</td>
+      <td>${formatOwnerName(row.owner_id)}</td>
       <td><strong>${cleanText(row.team)}</strong></td>
-      <td>${cleanText(row.team_rating) || "TBD"}</td>
+      <td>${formatNumber(row.team_rating)}</td>
       <td>${cleanText(row.record)}</td>
-      <td>${cleanText(row.win_pct)}</td>
+      <td>${formatWinPct(row.win_pct)}</td>
       <td>${formatNumber(row.points_for)}</td>
-      <td>${cleanText(row.avg_for)}</td>
+      <td>${formatNumber(row.avg_for)}</td>
       <td>${formatNumber(row.points_against)}</td>
-      <td>${cleanText(row.avg_against)}</td>
+      <td>${formatNumber(row.avg_against)}</td>
       <td>${formatNumber(row.point_margin)}</td>
-      <td>${cleanText(row.avg_point_margin) || "TBD"}</td>
+      <td>${formatNumber(row.avg_point_margin)}</td>
       <td>${cleanText(row.moves)}</td>
     </tr>
   `;
@@ -190,6 +194,36 @@ function calculateLeagueAverage(standings) {
 
   const total = averages.reduce((sum, value) => sum + value, 0);
   return (total / averages.length).toFixed(2);
+}
+
+function formatOwnerName(ownerId) {
+  const ownerMap = {
+    bard: "Bard",
+    sco: "Sco",
+    jake: "Jake",
+    muffin: "Muffin",
+    miner: "Miner",
+    hunter: "Hunter",
+    kyle: "Kyle",
+    gary: "Gary",
+    eric: "Eric",
+    sabella: "Sabella",
+    charlie: "Charlie",
+    miller: "Miller"
+  };
+
+  const cleaned = cleanText(ownerId).toLowerCase();
+  return ownerMap[cleaned] || cleanText(ownerId) || "TBD";
+}
+
+function formatWinPct(value) {
+  const number = Number(value);
+
+  if (Number.isNaN(number)) {
+    return cleanText(value) || "TBD";
+  }
+
+  return number.toFixed(2);
 }
 
 function setText(id, text) {
@@ -212,7 +246,7 @@ function formatNumber(value) {
   }
 
   return number.toLocaleString(undefined, {
-    minimumFractionDigits: 2,
+    minimumFractionDigits: 0,
     maximumFractionDigits: 2
   });
 }
