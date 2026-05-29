@@ -139,7 +139,6 @@ function buildSeasonBlocks(standingsByYear, years) {
           <thead>
             <tr>
               <th>Rank</th>
-              <th>Owner</th>
               <th>Team</th>
               <th>Rating</th>
               <th>Record</th>
@@ -169,7 +168,6 @@ function buildStandingRow(row) {
   return `
     <tr>
       <td>${cleanText(row.rank)}</td>
-      <td>${formatOwnerName(row.owner_id)}</td>
       <td><strong>${cleanText(row.team)}</strong></td>
       <td>${formatNumber(row.team_rating)}</td>
       <td>${cleanText(row.record)}</td>
