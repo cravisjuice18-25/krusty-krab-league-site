@@ -12,6 +12,7 @@ async function buildTeamPage() {
 
     let teamPlayers = [];
     let teamH2H = [];
+    let teamRecords = [];
 
     try {
       teamPlayers = await loadCSV("data/team-players.csv");
@@ -25,6 +26,13 @@ async function buildTeamPage() {
     } catch (error) {
       console.warn("team-h2h.csv did not load:", error);
       teamH2H = [];
+    }
+
+    try {
+      teamRecords = await loadCSV("data/team-records.csv");
+    } catch (error) {
+      console.warn("team-records.csv did not load:", error);
+      teamRecords = [];
     }
 
     const team = teams.find(row => {
@@ -48,12 +56,17 @@ async function buildTeamPage() {
       return cleanText(row.owner_id).toLowerCase() === ownerId.toLowerCase();
     });
 
+    const ownerRecords = teamRecords.filter(row => {
+      return cleanText(row.owner_id).toLowerCase() === ownerId.toLowerCase();
+    });
+
     buildTeamIdentity(team);
     buildTeamSnapshot(team, ownerStandings);
     buildSeasonHistory(ownerStandings);
     buildBestWorstSeasons(ownerStandings);
     buildTopPlayerSeasons(ownerPlayers);
     buildHeadToHead(ownerH2H);
+    buildTeamRecords(ownerRecords);
 
   } catch (error) {
     console.error("Team page error:", error);
@@ -293,6 +306,53 @@ function buildHeadToHead(ownerH2H) {
     `;
 
     h2hBody.appendChild(tableRow);
+  });
+}
+
+function buildTeamRecords(ownerRecords) {
+  const list = document.getElementById("team-records-held-list");
+
+  if (!list) return;
+
+  const realRecords = ownerRecords.filter(row => {
+    return cleanText(row.record).toLowerCase() !== "team record held";
+  });
+
+  if (!realRecords || realRecords.length === 0) {
+    list.innerHTML = `
+      <div class="record-item">
+        <strong>No Records Listed Yet</strong>
+        <span>This franchise does not have league records entered yet.</span>
+      </div>
+    `;
+    return;
+  }
+
+  list.innerHTML = "";
+
+  realRecords.forEach(row => {
+    const item = document.createElement("div");
+    item.className = "record-item";
+
+    const record = cleanText(row.record) || "Record";
+    const value = cleanText(row.value) || "TBD";
+    const year = cleanText(row.year);
+    const teamName = cleanText(row.team_name);
+    const notes = cleanText(row.notes);
+
+    const details = [
+      value,
+      year && year.toLowerCase() !== "tbd" ? year : "",
+      teamName && teamName.toLowerCase() !== "tbd" ? teamName : "",
+      notes && notes.toLowerCase() !== "tbd" ? notes : ""
+    ].filter(Boolean).join(" · ");
+
+    item.innerHTML = `
+      <strong>${record}</strong>
+      <span>${details || "TBD"}</span>
+    `;
+
+    list.appendChild(item);
   });
 }
 
