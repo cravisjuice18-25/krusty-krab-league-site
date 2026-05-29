@@ -54,7 +54,6 @@ async function buildTeamPage() {
     buildBestWorstSeasons(ownerStandings);
     buildTopPlayerSeasons(ownerPlayers);
     buildHeadToHead(ownerH2H);
-    buildTemporarySections(team);
 
   } catch (error) {
     console.error("Team page error:", error);
@@ -128,9 +127,6 @@ function buildTeamSnapshot(team, ownerStandings) {
   setText("team-average-finish", cleanText(team.average_finish) || calculateAverageFinish(ownerStandings));
   setText("team-all-play-record", cleanText(team.all_play_record) || "TBD");
   setText("team-top-week-count", cleanText(team.top_week_count) || "TBD");
-
-  setText("team-trophy-championships", titles);
-  setText("team-pain-sco-finishes", cleanText(team.sco_finishes) || calculateScoFinishes(ownerStandings));
 }
 
 function buildSeasonHistory(ownerStandings) {
@@ -199,7 +195,7 @@ function buildBestWorstSeasons(ownerStandings) {
   if (bestRating) {
     setText(
       "team-most-painful-finish",
-      `${bestRating.year} · Best rating season: ${formatNumber(bestRating.team_rating)} · Finished ${ordinal(bestRating.rank)}`
+      `${bestRating.year} · ${cleanText(bestRating.team)} · Rating ${formatNumber(bestRating.team_rating)} · Finished ${ordinal(bestRating.rank)}`
     );
   }
 
@@ -292,20 +288,6 @@ function buildHeadToHead(ownerH2H) {
 
     h2hBody.appendChild(tableRow);
   });
-}
-
-function buildTemporarySections(team) {
-  const teamName = cleanText(team.team_name) || "This franchise";
-  const recordsList = document.getElementById("team-records-held-list");
-
-  if (recordsList) {
-    recordsList.innerHTML = `
-      <div class="record-item">
-        <strong>Records Held</strong>
-        <span>League records for ${teamName} will load here once we add team records data.</span>
-      </div>
-    `;
-  }
 }
 
 function calculateLifetimeRecord(ownerStandings) {
