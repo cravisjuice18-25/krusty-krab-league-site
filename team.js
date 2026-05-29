@@ -9,8 +9,23 @@ async function buildTeamPage() {
 
     const teams = await loadCSV("data/teams.csv");
     const standings = await loadCSV("data/standings.csv");
-    const teamPlayers = await loadCSV("data/team-players.csv");
-    const teamH2H = await loadCSV("data/team-h2h.csv");
+
+    let teamPlayers = [];
+    let teamH2H = [];
+
+    try {
+      teamPlayers = await loadCSV("data/team-players.csv");
+    } catch (error) {
+      console.warn("team-players.csv did not load:", error);
+      teamPlayers = [];
+    }
+
+    try {
+      teamH2H = await loadCSV("data/team-h2h.csv");
+    } catch (error) {
+      console.warn("team-h2h.csv did not load:", error);
+      teamH2H = [];
+    }
 
     const team = teams.find(row => {
       return cleanText(row.owner_id).toLowerCase() === ownerId.toLowerCase();
@@ -45,7 +60,7 @@ async function buildTeamPage() {
     console.error("Team page error:", error);
     showTeamError(
       "Team page error",
-      "Check data/teams.csv, data/standings.csv, data/team-players.csv, data/team-h2h.csv, data-loader.js, and team.js."
+      "Check data/teams.csv, data/standings.csv, data-loader.js, and team.js."
     );
   }
 }
