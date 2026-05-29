@@ -9,6 +9,7 @@ async function buildTeamPage() {
 
     const teams = await loadCSV("data/teams.csv");
     const standings = await loadCSV("data/standings.csv");
+    const teamPlayers = await loadCSV("data/team-players.csv");
 
     const team = teams.find(row => {
       return cleanText(row.owner_id).toLowerCase() === ownerId.toLowerCase();
@@ -23,15 +24,20 @@ async function buildTeamPage() {
       .filter(row => cleanText(row.owner_id).toLowerCase() === ownerId.toLowerCase())
       .sort((a, b) => Number(b.year) - Number(a.year));
 
+    const ownerPlayers = teamPlayers.filter(row => {
+      return cleanText(row.owner_id).toLowerCase() === ownerId.toLowerCase();
+    });
+
     buildTeamIdentity(team);
     buildTeamSnapshot(team, ownerStandings);
     buildSeasonHistory(ownerStandings);
     buildBestWorstSeasons(ownerStandings);
+    buildTopPlayerSeasons(ownerPlayers);
     buildTemporarySections(team);
 
   } catch (error) {
     console.error("Team page error:", error);
-    showTeamError("Team page error", "Check data/teams.csv, data/standings.csv, data-loader.js, and team.js.");
+    showTeamError("Team page error", "Check data/teams.csv, data/standings.csv, data/team-players.csv, data-loader.js, and team.js.");
   }
 }
 
@@ -179,6 +185,49 @@ function buildBestWorstSeasons(ownerStandings) {
       `${worstFinish.year} · ${cleanText(worstFinish.team)} · ${ordinal(worstFinish.rank)} place · ${cleanText(worstFinish.record)}`
     );
   }
+}
+
+function buildTopPlayerSeasons(ownerPlayers) {
+  const list = document.getElementById("team-top-player-list");
+
+  if (!list) return;
+
+  if (!ownerPlayers || ownerPlayers.length === 0) {
+    list.innerHTML = `
+      <div class="record-item">
+        <strong>Top Player Seasons</strong>
+        <span>No player season data found yet.</span>
+      </div>
+    `;
+    return;
+  }
+
+  const positionOrder = ["QB", "RB", "WR", "TE"];
+
+  const sortedPlayers = [...ownerPlayers].sort((a, b) => {
+    return positionOrder.indexOf(cleanText(a.position)) - positionOrder.indexOf(cleanText(b.position));
+  });
+
+  list.innerHTML = "";
+
+  sortedPlayers.forEach(row => {
+    const item = document.createElement("div");
+    item.className = "record-item";
+
+    const position = cleanText(row.position) || "Position";
+    const player = cleanText(row.player) || "TBD";
+    const nflTeam = cleanText(row.nfl_team);
+    const points = cleanText(row.points) || "TBD";
+    const year = cleanText(row.year) || "TBD";
+    const notes = cleanText(row.notes);
+
+    item.innerHTML = `
+      <strong>Best ${position} Season</strong>
+      <span>${player}${nflTeam ? ` · ${nflTeam}` : ""} · ${formatNumber(points)} points · ${year}${notes ? ` · ${notes}` : ""}</span>
+    `;
+
+    list.appendChild(item);
+  });
 }
 
 function buildTemporarySections(team) {
