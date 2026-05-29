@@ -10,6 +10,7 @@ async function buildTeamPage() {
     const teams = await loadCSV("data/teams.csv");
     const standings = await loadCSV("data/standings.csv");
     const teamPlayers = await loadCSV("data/team-players.csv");
+    const teamH2H = await loadCSV("data/team-h2h.csv");
 
     const team = teams.find(row => {
       return cleanText(row.owner_id).toLowerCase() === ownerId.toLowerCase();
@@ -28,16 +29,24 @@ async function buildTeamPage() {
       return cleanText(row.owner_id).toLowerCase() === ownerId.toLowerCase();
     });
 
+    const ownerH2H = teamH2H.filter(row => {
+      return cleanText(row.owner_id).toLowerCase() === ownerId.toLowerCase();
+    });
+
     buildTeamIdentity(team);
     buildTeamSnapshot(team, ownerStandings);
     buildSeasonHistory(ownerStandings);
     buildBestWorstSeasons(ownerStandings);
     buildTopPlayerSeasons(ownerPlayers);
+    buildHeadToHead(ownerH2H);
     buildTemporarySections(team);
 
   } catch (error) {
     console.error("Team page error:", error);
-    showTeamError("Team page error", "Check data/teams.csv, data/standings.csv, data/team-players.csv, data-loader.js, and team.js.");
+    showTeamError(
+      "Team page error",
+      "Check data/teams.csv, data/standings.csv, data/team-players.csv, data/team-h2h.csv, data-loader.js, and team.js."
+    );
   }
 }
 
@@ -205,7 +214,10 @@ function buildTopPlayerSeasons(ownerPlayers) {
   const positionOrder = ["QB", "RB", "WR", "TE"];
 
   const sortedPlayers = [...ownerPlayers].sort((a, b) => {
-    return positionOrder.indexOf(cleanText(a.position)) - positionOrder.indexOf(cleanText(b.position));
+    const aIndex = positionOrder.indexOf(cleanText(a.position));
+    const bIndex = positionOrder.indexOf(cleanText(b.position));
+
+    return (aIndex === -1 ? 999 : aIndex) - (bIndex === -1 ? 999 : bIndex);
   });
 
   list.innerHTML = "";
@@ -230,21 +242,45 @@ function buildTopPlayerSeasons(ownerPlayers) {
   });
 }
 
-function buildTemporarySections(team) {
-  const teamName = cleanText(team.team_name) || "This franchise";
-
+function buildHeadToHead(ownerH2H) {
   const h2hBody = document.getElementById("team-h2h-body");
 
-  if (h2hBody) {
+  if (!h2hBody) return;
+
+  if (!ownerH2H || ownerH2H.length === 0) {
     h2hBody.innerHTML = `
       <tr>
-        <td colspan="7">
-          Head-to-head records for ${teamName} will load here once we add the H2H data.
-        </td>
+        <td colspan="7">No head-to-head records found for this franchise yet.</td>
       </tr>
     `;
+    return;
   }
 
+  const sortedH2H = [...ownerH2H].sort((a, b) => {
+    return cleanText(a.opponent_name).localeCompare(cleanText(b.opponent_name));
+  });
+
+  h2hBody.innerHTML = "";
+
+  sortedH2H.forEach(row => {
+    const tableRow = document.createElement("tr");
+
+    tableRow.innerHTML = `
+      <td><strong>${cleanText(row.opponent_name) || "TBD"}</strong></td>
+      <td>${cleanText(row.record) || "TBD"}</td>
+      <td>${formatWinPct(row.win_pct)}</td>
+      <td>${formatNumber(row.points_for)}</td>
+      <td>${formatNumber(row.points_against)}</td>
+      <td>${cleanText(row.best_win) || "TBD"}</td>
+      <td>${cleanText(row.worst_loss) || "TBD"}</td>
+    `;
+
+    h2hBody.appendChild(tableRow);
+  });
+}
+
+function buildTemporarySections(team) {
+  const teamName = cleanText(team.team_name) || "This franchise";
   const recordsList = document.getElementById("team-records-held-list");
 
   if (recordsList) {
@@ -356,6 +392,20 @@ function calculateWinPct(record) {
   if (!total) return "TBD";
 
   return ((wins + ties * 0.5) / total).toFixed(3).replace("0.", ".");
+}
+
+function formatWinPct(value) {
+  const cleaned = cleanText(value);
+
+  if (!cleaned || cleaned === "TBD") return "TBD";
+
+  const number = Number(cleaned);
+
+  if (Number.isNaN(number)) {
+    return cleaned;
+  }
+
+  return number.toFixed(2);
 }
 
 function ordinal(value) {
