@@ -8,6 +8,7 @@ async function buildTeamPage() {
     }
 
     const teams = await loadCSV("data/teams.csv");
+    const standings = await loadCSV("data/standings.csv");
 
     const team = teams.find(row => {
       return cleanText(row.owner_id).toLowerCase() === ownerId.toLowerCase();
@@ -18,13 +19,19 @@ async function buildTeamPage() {
       return;
     }
 
+    const ownerStandings = standings
+      .filter(row => cleanText(row.owner_id).toLowerCase() === ownerId.toLowerCase())
+      .sort((a, b) => Number(b.year) - Number(a.year));
+
     buildTeamIdentity(team);
-    buildTeamSnapshot(team);
+    buildTeamSnapshot(team, ownerStandings);
+    buildSeasonHistory(ownerStandings);
+    buildBestWorstSeasons(ownerStandings);
     buildTemporarySections(team);
 
   } catch (error) {
     console.error("Team page error:", error);
-    showTeamError("Team page error", "Check data/teams.csv, data-loader.js, and team.js.");
+    showTeamError("Team page error", "Check data/teams.csv, data/standings.csv, data-loader.js, and team.js.");
   }
 }
 
@@ -77,39 +84,105 @@ function buildTeamIdentity(team) {
   setText("team-footer", `Krusty Krab League · ${teamName}`);
 }
 
-function buildTeamSnapshot(team) {
-  const record = cleanText(team.record) || "TBD";
+function buildTeamSnapshot(team, ownerStandings) {
+  const record = calculateLifetimeRecord(ownerStandings);
   const titles = cleanText(team.titles) || "TBD";
   const playoffAppearances = cleanText(team.playoff_appearances) || "TBD";
 
   setText("team-lifetime-record", record);
+  setText("team-win-pct", calculateWinPct(record));
   setText("team-titles", titles);
   setText("team-playoffs", playoffAppearances);
 
-  setText("team-win-pct", calculateWinPct(record));
-  setText("team-sco-finishes", cleanText(team.sco_finishes) || "TBD");
-  setText("team-average-finish", cleanText(team.average_finish) || "TBD");
+  setText("team-sco-finishes", cleanText(team.sco_finishes) || calculateScoFinishes(ownerStandings));
+  setText("team-average-finish", cleanText(team.average_finish) || calculateAverageFinish(ownerStandings));
   setText("team-all-play-record", cleanText(team.all_play_record) || "TBD");
   setText("team-top-week-count", cleanText(team.top_week_count) || "TBD");
 
   setText("team-trophy-championships", titles);
-  setText("team-pain-sco-finishes", cleanText(team.sco_finishes) || "TBD");
+  setText("team-pain-sco-finishes", cleanText(team.sco_finishes) || calculateScoFinishes(ownerStandings));
+}
+
+function buildSeasonHistory(ownerStandings) {
+  const seasonBody = document.getElementById("team-season-history-body");
+
+  if (!seasonBody) return;
+
+  if (ownerStandings.length === 0) {
+    seasonBody.innerHTML = `
+      <tr>
+        <td colspan="8">No season history found for this franchise.</td>
+      </tr>
+    `;
+    return;
+  }
+
+  seasonBody.innerHTML = "";
+
+  ownerStandings.forEach(row => {
+    const tableRow = document.createElement("tr");
+
+    tableRow.innerHTML = `
+      <td>${cleanText(row.year)}</td>
+      <td><strong>${cleanText(row.team)}</strong></td>
+      <td>${ordinal(cleanText(row.rank))}</td>
+      <td>${cleanText(row.record)}</td>
+      <td>${formatNumber(row.points_for)}</td>
+      <td>${formatNumber(row.team_rating)}</td>
+      <td>${getPlayoffText(row.rank)}</td>
+      <td>${getSeasonResult(row.rank)}</td>
+    `;
+
+    seasonBody.appendChild(tableRow);
+  });
+}
+
+function buildBestWorstSeasons(ownerStandings) {
+  if (!ownerStandings || ownerStandings.length === 0) return;
+
+  const bestFinish = [...ownerStandings].sort((a, b) => Number(a.rank) - Number(b.rank))[0];
+
+  const bestScoring = [...ownerStandings].sort((a, b) => {
+    return Number(b.points_for) - Number(a.points_for);
+  })[0];
+
+  const bestRating = [...ownerStandings].sort((a, b) => {
+    return Number(b.team_rating) - Number(a.team_rating);
+  })[0];
+
+  const worstFinish = [...ownerStandings].sort((a, b) => Number(b.rank) - Number(a.rank))[0];
+
+  if (bestFinish) {
+    setText(
+      "team-best-season",
+      `${bestFinish.year} · ${cleanText(bestFinish.team)} · ${ordinal(bestFinish.rank)} place · ${cleanText(bestFinish.record)}`
+    );
+  }
+
+  if (bestScoring) {
+    setText(
+      "team-best-scoring-season",
+      `${bestScoring.year} · ${formatNumber(bestScoring.points_for)} points · ${formatNumber(bestScoring.avg_for)} average`
+    );
+  }
+
+  if (bestRating) {
+    setText(
+      "team-most-painful-finish",
+      `${bestRating.year} · Best rating season: ${formatNumber(bestRating.team_rating)} · Finished ${ordinal(bestRating.rank)}`
+    );
+  }
+
+  if (worstFinish) {
+    setText(
+      "team-worst-season",
+      `${worstFinish.year} · ${cleanText(worstFinish.team)} · ${ordinal(worstFinish.rank)} place · ${cleanText(worstFinish.record)}`
+    );
+  }
 }
 
 function buildTemporarySections(team) {
   const teamName = cleanText(team.team_name) || "This franchise";
-
-  const seasonBody = document.getElementById("team-season-history-body");
-
-  if (seasonBody) {
-    seasonBody.innerHTML = `
-      <tr>
-        <td colspan="8">
-          Season history for ${teamName} will load here once we connect this page to standings.csv by owner_id.
-        </td>
-      </tr>
-    `;
-  }
 
   const h2hBody = document.getElementById("team-h2h-body");
 
@@ -133,6 +206,68 @@ function buildTemporarySections(team) {
       </div>
     `;
   }
+}
+
+function calculateLifetimeRecord(ownerStandings) {
+  let wins = 0;
+  let losses = 0;
+  let ties = 0;
+
+  ownerStandings.forEach(row => {
+    const record = cleanText(row.record);
+    const parts = record.split("-").map(Number);
+
+    if (parts.length >= 2) {
+      wins += Number(parts[0]) || 0;
+      losses += Number(parts[1]) || 0;
+      ties += Number(parts[2]) || 0;
+    }
+  });
+
+  if (wins === 0 && losses === 0 && ties === 0) return "TBD";
+
+  if (ties > 0) {
+    return `${wins}-${losses}-${ties}`;
+  }
+
+  return `${wins}-${losses}`;
+}
+
+function calculateScoFinishes(ownerStandings) {
+  const scoCount = ownerStandings.filter(row => Number(row.rank) === 8).length;
+  return scoCount || "0";
+}
+
+function calculateAverageFinish(ownerStandings) {
+  const finishes = ownerStandings
+    .map(row => Number(row.rank))
+    .filter(value => !Number.isNaN(value));
+
+  if (finishes.length === 0) return "TBD";
+
+  const average = finishes.reduce((sum, value) => sum + value, 0) / finishes.length;
+
+  return average.toFixed(2);
+}
+
+function getPlayoffText(rank) {
+  const numericRank = Number(rank);
+
+  if (Number.isNaN(numericRank)) return "TBD";
+
+  return numericRank <= 4 ? "Yes" : "No";
+}
+
+function getSeasonResult(rank) {
+  const numericRank = Number(rank);
+
+  if (Number.isNaN(numericRank)) return "TBD";
+
+  if (numericRank === 1) return "Regular Season Winner";
+  if (numericRank === 8) return "The Sco";
+  if (numericRank <= 4) return "Playoff Team";
+
+  return "Missed Playoffs";
 }
 
 function buildStoryText(teamName, owner, tagline) {
@@ -161,17 +296,28 @@ function calculateWinPct(record) {
 
   if (!cleaned || cleaned === "TBD") return "TBD";
 
-  const match = cleaned.match(/(\d+)\s*-\s*(\d+)/);
+  const parts = cleaned.split("-").map(Number);
 
-  if (!match) return "TBD";
+  const wins = Number(parts[0]) || 0;
+  const losses = Number(parts[1]) || 0;
+  const ties = Number(parts[2]) || 0;
 
-  const wins = Number(match[1]);
-  const losses = Number(match[2]);
-  const total = wins + losses;
+  const total = wins + losses + ties;
 
   if (!total) return "TBD";
 
-  return (wins / total).toFixed(3).replace("0.", ".");
+  return ((wins + ties * 0.5) / total).toFixed(3).replace("0.", ".");
+}
+
+function ordinal(value) {
+  const number = Number(value);
+
+  if (Number.isNaN(number)) return cleanText(value) || "TBD";
+
+  const suffixes = ["th", "st", "nd", "rd"];
+  const mod100 = number % 100;
+
+  return number + (suffixes[(mod100 - 20) % 10] || suffixes[mod100] || suffixes[0]);
 }
 
 function setText(id, value) {
@@ -209,6 +355,19 @@ function cleanColor(value, fallback) {
   const isValidHex = /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(color);
 
   return isValidHex ? color : fallback;
+}
+
+function formatNumber(value) {
+  const number = Number(value);
+
+  if (Number.isNaN(number)) {
+    return cleanText(value) || "TBD";
+  }
+
+  return number.toLocaleString(undefined, {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2
+  });
 }
 
 buildTeamPage();
