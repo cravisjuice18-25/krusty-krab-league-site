@@ -1,20 +1,20 @@
 async function buildTeamPage() {
   try {
-    const teamId = getTeamIdFromUrl();
+    const ownerId = getOwnerIdFromUrl();
 
-    if (!teamId) {
-      showTeamError("No team selected", "Go back to the Teams page and select a franchise.");
+    if (!ownerId) {
+      showTeamError("No owner selected", "Go back to the Teams page and select a franchise.");
       return;
     }
 
     const teams = await loadCSV("data/teams.csv");
 
     const team = teams.find(row => {
-      return cleanText(row.team_id).toLowerCase() === teamId.toLowerCase();
+      return cleanText(row.owner_id).toLowerCase() === ownerId.toLowerCase();
     });
 
     if (!team) {
-      showTeamError("Team not found", `No team was found for: ${teamId}`);
+      showTeamError("Franchise not found", `No franchise was found for owner: ${ownerId}`);
       return;
     }
 
@@ -28,9 +28,9 @@ async function buildTeamPage() {
   }
 }
 
-function getTeamIdFromUrl() {
+function getOwnerIdFromUrl() {
   const params = new URLSearchParams(window.location.search);
-  return cleanText(params.get("team"));
+  return cleanText(params.get("owner"));
 }
 
 function buildTeamIdentity(team) {
@@ -105,7 +105,7 @@ function buildTemporarySections(team) {
     seasonBody.innerHTML = `
       <tr>
         <td colspan="8">
-          Season history for ${teamName} will load here once we add the team season CSV.
+          Season history for ${teamName} will load here once we connect this page to standings.csv by owner_id.
         </td>
       </tr>
     `;
@@ -117,7 +117,7 @@ function buildTemporarySections(team) {
     h2hBody.innerHTML = `
       <tr>
         <td colspan="7">
-          Head-to-head records for ${teamName} will load here once we add the H2H CSV.
+          Head-to-head records for ${teamName} will load here once we add the H2H data.
         </td>
       </tr>
     `;
@@ -129,14 +129,14 @@ function buildTemporarySections(team) {
     recordsList.innerHTML = `
       <div class="record-item">
         <strong>Records Held</strong>
-        <span>League records for ${teamName} will load here once we add the team records CSV.</span>
+        <span>League records for ${teamName} will load here once we add team records data.</span>
       </div>
     `;
   }
 }
 
 function buildStoryText(teamName, owner, tagline) {
-  return `${teamName} is owned by ${owner}. ${tagline} This franchise profile will eventually include full season history, head-to-head results, player records, trophies, lowlights, and league records.`;
+  return `${teamName} is owned by ${owner}. ${tagline}`;
 }
 
 function showTeamError(title, message) {
