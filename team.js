@@ -79,6 +79,7 @@ function buildTeamIdentity(team) {
   const location = cleanText(team.location) || "TBD";
   const status = cleanText(team.status) || "Active";
   const tagline = cleanText(team.tagline) || "Franchise details coming soon.";
+  const franchiseStory = cleanText(team.franchise_story);
 
   const primaryLogo = cleanText(team.primary_logo) || "images/team-primary-logo-placeholder.png";
   const secondaryLogo = cleanText(team.secondary_logo) || "images/team-secondary-logo-placeholder.png";
@@ -102,7 +103,12 @@ function buildTeamIdentity(team) {
   setText("team-status", `${status} Franchise`);
 
   setText("team-story-title", `About ${teamName}`);
-  setText("team-story", buildStoryText(teamName, owner, tagline));
+
+  if (franchiseStory && franchiseStory.toLowerCase() !== "tbd") {
+    setText("team-story", franchiseStory);
+  } else {
+    setText("team-story", buildStoryText(teamName, owner, tagline));
+  }
 
   setImage("team-primary-logo", primaryLogo, `${teamName} logo`);
   setImage("team-brand-primary-logo", primaryLogo, `${teamName} primary logo`);
