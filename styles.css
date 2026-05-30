@@ -2560,3 +2560,84 @@ td strong {
     min-height: 360px;
   }
 }
+/* =========================================================
+   HOMEPAGE NEWSROOM + PLAYER CARD WIDTH FIXES
+   ========================================================= */
+
+.nfl-feed-card {
+  overflow: hidden;
+}
+
+.nfl-feed-card p {
+  color: #d1d5db;
+}
+
+.embedded-x-feed {
+  margin-top: 16px;
+  min-height: 440px;
+  max-height: 440px;
+  overflow: hidden;
+  border-radius: 18px;
+  background: #050b18;
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.embedded-x-feed .twitter-timeline {
+  display: block;
+  width: 100% !important;
+}
+
+/* Keep the All-Time Player section inside the same normal page width */
+.all-time-player-section {
+  width: 100%;
+  max-width: 100%;
+  margin: 28px auto 0;
+  overflow: hidden;
+}
+
+/* Make the card grid fit inside its content card */
+.all-time-player-grid {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Slightly shrink cards so four fit better inside the page card */
+.player-card {
+  min-width: 0;
+  min-height: 360px;
+  border-width: 5px;
+}
+
+.player-card::before {
+  width: 180px;
+  height: 180px;
+}
+
+.player-card-body {
+  padding: 68px 14px 16px;
+}
+
+.player-card-position {
+  margin-bottom: 54px;
+}
+
+.player-card h3 {
+  font-size: 24px;
+}
+
+.player-card-footer strong {
+  font-size: 15px;
+}
+
+@media (max-width: 1180px) {
+  .all-time-player-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .all-time-player-grid {
+    grid-template-columns: 1fr;
+  }
+}
