@@ -8,10 +8,20 @@ async function buildHomePage() {
     const teams = await loadCSV("data/teams.csv");
     const standings = await loadCSV("data/standings.csv");
 
+    let allTimePlayers = [];
+
+    try {
+      allTimePlayers = await loadCSV("data/all-time-players.csv");
+    } catch (error) {
+      console.warn("all-time-players.csv did not load:", error);
+      allTimePlayers = [];
+    }
+
     buildLatestChampion(champions);
     buildLatestSco(scoHistory);
     buildTeamsCount(teams);
     buildLatestSeasonSnapshot(standings);
+    buildAllTimePlayerCards(allTimePlayers);
     buildDraftCountdown();
 
   } catch (error) {
@@ -81,9 +91,93 @@ function buildLatestSeasonSnapshot(standings) {
   }
 }
 
+function buildAllTimePlayerCards(allTimePlayers) {
+  const grid = document.getElementById("all-time-player-grid");
+
+  if (!grid) return;
+
+  const positionOrder = ["QB", "RB", "WR", "TE"];
+
+  const featuredPlayers = positionOrder.map(position => {
+    return allTimePlayers.find(row => {
+      return cleanText(row.position).toUpperCase() === position &&
+        cleanText(row.record_type).toLowerCase().includes("season");
+    });
+  }).filter(Boolean);
+
+  if (featuredPlayers.length === 0) {
+    grid.innerHTML = `
+      <article class="player-card player-card-qb">
+        <div class="player-card-top">
+          <span>QB</span>
+        </div>
+
+        <div class="player-card-body">
+          <div class="player-card-position">Quarterback</div>
+          <h3>Coming Soon</h3>
+          <p>All-time player cards will appear once real data is added.</p>
+          <div class="player-card-medal">TBD</div>
+        </div>
+
+        <div class="player-card-footer">
+          <strong>League Legends</strong>
+        </div>
+      </article>
+    `;
+    return;
+  }
+
+  grid.innerHTML = "";
+
+  featuredPlayers.forEach(row => {
+    const card = document.createElement("article");
+
+    const position = cleanText(row.position).toUpperCase();
+    const player = cleanText(row.player) || "TBD";
+    const nflTeam = cleanText(row.nfl_team) || "TBD";
+    const points = cleanText(row.points) || "TBD";
+    const year = cleanText(row.year) || "TBD";
+    const fantasyTeam = cleanText(row.fantasy_team) || "TBD";
+    const recordType = cleanText(row.record_type) || `Best ${position} Season`;
+
+    card.className = `player-card player-card-${position.toLowerCase()}`;
+
+    card.innerHTML = `
+      <div class="player-card-top">
+        <span>${getPositionLabel(position)}</span>
+      </div>
+
+      <div class="player-card-body">
+        <div class="player-card-position">${recordType}</div>
+        <h3>${player}</h3>
+        <p>${nflTeam} · ${formatNumber(points)} points · ${year}</p>
+        <div class="player-card-medal">${position}</div>
+      </div>
+
+      <div class="player-card-footer">
+        <strong>${fantasyTeam}</strong>
+      </div>
+    `;
+
+    grid.appendChild(card);
+  });
+}
+
+function getPositionLabel(position) {
+  const labels = {
+    QB: "Quarterback",
+    RB: "Running Back",
+    WR: "Wide Receiver",
+    TE: "Tight End",
+    DST: "Defense",
+    K: "Kicker"
+  };
+
+  return labels[position] || position;
+}
+
 function buildDraftCountdown() {
   updateDraftCountdown();
-
   setInterval(updateDraftCountdown, 60000);
 }
 
@@ -129,7 +223,7 @@ function formatNumber(value) {
   }
 
   return number.toLocaleString(undefined, {
-    minimumFractionDigits: 2,
+    minimumFractionDigits: 0,
     maximumFractionDigits: 2
   });
 }
