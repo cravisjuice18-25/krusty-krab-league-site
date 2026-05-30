@@ -98,34 +98,45 @@ function buildAllTimePlayerCards(allTimePlayers) {
 
   const positionOrder = ["QB", "RB", "WR", "TE"];
 
-  const featuredPlayers = positionOrder.map(position => {
-    return allTimePlayers.find(row => {
-      return cleanText(row.position).toUpperCase() === position &&
-        cleanText(row.record_type).toLowerCase().includes("season");
+  grid.innerHTML = "";
+
+  positionOrder.forEach(position => {
+    const row = allTimePlayers.find(playerRow => {
+      return cleanText(playerRow.position).toUpperCase() === position &&
+        cleanText(playerRow.record_type).toLowerCase().includes("season");
     });
-  }).filter(Boolean);
 
-  if (featuredPlayers.length === 0) {
-    grid.innerHTML = `
-      <article class="player-card player-card-qb">
-        <div class="player-card-top">
-          <span>QB</span>
-        </div>
+    const card = document.createElement("article");
 
-        <div class="player-card-body">
-          <div class="player-card-position">Quarterback</div>
-          <h3>Coming Soon</h3>
-          <p>All-time player cards will appear once real data is added.</p>
-          <div class="player-card-medal">TBD</div>
-        </div>
+    const player = row ? cleanText(row.player) : "TBD";
+    const nflTeam = row ? cleanText(row.nfl_team) : "TBD";
+    const points = row ? cleanText(row.points) : "TBD";
+    const year = row ? cleanText(row.year) : "TBD";
+    const fantasyTeam = row ? cleanText(row.fantasy_team) : "TBD";
+    const recordType = row ? cleanText(row.record_type) : `Best ${position} Season`;
 
-        <div class="player-card-footer">
-          <strong>League Legends</strong>
-        </div>
-      </article>
+    card.className = `player-card player-card-${position.toLowerCase()}`;
+
+    card.innerHTML = `
+      <div class="player-card-top">
+        <span>${getPositionLabel(position)}</span>
+      </div>
+
+      <div class="player-card-body">
+        <div class="player-card-position">${recordType || `Best ${position} Season`}</div>
+        <h3>${player || "TBD"}</h3>
+        <p>${nflTeam || "TBD"} · ${formatNumber(points)} points · ${year || "TBD"}</p>
+        <div class="player-card-medal">${position}</div>
+      </div>
+
+      <div class="player-card-footer">
+        <strong>${fantasyTeam || "TBD"}</strong>
+      </div>
     `;
-    return;
-  }
+
+    grid.appendChild(card);
+  });
+}
 
   grid.innerHTML = "";
 
