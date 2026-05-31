@@ -6,7 +6,8 @@ async function buildUniformsPage() {
       .filter(team => cleanText(team.status).toLowerCase() === "active")
       .sort((a, b) => cleanText(a.team_name).localeCompare(cleanText(b.team_name)));
 
-    buildUniformGallery(activeTeams);
+    buildUniformFeatureCards(activeTeams);
+    buildUniformLocker(activeTeams);
 
   } catch (error) {
     console.error("Uniforms page error:", error);
@@ -15,11 +16,11 @@ async function buildUniformsPage() {
 
     if (grid) {
       grid.innerHTML = `
-        <article class="uniform-locker-card" style="--team-color: #111827; --primary-color: #111827; --secondary-color: #f9fafb; --decal-color: #facc15;">
+        <article class="uniform-locker-card" style="--team-color: #111827; --primary-color: #111827; --secondary-color: #ffffff; --decal-color: #facc15;">
           <div class="uniform-locker-header">
             <div>
               <p class="section-label">Error</p>
-              <h3>Uniforms CSV Not Loaded</h3>
+              <h3>Uniforms Not Loaded</h3>
             </div>
           </div>
 
@@ -32,14 +33,45 @@ async function buildUniformsPage() {
   }
 }
 
-function buildUniformGallery(teams) {
+function buildUniformFeatureCards(activeTeams) {
+  setText("uniform-active-count", `${activeTeams.length || 8} Active Franchises`);
+}
+
+function buildUniformLocker(activeTeams) {
   const grid = document.getElementById("uniform-locker-grid");
+
+  if (!grid) return;
+
+  if (!activeTeams || activeTeams.length === 0) {
+    grid.innerHTML = `
+      <article class="uniform-locker-card" style="--team-color: #111827; --primary-color: #111827; --secondary-color: #ffffff; --decal-color: #facc15;">
+        <div class="uniform-locker-header">
+          <div>
+            <p class="section-label">Uniform Locker</p>
+            <h3>No Teams Found</h3>
+          </div>
+        </div>
+
+        <div class="uniform-image-panel">
+          <p>No active teams were found in teams.csv.</p>
+        </div>
+      </article>
+    `;
+    return;
+  }
+
   grid.innerHTML = "";
 
-  teams.forEach(team => {
+  activeTeams.forEach(team => {
     const primaryColor = cleanColor(team.primary_color, "#001f3f");
     const secondaryColor = cleanColor(team.secondary_color, "#ffffff");
     const decalColor = cleanColor(team.decal_color, "#facc15");
+
+    const teamName = cleanText(team.team_name) || "Team Name";
+    const owner = cleanText(team.owner) || "TBD";
+    const primaryLogo = cleanText(team.primary_logo);
+    const secondaryLogo = cleanText(team.secondary_logo);
+    const uniformImage = cleanText(team.uniform_image);
 
     const card = document.createElement("article");
     card.className = "uniform-locker-card";
@@ -52,36 +84,81 @@ function buildUniformGallery(teams) {
     card.innerHTML = `
       <div class="uniform-locker-header">
         <div>
-          <p class="section-label">Owner: ${cleanText(team.owner)}</p>
-          <h3>${cleanText(team.team_name)}</h3>
+          <p class="section-label">Owner: ${owner}</p>
+          <h3>${teamName}</h3>
         </div>
 
         <div class="uniform-color-stack">
-          <div class="uniform-color-chip primary-chip"></div>
-          <div class="uniform-color-chip secondary-chip"></div>
-          <div class="uniform-color-chip decal-chip"></div>
+          <span class="uniform-color-dot primary-dot"></span>
+          <span class="uniform-color-dot secondary-dot"></span>
+          <span class="uniform-color-dot decal-dot"></span>
         </div>
+      </div>
+
+      <div class="uniform-assets-grid">
+        ${buildAssetBox("Primary Logo", primaryLogo, `${teamName} primary logo`)}
+        ${buildAssetBox("Secondary Logo", secondaryLogo, `${teamName} secondary logo`)}
       </div>
 
       <div class="uniform-image-panel">
-        <img src="${cleanText(team.uniform_image) || "images/team-uniform-placeholder.png"}" alt="${cleanText(team.team_name)} uniform">
-      </div>
-
-      <div class="uniform-logo-row">
-        <div>
-          <span>Primary</span>
-          <img src="${cleanText(team.primary_logo) || "images/team-primary-logo-placeholder.png"}" alt="${cleanText(team.team_name)} primary logo">
-        </div>
-
-        <div>
-          <span>Secondary</span>
-          <img src="${cleanText(team.secondary_logo) || "images/team-secondary-logo-placeholder.png"}" alt="${cleanText(team.team_name)} secondary logo">
-        </div>
+        ${buildUniformImage(uniformImage, `${teamName} uniform`)}
       </div>
     `;
 
     grid.appendChild(card);
   });
+}
+
+function buildAssetBox(label, imagePath, altText) {
+  if (!isRealImagePath(imagePath)) {
+    return `
+      <div class="uniform-logo-box uniform-placeholder-box">
+        <span>${label}</span>
+        <strong>Coming Soon</strong>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="uniform-logo-box">
+      <span>${label}</span>
+      <img src="${imagePath}" alt="${altText}" onerror="this.parentElement.classList.add('image-missing'); this.remove();">
+    </div>
+  `;
+}
+
+function buildUniformImage(imagePath, altText) {
+  if (!isRealImagePath(imagePath)) {
+    return `
+      <div class="uniform-placeholder-large">
+        <strong>Uniform Coming Soon</strong>
+        <span>Add the image path in teams.csv under uniform_image.</span>
+      </div>
+    `;
+  }
+
+  return `
+    <img src="${imagePath}" alt="${altText}" onerror="this.parentElement.innerHTML = '<div class=&quot;uniform-placeholder-large&quot;><strong>Uniform Coming Soon</strong><span>Image path not found.</span></div>';">
+  `;
+}
+
+function isRealImagePath(value) {
+  const text = cleanText(value).toLowerCase();
+
+  if (!text) return false;
+  if (text === "tbd") return false;
+  if (text === "n/a") return false;
+  if (text === "na") return false;
+
+  return true;
+}
+
+function setText(id, value) {
+  const element = document.getElementById(id);
+
+  if (element) {
+    element.textContent = value;
+  }
 }
 
 function cleanText(value) {
