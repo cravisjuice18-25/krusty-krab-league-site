@@ -2979,3 +2979,123 @@ td strong {
     font-size: 24px;
   }
 }
+/* =========================================================
+   CHAMPIONS PAGE TABLE WIDTH FIX
+   Goal: avoid bottom horizontal scrollbar
+   ========================================================= */
+
+.champions-history-table,
+.champions-history-table table,
+.champions-table,
+#championship-history-table {
+  width: 100%;
+}
+
+/* Let champions page tables fit inside the card */
+.champions-page .table-wrap,
+.champions-history-section .table-wrap,
+#championship-history .table-wrap {
+  overflow-x: visible;
+}
+
+/* Make championship history table more compact */
+.champions-page table,
+.champions-history-section table,
+#championship-history table {
+  width: 100%;
+  min-width: 0;
+  table-layout: fixed;
+}
+
+/* General tighter spacing */
+.champions-page th,
+.champions-page td,
+.champions-history-section th,
+.champions-history-section td,
+#championship-history th,
+#championship-history td {
+  padding: 12px 10px;
+  font-size: 14px;
+  line-height: 1.25;
+  vertical-align: middle;
+}
+
+/* Year column */
+.champions-page th:nth-child(1),
+.champions-page td:nth-child(1),
+.champions-history-section th:nth-child(1),
+.champions-history-section td:nth-child(1),
+#championship-history th:nth-child(1),
+#championship-history td:nth-child(1) {
+  width: 9%;
+  white-space: nowrap;
+}
+
+/* Champion column gets the most room */
+.champions-page th:nth-child(2),
+.champions-page td:nth-child(2),
+.champions-history-section th:nth-child(2),
+.champions-history-section td:nth-child(2),
+#championship-history th:nth-child(2),
+#championship-history td:nth-child(2) {
+  width: 28%;
+}
+
+/* Runner-Up column tightened */
+.champions-page th:nth-child(3),
+.champions-page td:nth-child(3),
+.champions-history-section th:nth-child(3),
+.champions-history-section td:nth-child(3),
+#championship-history th:nth-child(3),
+#championship-history td:nth-child(3) {
+  width: 20%;
+}
+
+/* Final Score column tightened */
+.champions-page th:nth-child(4),
+.champions-page td:nth-child(4),
+.champions-history-section th:nth-child(4),
+.champions-history-section td:nth-child(4),
+#championship-history th:nth-child(4),
+#championship-history td:nth-child(4) {
+  width: 13%;
+  white-space: nowrap;
+}
+
+/* Champion Record column tightened */
+.champions-page th:nth-child(5),
+.champions-page td:nth-child(5),
+.champions-history-section th:nth-child(5),
+.champions-history-section td:nth-child(5),
+#championship-history th:nth-child(5),
+#championship-history td:nth-child(5) {
+  width: 13%;
+  white-space: nowrap;
+}
+
+/* Notes / remaining column, if present */
+.champions-page th:nth-child(6),
+.champions-page td:nth-child(6),
+.champions-history-section th:nth-child(6),
+.champions-history-section td:nth-child(6),
+#championship-history th:nth-child(6),
+#championship-history td:nth-child(6) {
+  width: 17%;
+}
+
+/* Allow long team names to wrap cleanly instead of forcing scroll */
+.champions-page td,
+.champions-history-section td,
+#championship-history td {
+  overflow-wrap: anywhere;
+}
+
+/* Keep score/record cleaner */
+.champions-page td:nth-child(4),
+.champions-page td:nth-child(5),
+.champions-history-section td:nth-child(4),
+.champions-history-section td:nth-child(5),
+#championship-history td:nth-child(4),
+#championship-history td:nth-child(5) {
+  overflow-wrap: normal;
+}
