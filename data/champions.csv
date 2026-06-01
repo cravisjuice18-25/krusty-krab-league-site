@@ -1,13 +1,13 @@
-year,champion,runner_up,final_score,champion_record,champion_owner_id
-2014,Bard,Muffin,149-148,12-3-1,bard
-2015,Sabella,Bard,144-118,11-5,sabella
-2016,Jake,Bard,179-99,12-3-1,jake
-2017,Bard,Muffin,139-115,12-4,bard
-2018,Muffin,Sco,151-143,8-8,muff
-2019,Jake,Miner,163-157,11-5,jake
-2020,Sco,Bard,174-126,12-4,sco
-2021,Sco,Bard,152-93,11-7,sco
-2022,No Winner,NA,NA,NA,NA
-2023,Jake,Muffin,155-131,8-9,Jake
-2024,Muffin,Bard,166-149,12-3-1,Muffin
-2025,Gary,Hunter,164-93,10-6,Gary
+year,champion,champion_owner_id,runner_up,final_score,champion_record
+2014,Bard,bard,Muffin,149-148,12-3-1
+2015,Sabella,sabella,Bard,144-118,11-5
+2016,Jake,jake,Bard,179-99,12-3-1
+2017,Bard,bard,Muffin,139-115,12-4
+2018,Muffin,muffin,Sco,151-143,8-8
+2019,Jake,jake,Miner,163-157,11-5
+2020,Sco,sco,Bard,174-126,12-4
+2021,Sco,sco,Bard,152-93,11-7
+2022,No Winner,na,NA,NA,NA
+2023,Jake,jake,Muffin,155-131,8-9
+2024,Muffin,muffin,Bard,166-149,12-3-1
+2025,Gary,gary,Hunter,164-93,10-6
