@@ -147,19 +147,27 @@ function buildAllTimePlayerCards(allTimePlayers) {
     card.className = `player-card player-card-${position.toLowerCase()}`;
 
     card.innerHTML = `
-      <div class="player-card-top">
-        <span>${getPositionLabel(position)}</span>
+      <div class="player-card-header">
+        ${recordType && recordType.toLowerCase() !== "tbd" ? recordType : `Best ${position} Season`}
+      </div>
+
+      <div class="player-card-image-wrap">
+        <div class="player-card-image-placeholder">
+          ${position}
+        </div>
       </div>
 
       <div class="player-card-body">
-        <div class="player-card-position">${recordType && recordType.toLowerCase() !== "tbd" ? recordType : `Best ${position} Season`}</div>
         <h3>${player && player.toLowerCase() !== "tbd" ? player : "Coming Soon"}</h3>
-        <p>${nflTeam && nflTeam.toLowerCase() !== "tbd" ? nflTeam : "NFL Team TBD"} · ${formatNumber(points)} points · ${year && year.toLowerCase() !== "tbd" ? year : "Year TBD"}</p>
-        <div class="player-card-medal">${position}</div>
+        <p>
+          ${nflTeam && nflTeam.toLowerCase() !== "tbd" ? nflTeam : "NFL Team TBD"}
+          · ${formatNumber(points)} points
+          · ${year && year.toLowerCase() !== "tbd" ? year : "Year TBD"}
+        </p>
       </div>
 
       <div class="player-card-footer">
-        <strong>${fantasyTeam && fantasyTeam.toLowerCase() !== "tbd" ? fantasyTeam : "League Legends"}</strong>
+        <strong>${fantasyTeam && fantasyTeam.toLowerCase() !== "tbd" ? fantasyTeam : "League Member Team TBD"}</strong>
       </div>
     `;
 
