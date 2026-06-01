@@ -3297,3 +3297,58 @@ td strong {
     grid-template-columns: 1fr;
   }
 }
+function buildBasementRecords(scoHistory) {
+  const validRows = scoHistory.filter(row => cleanText(row.year));
+
+  if (validRows.length === 0) return;
+
+  const lossCounts = {};
+  const gameAppearanceCounts = {};
+
+  validRows.forEach(row => {
+    const ownerId = cleanText(row.owner_id).toLowerCase();
+    const losingTeamName = formatOwnerName(ownerId) || cleanText(row.team);
+    const opponentName = cleanText(row.sco_opponent);
+
+    if (losingTeamName) {
+      lossCounts[losingTeamName] = (lossCounts[losingTeamName] || 0) + 1;
+      gameAppearanceCounts[losingTeamName] = (gameAppearanceCounts[losingTeamName] || 0) + 1;
+    }
+
+    if (
+      opponentName &&
+      opponentName.toLowerCase() !== "tbd" &&
+      opponentName.toLowerCase() !== "na"
+    ) {
+      gameAppearanceCounts[opponentName] = (gameAppearanceCounts[opponentName] || 0) + 1;
+    }
+  });
+
+  const mostAppearances = Object.entries(gameAppearanceCounts)
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0];
+
+  const mostLosses = Object.entries(lossCounts)
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0];
+
+  const byAvgPoints = validRows
+    .filter(row => !Number.isNaN(Number(row.avg_points_for)));
+
+  const lowestAvg = [...byAvgPoints].sort((a, b) => {
+    return Number(a.avg_points_for) - Number(b.avg_points_for);
+  })[0];
+
+  setText(
+    "sco-most-appearances",
+    mostAppearances ? `${mostAppearances[0]} · ${mostAppearances[1]}` : "TBD"
+  );
+
+  setText(
+    "sco-most-losses",
+    mostLosses ? `${mostLosses[0]} · ${mostLosses[1]}` : "TBD"
+  );
+
+  setText(
+    "sco-lowest-avg-points",
+    lowestAvg ? `${cleanText(lowestAvg.team)} · ${cleanText(lowestAvg.avg_points_for)} · ${cleanText(lowestAvg.year)}` : "TBD"
+  );
+}
