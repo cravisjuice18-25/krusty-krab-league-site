@@ -10,6 +10,7 @@ async function buildScoPage() {
     buildScoCounts(sortedSco);
     buildScoBanners(sortedSco);
     buildScoHistory(sortedSco);
+    buildBasementRecords(sortedSco);
 
   } catch (error) {
     console.error("The Sco page error:", error);
@@ -43,21 +44,25 @@ function buildCurrentSco(scoHistory) {
 
   const year = cleanText(latestSco.year);
   const team = cleanText(latestSco.team);
-  const record = cleanText(latestSco.final_record);
-  const finish = cleanText(latestSco.final_finish);
+  const seed = cleanText(latestSco.regular_season_seed);
+  const record = cleanText(latestSco.regular_season_record);
   const avgPoints = cleanText(latestSco.avg_points_for);
+  const opponent = cleanText(latestSco.sco_opponent);
 
   setText("current-sco-year", `${year} The Sco`);
   setText("current-sco-team", team);
-  setText("current-sco-details", `${team} finished ${finish} with a ${record} record and ${avgPoints} average points for.`);
+  setText(
+    "current-sco-details",
+    `${team} entered as the ${ordinal(seed)} seed, finished ${record}, averaged ${avgPoints} points for, and lost the Sco game${opponent ? ` against ${opponent}` : ""}.`
+  );
 
   setText("latest-sco-year", `${year} The Sco`);
   setText("latest-sco-team", team);
-  setText("latest-sco-details", `${record} · ${avgPoints} avg points`);
+  setText("latest-sco-details", `${ordinal(seed)} seed · ${record} · ${avgPoints} avg PF`);
 
   setText("sco-feature-year", `${year} The Sco`);
   setText("sco-feature-team", team);
-  setText("sco-feature-details", `${record} · ${avgPoints} avg points`);
+  setText("sco-feature-details", `${ordinal(seed)} seed · ${record} · ${avgPoints} avg PF`);
 }
 
 function buildScoCounts(scoHistory) {
@@ -125,8 +130,10 @@ function buildScoBanners(scoHistory) {
   scoHistory.forEach(row => {
     const year = cleanText(row.year);
     const team = cleanText(row.team);
-    const record = cleanText(row.final_record);
+    const seed = cleanText(row.regular_season_seed);
+    const record = cleanText(row.regular_season_record);
     const avgPoints = cleanText(row.avg_points_for);
+    const opponent = cleanText(row.sco_opponent);
 
     const banner = document.createElement("article");
     banner.className = "sco-banner";
@@ -137,8 +144,8 @@ function buildScoBanners(scoHistory) {
       <div class="banner-content">
         <p class="section-label">The Sco</p>
         <h3>${team}</h3>
-        <p>${record} · Finished ${finish}</p>
-        <strong>${avgPoints} Avg Points For</strong>
+        <p>${ordinal(seed)} seed · ${record}</p>
+        <strong>${avgPoints} Avg PF${opponent ? ` · Lost to ${opponent}` : ""}</strong>
       </div>
     `;
 
@@ -163,13 +170,125 @@ function buildScoHistory(scoHistory) {
     tr.innerHTML = `
       <td>${cleanText(row.year)}</td>
       <td><strong>${cleanText(row.team)}</strong></td>
-      <td>${cleanText(row.final_record)}</td>
-      <td>${cleanText(row.final_finish)}</td>
+      <td>${ordinal(cleanText(row.regular_season_seed))}</td>
+      <td>${cleanText(row.regular_season_record)}</td>
       <td>${cleanText(row.avg_points_for)}</td>
+      <td>${cleanText(row.sco_opponent) || "TBD"}</td>
     `;
 
     tableBody.appendChild(tr);
   });
+}
+
+function buildBasementRecords(scoHistory) {
+  const validRows = scoHistory.filter(row => cleanText(row.year));
+
+  if (validRows.length === 0) return;
+
+  const counts = {};
+
+  validRows.forEach(row => {
+    const ownerId = cleanText(row.owner_id).toLowerCase();
+    const displayName = formatOwnerName(ownerId) || cleanText(row.team);
+
+    counts[displayName] = (counts[displayName] || 0) + 1;
+  });
+
+  const mostSco = Object.entries(counts)
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0];
+
+  const byAvgPoints = validRows
+    .filter(row => !Number.isNaN(Number(row.avg_points_for)));
+
+  const lowestAvg = [...byAvgPoints].sort((a, b) => {
+    return Number(a.avg_points_for) - Number(b.avg_points_for);
+  })[0];
+
+  const highestAvg = [...byAvgPoints].sort((a, b) => {
+    return Number(b.avg_points_for) - Number(a.avg_points_for);
+  })[0];
+
+  const bySeed = validRows
+    .filter(row => !Number.isNaN(Number(row.regular_season_seed)));
+
+  const bestSeed = [...bySeed].sort((a, b) => {
+    return Number(a.regular_season_seed) - Number(b.regular_season_seed);
+  })[0];
+
+  const worstSeed = [...bySeed].sort((a, b) => {
+    return Number(b.regular_season_seed) - Number(a.regular_season_seed);
+  })[0];
+
+  const worstRecord = [...validRows].sort((a, b) => {
+    const aPct = calculateRecordPct(cleanText(a.regular_season_record));
+    const bPct = calculateRecordPct(cleanText(b.regular_season_record));
+    return aPct - bPct;
+  })[0];
+
+  const bestRecord = [...validRows].sort((a, b) => {
+    const aPct = calculateRecordPct(cleanText(a.regular_season_record));
+    const bPct = calculateRecordPct(cleanText(b.regular_season_record));
+    return bPct - aPct;
+  })[0];
+
+  setText(
+    "sco-most-appearances",
+    mostSco ? `${mostSco[0]} · ${mostSco[1]}` : "TBD"
+  );
+
+  setText(
+    "sco-lowest-avg-points",
+    lowestAvg ? `${cleanText(lowestAvg.team)} · ${cleanText(lowestAvg.avg_points_for)} · ${cleanText(lowestAvg.year)}` : "TBD"
+  );
+
+  setText(
+    "sco-highest-avg-points",
+    highestAvg ? `${cleanText(highestAvg.team)} · ${cleanText(highestAvg.avg_points_for)} · ${cleanText(highestAvg.year)}` : "TBD"
+  );
+
+  setText(
+    "sco-best-seed",
+    bestSeed ? `${cleanText(bestSeed.team)} · ${ordinal(cleanText(bestSeed.regular_season_seed))} seed · ${cleanText(bestSeed.year)}` : "TBD"
+  );
+
+  setText(
+    "sco-worst-seed",
+    worstSeed ? `${cleanText(worstSeed.team)} · ${ordinal(cleanText(worstSeed.regular_season_seed))} seed · ${cleanText(worstSeed.year)}` : "TBD"
+  );
+
+  setText(
+    "sco-worst-record",
+    worstRecord ? `${cleanText(worstRecord.team)} · ${cleanText(worstRecord.regular_season_record)} · ${cleanText(worstRecord.year)}` : "TBD"
+  );
+
+  setText(
+    "sco-best-record",
+    bestRecord ? `${cleanText(bestRecord.team)} · ${cleanText(bestRecord.regular_season_record)} · ${cleanText(bestRecord.year)}` : "TBD"
+  );
+}
+
+function calculateRecordPct(record) {
+  const parts = cleanText(record).split("-").map(Number);
+
+  const wins = Number(parts[0]) || 0;
+  const losses = Number(parts[1]) || 0;
+  const ties = Number(parts[2]) || 0;
+  const total = wins + losses + ties;
+
+  if (!total) return 0;
+
+  return (wins + ties * 0.5) / total;
+}
+
+function ordinal(value) {
+  const number = Number(value);
+
+  if (Number.isNaN(number)) return cleanText(value) || "TBD";
+
+  const suffixes = ["th", "st", "nd", "rd"];
+  const mod100 = number % 100;
+
+  return number + (suffixes[(mod100 - 20) % 10] || suffixes[mod100] || suffixes[0]);
 }
 
 function formatOwnerName(ownerId) {
