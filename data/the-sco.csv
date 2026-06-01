@@ -1,4 +1,4 @@
-year,owner_id,team,regular_season_seed,regular_season_record,avg_points_for,round_1_loss,sco_game_loss,sco_opponent,notes
+year,owner_id,team,regular_season_seed,regular_season_record,avg_points_for,round_1_loss,sco_game_loss,sco_opponent
 2014,Hunter,7,4-12,126.25,Charlie,90-18,Miller
 2015,Charlie,6,5-11,110.89,Hunter,78-66,Muffin
 2016,Miner,7,4-12,120.09,Charlie,138-114,Sabella
