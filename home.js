@@ -2,65 +2,92 @@ const UPCOMING_DRAFT_DATE = "2026-09-05T12:00:00";
 const UPCOMING_DRAFT_LOCATION = "Sparrow Bush, NY";
 
 async function buildHomePage() {
+  let champions = [];
+  let scoHistory = [];
+  let teams = [];
+  let standings = [];
+  let allTimePlayers = [];
+
   try {
-    const champions = await loadCSV("data/champions.csv");
-    const scoHistory = await loadCSV("data/the-sco.csv");
-    const teams = await loadCSV("data/teams.csv");
-    const standings = await loadCSV("data/standings.csv");
-
-    let allTimePlayers = [];
-
-    try {
-      allTimePlayers = await loadCSV("data/all-time-players.csv");
-    } catch (error) {
-      console.warn("all-time-players.csv did not load:", error);
-      allTimePlayers = [];
-    }
-
-    buildLatestChampion(champions);
-    buildLatestSco(scoHistory);
-    buildTeamsCount(teams);
-    buildLatestSeasonSnapshot(standings);
-    buildAllTimePlayerCards(allTimePlayers);
-    buildDraftCountdown();
-
+    champions = await loadCSV("data/champions.csv");
   } catch (error) {
-    console.error("Home page error:", error);
-    buildDraftCountdown();
+    console.warn("champions.csv did not load:", error);
   }
+
+  try {
+    scoHistory = await loadCSV("data/the-sco.csv");
+  } catch (error) {
+    console.warn("the-sco.csv did not load:", error);
+  }
+
+  try {
+    teams = await loadCSV("data/teams.csv");
+  } catch (error) {
+    console.warn("teams.csv did not load:", error);
+  }
+
+  try {
+    standings = await loadCSV("data/standings.csv");
+  } catch (error) {
+    console.warn("standings.csv did not load:", error);
+  }
+
+  try {
+    allTimePlayers = await loadCSV("data/all-time-players.csv");
+  } catch (error) {
+    console.warn("all-time-players.csv did not load:", error);
+  }
+
+  buildLatestChampion(champions);
+  buildLatestSco(scoHistory);
+  buildTeamsCount(teams);
+  buildLatestSeasonSnapshot(standings);
+  buildAllTimePlayerCards(allTimePlayers);
+  buildDraftCountdown();
 }
 
 function buildLatestChampion(champions) {
+  if (!champions || champions.length === 0) return;
+
   const sorted = [...champions].sort((a, b) => Number(b.year) - Number(a.year));
   const latest = sorted[0];
 
   if (!latest) return;
 
-  setText("home-latest-champion-year", `${latest.year} Champion`);
-  setText("home-latest-champion-team", latest.champion || "TBD");
+  setText("home-latest-champion-year", `${cleanText(latest.year)} Champion`);
+  setText("home-latest-champion-team", cleanText(latest.champion) || "TBD");
   setText("home-latest-champion-link", "View championship history");
 }
 
 function buildLatestSco(scoHistory) {
+  if (!scoHistory || scoHistory.length === 0) return;
+
   const sorted = [...scoHistory].sort((a, b) => Number(b.year) - Number(a.year));
   const latest = sorted[0];
 
   if (!latest) return;
 
   setText("home-latest-sco-title", "The Sco");
-  setText("home-latest-sco-team", `${latest.year}: ${latest.team || "TBD"}`);
+  setText("home-latest-sco-team", `${cleanText(latest.year)}: ${cleanText(latest.team) || "TBD"}`);
   setText("home-latest-sco-link", "View last-place history");
 }
 
 function buildTeamsCount(teams) {
+  if (!teams || teams.length === 0) return;
+
   const activeTeams = teams.filter(team => {
     return cleanText(team.status).toLowerCase() === "active";
   });
 
-  setText("home-active-team-count", `${activeTeams.length} active franchises, owners, defunct teams, and future franchise pages.`);
+  setText(
+    "home-active-team-count",
+    `${activeTeams.length} active franchises, owners, defunct teams, and future franchise pages.`
+  );
 }
 
 function buildLatestSeasonSnapshot(standings) {
+  if (!standings || standings.length === 0) return;
+
   const years = [...new Set(standings.map(row => cleanText(row.year)))]
     .filter(Boolean)
     .sort((a, b) => Number(b) - Number(a));
@@ -81,13 +108,19 @@ function buildLatestSeasonSnapshot(standings) {
 
   if (firstPlace) {
     setText("home-season-title", `${latestYear} Season Snapshot`);
-    setText("home-season-details", `Latest season: ${firstPlace.team || "TBD"} finished 1st`);
-    setText("home-season-details-expanded", `${firstPlace.team || "TBD"} · ${firstPlace.record || "TBD"} · 1st Place`);
+    setText("home-season-details", `Latest season: ${cleanText(firstPlace.team) || "TBD"} finished 1st`);
+    setText(
+      "home-season-details-expanded",
+      `${cleanText(firstPlace.team) || "TBD"} · ${cleanText(firstPlace.record) || "TBD"} · 1st Place`
+    );
   }
 
   if (topScoringTeam) {
-    setText("home-record-book-summary", `Latest points leader: ${topScoringTeam.team || "TBD"}`);
-    setText("home-season-points-leader", `${topScoringTeam.team || "TBD"} · ${formatNumber(topScoringTeam.points_for)} points`);
+    setText("home-record-book-summary", `Latest points leader: ${cleanText(topScoringTeam.team) || "TBD"}`);
+    setText(
+      "home-season-points-leader",
+      `${cleanText(topScoringTeam.team) || "TBD"} · ${formatNumber(topScoringTeam.points_for)} points`
+    );
   }
 }
 
@@ -101,12 +134,7 @@ function buildAllTimePlayerCards(allTimePlayers) {
   grid.innerHTML = "";
 
   positionOrder.forEach(position => {
-    const row = allTimePlayers.find(playerRow => {
-      return cleanText(playerRow.position).toUpperCase() === position &&
-        cleanText(playerRow.record_type).toLowerCase().includes("season");
-    });
-
-    const card = document.createElement("article");
+    const row = findPlayerRowByPosition(allTimePlayers, position);
 
     const player = row ? cleanText(row.player) : "TBD";
     const nflTeam = row ? cleanText(row.nfl_team) : "TBD";
@@ -115,6 +143,7 @@ function buildAllTimePlayerCards(allTimePlayers) {
     const fantasyTeam = row ? cleanText(row.fantasy_team) : "TBD";
     const recordType = row ? cleanText(row.record_type) : `Best ${position} Season`;
 
+    const card = document.createElement("article");
     card.className = `player-card player-card-${position.toLowerCase()}`;
 
     card.innerHTML = `
@@ -123,14 +152,14 @@ function buildAllTimePlayerCards(allTimePlayers) {
       </div>
 
       <div class="player-card-body">
-        <div class="player-card-position">${recordType || `Best ${position} Season`}</div>
-        <h3>${player || "TBD"}</h3>
-        <p>${nflTeam || "TBD"} · ${formatNumber(points)} points · ${year || "TBD"}</p>
+        <div class="player-card-position">${recordType && recordType.toLowerCase() !== "tbd" ? recordType : `Best ${position} Season`}</div>
+        <h3>${player && player.toLowerCase() !== "tbd" ? player : "Coming Soon"}</h3>
+        <p>${nflTeam && nflTeam.toLowerCase() !== "tbd" ? nflTeam : "NFL Team TBD"} · ${formatNumber(points)} points · ${year && year.toLowerCase() !== "tbd" ? year : "Year TBD"}</p>
         <div class="player-card-medal">${position}</div>
       </div>
 
       <div class="player-card-footer">
-        <strong>${fantasyTeam || "TBD"}</strong>
+        <strong>${fantasyTeam && fantasyTeam.toLowerCase() !== "tbd" ? fantasyTeam : "League Legends"}</strong>
       </div>
     `;
 
@@ -138,40 +167,15 @@ function buildAllTimePlayerCards(allTimePlayers) {
   });
 }
 
-  grid.innerHTML = "";
+function findPlayerRowByPosition(allTimePlayers, position) {
+  if (!allTimePlayers || allTimePlayers.length === 0) return null;
 
-  featuredPlayers.forEach(row => {
-    const card = document.createElement("article");
+  return allTimePlayers.find(row => {
+    const rowPosition = cleanText(row.position).toUpperCase();
+    const recordType = cleanText(row.record_type).toLowerCase();
 
-    const position = cleanText(row.position).toUpperCase();
-    const player = cleanText(row.player) || "TBD";
-    const nflTeam = cleanText(row.nfl_team) || "TBD";
-    const points = cleanText(row.points) || "TBD";
-    const year = cleanText(row.year) || "TBD";
-    const fantasyTeam = cleanText(row.fantasy_team) || "TBD";
-    const recordType = cleanText(row.record_type) || `Best ${position} Season`;
-
-    card.className = `player-card player-card-${position.toLowerCase()}`;
-
-    card.innerHTML = `
-      <div class="player-card-top">
-        <span>${getPositionLabel(position)}</span>
-      </div>
-
-      <div class="player-card-body">
-        <div class="player-card-position">${recordType}</div>
-        <h3>${player}</h3>
-        <p>${nflTeam} · ${formatNumber(points)} points · ${year}</p>
-        <div class="player-card-medal">${position}</div>
-      </div>
-
-      <div class="player-card-footer">
-        <strong>${fantasyTeam}</strong>
-      </div>
-    `;
-
-    grid.appendChild(card);
-  });
+    return rowPosition === position && recordType.includes("season");
+  }) || null;
 }
 
 function getPositionLabel(position) {
@@ -227,10 +231,16 @@ function cleanText(value) {
 }
 
 function formatNumber(value) {
-  const number = Number(value);
+  const text = cleanText(value);
+
+  if (!text || text.toLowerCase() === "tbd") {
+    return "TBD";
+  }
+
+  const number = Number(text);
 
   if (Number.isNaN(number)) {
-    return cleanText(value) || "TBD";
+    return text;
   }
 
   return number.toLocaleString(undefined, {
