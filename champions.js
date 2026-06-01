@@ -49,44 +49,33 @@ function buildChampionFeatureCards(champions) {
   setText("champion-feature-details", `${cleanText(latestChampion.final_score)} · ${cleanText(latestChampion.champion_record)}`);
 }
 
-function buildChampionBanners(champions, teams) {
+function buildScoBanners(scoHistory, teams) {
   const bannerGrid = getFirstElement([
-    "championship-banners-grid",
-    "champion-banners-grid",
-    "championship-banner-grid",
-    "champions-banner-grid"
+    "sco-banners-grid",
+    "the-sco-banners-grid",
+    "sco-banner-grid",
+    "the-sco-banner-grid"
   ]);
 
   if (!bannerGrid) return;
 
   bannerGrid.innerHTML = "";
 
-  champions.forEach(row => {
+  scoHistory.forEach(row => {
     const year = cleanText(row.year);
-    const champion = cleanText(row.champion);
-    const ownerId = cleanText(row.champion_owner_id).toLowerCase();
-
-    if (!year || champion.toLowerCase() === "no winner") {
-      return;
-    }
-
-    const colors = getOwnerColors(ownerId, teams);
+    const team = cleanText(row.team);
 
     const banner = document.createElement("article");
-    banner.className = "championship-banner colored-championship-banner";
-
-    banner.style.setProperty("--banner-primary", colors.primary);
-    banner.style.setProperty("--banner-secondary", colors.secondary);
-    banner.style.setProperty("--banner-decal", colors.decal);
+    banner.className = "sco-banner";
 
     banner.innerHTML = `
       <div class="banner-year">${year}</div>
 
       <div class="banner-content">
-        <p class="section-label">League Champion</p>
-        <h3>${champion}</h3>
-        <p>${cleanText(row.final_score) || "Final score TBD"}</p>
-        <strong>${cleanText(row.champion_record) || "Record TBD"}</strong>
+        <p class="section-label">The Sco</p>
+        <h3>${team}</h3>
+        <p>${cleanText(row.final_record) || "Final record TBD"}</p>
+        <strong>${cleanText(row.avg_points_for) || "Avg points TBD"} Avg Points</strong>
       </div>
     `;
 
