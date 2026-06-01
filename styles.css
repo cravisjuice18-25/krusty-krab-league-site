@@ -3099,3 +3099,37 @@ td strong {
 #championship-history td:nth-child(5) {
   overflow-wrap: normal;
 }
+/* =========================================================
+   COUNT ROW RESET FOR CHAMPIONS / THE SCO
+   ========================================================= */
+
+.count-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.count-row span {
+  font-weight: 800;
+  color: #111827;
+}
+
+.count-row strong {
+  min-width: 28px;
+  height: 28px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: #050b18;
+  color: #facc15;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 1000;
+}
