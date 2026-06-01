@@ -198,7 +198,11 @@ function buildBasementRecords(scoHistory) {
       gameAppearanceCounts[losingTeamName] = (gameAppearanceCounts[losingTeamName] || 0) + 1;
     }
 
-    if (opponentName && opponentName.toLowerCase() !== "tbd" && opponentName.toLowerCase() !== "na") {
+    if (
+      opponentName &&
+      opponentName.toLowerCase() !== "tbd" &&
+      opponentName.toLowerCase() !== "na"
+    ) {
       gameAppearanceCounts[opponentName] = (gameAppearanceCounts[opponentName] || 0) + 1;
     }
   });
@@ -216,33 +220,6 @@ function buildBasementRecords(scoHistory) {
     return Number(a.avg_points_for) - Number(b.avg_points_for);
   })[0];
 
-  const highestAvg = [...byAvgPoints].sort((a, b) => {
-    return Number(b.avg_points_for) - Number(a.avg_points_for);
-  })[0];
-
-  const bySeed = validRows
-    .filter(row => !Number.isNaN(Number(row.regular_season_seed)));
-
-  const bestSeed = [...bySeed].sort((a, b) => {
-    return Number(a.regular_season_seed) - Number(b.regular_season_seed);
-  })[0];
-
-  const worstSeed = [...bySeed].sort((a, b) => {
-    return Number(b.regular_season_seed) - Number(a.regular_season_seed);
-  })[0];
-
-  const worstRecord = [...validRows].sort((a, b) => {
-    const aPct = calculateRecordPct(cleanText(a.regular_season_record));
-    const bPct = calculateRecordPct(cleanText(b.regular_season_record));
-    return aPct - bPct;
-  })[0];
-
-  const bestRecord = [...validRows].sort((a, b) => {
-    const aPct = calculateRecordPct(cleanText(a.regular_season_record));
-    const bPct = calculateRecordPct(cleanText(b.regular_season_record));
-    return bPct - aPct;
-  })[0];
-
   setText(
     "sco-most-appearances",
     mostAppearances ? `${mostAppearances[0]} · ${mostAppearances[1]}` : "TBD"
@@ -256,31 +233,6 @@ function buildBasementRecords(scoHistory) {
   setText(
     "sco-lowest-avg-points",
     lowestAvg ? `${cleanText(lowestAvg.team)} · ${cleanText(lowestAvg.avg_points_for)} · ${cleanText(lowestAvg.year)}` : "TBD"
-  );
-
-  setText(
-    "sco-highest-avg-points",
-    highestAvg ? `${cleanText(highestAvg.team)} · ${cleanText(highestAvg.avg_points_for)} · ${cleanText(highestAvg.year)}` : "TBD"
-  );
-
-  setText(
-    "sco-best-seed",
-    bestSeed ? `${cleanText(bestSeed.team)} · ${ordinal(cleanText(bestSeed.regular_season_seed))} seed · ${cleanText(bestSeed.year)}` : "TBD"
-  );
-
-  setText(
-    "sco-worst-seed",
-    worstSeed ? `${cleanText(worstSeed.team)} · ${ordinal(cleanText(worstSeed.regular_season_seed))} seed · ${cleanText(worstSeed.year)}` : "TBD"
-  );
-
-  setText(
-    "sco-worst-record",
-    worstRecord ? `${cleanText(worstRecord.team)} · ${cleanText(worstRecord.regular_season_record)} · ${cleanText(worstRecord.year)}` : "TBD"
-  );
-
-  setText(
-    "sco-best-record",
-    bestRecord ? `${cleanText(bestRecord.team)} · ${cleanText(bestRecord.regular_season_record)} · ${cleanText(bestRecord.year)}` : "TBD"
   );
 }
 
