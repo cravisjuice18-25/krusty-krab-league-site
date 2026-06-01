@@ -1,11 +1,7 @@
 rank,position,player,nfl_team,points,year,owner_id,fantasy_team,record_type,notes
 1,QB,Patrick Mahomes,KC,518,2022,gary,The Fantasy Football Team,Best QB Season,TBD
-1,RB,TBD,TBD,TBD,TBD,TBD,TBD,Best RB Season,TBD
-1,WR,TBD,TBD,TBD,TBD,TBD,TBD,Best WR Season,TBD
-1,TE,TBD,TBD,TBD,TBD,TBD,TBD,Best TE Season,TBD
-1,DST,TBD,TBD,TBD,TBD,TBD,TBD,Best Defense Season,TBD
-1,K,TBD,TBD,TBD,TBD,TBD,TBD,Best Kicker Season,TBD
-1,QB,TBD,TBD,TBD,TBD,TBD,TBD,Best QB Single Game,TBD
-1,RB,TBD,TBD,TBD,TBD,TBD,TBD,Best RB Single Game,TBD
-1,WR,TBD,TBD,TBD,TBD,TBD,TBD,Best WR Single Game,TBD
-1,TE,TBD,TBD,TBD,TBD,TBD,TBD,Best TE Single Game,TBD
+1,RB,Christian McCaffrey,CAR,434,2019,jake,Cincinnati Harambes,Best RB Season,TBD
+1,WR,Cooper Kupp,LAR,371,2021,muffin,Committed Not Addicted,Best WR Season,TBD
+1,TE,Tracis Kelce,KC,305,2020,bard,The Commish,Best TE Season,TBD
+1,DST,Patriots DEF,NE,229,2019,bard,The Commish,Best Defense Season,TBD
+1,K,Brandon Aubrey,DAL,149,2025,bard,The Commish,Best Kicker Season,TBD
