@@ -126,7 +126,6 @@ function buildScoBanners(scoHistory) {
     const year = cleanText(row.year);
     const team = cleanText(row.team);
     const record = cleanText(row.final_record);
-    const finish = cleanText(row.final_finish);
     const avgPoints = cleanText(row.avg_points_for);
 
     const banner = document.createElement("article");
