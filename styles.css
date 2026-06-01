@@ -3100,34 +3100,57 @@ td strong {
   overflow-wrap: normal;
 }
 /* =========================================================
-   COLORED CHAMPION / SCO BANNERS
+   CHAMPION / SCO BANNERS - ORIGINAL LOOK WITH TEAM COLOR ACCENTS
    ========================================================= */
 
 .colored-championship-banner,
 .colored-sco-banner {
-  background:
-    linear-gradient(135deg, var(--banner-primary), color-mix(in srgb, var(--banner-primary) 75%, #000 25%));
-  border: 3px solid var(--banner-decal);
-  color: var(--banner-secondary);
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-left: 8px solid var(--banner-primary);
+  color: #111827;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
 }
 
+/* Keep the year badge clean, but color it by team */
 .colored-championship-banner .banner-year,
 .colored-sco-banner .banner-year {
-  background: var(--banner-decal);
-  color: var(--banner-primary);
+  background: var(--banner-primary);
+  color: var(--banner-secondary);
+  border: 2px solid var(--banner-decal);
   font-weight: 1000;
 }
 
+/* Keep the label as a small accent */
 .colored-championship-banner .section-label,
 .colored-sco-banner .section-label {
-  color: var(--banner-decal);
+  color: var(--banner-primary);
 }
 
+/* Keep normal readable text */
 .colored-championship-banner h3,
+.colored-sco-banner h3 {
+  color: #111827;
+}
+
 .colored-championship-banner p,
 .colored-championship-banner strong,
-.colored-sco-banner h3,
 .colored-sco-banner p,
 .colored-sco-banner strong {
-  color: var(--banner-secondary);
+  color: #4b5563;
+}
+
+/* Small team-color stripe at the bottom */
+.colored-championship-banner::after,
+.colored-sco-banner::after {
+  content: "";
+  display: block;
+  height: 5px;
+  background: linear-gradient(
+    90deg,
+    var(--banner-primary),
+    var(--banner-decal)
+  );
+  margin-top: 14px;
+  border-radius: 999px;
 }
