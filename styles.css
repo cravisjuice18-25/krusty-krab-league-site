@@ -3099,3 +3099,35 @@ td strong {
 #championship-history td:nth-child(5) {
   overflow-wrap: normal;
 }
+/* =========================================================
+   COLORED CHAMPION / SCO BANNERS
+   ========================================================= */
+
+.colored-championship-banner,
+.colored-sco-banner {
+  background:
+    linear-gradient(135deg, var(--banner-primary), color-mix(in srgb, var(--banner-primary) 75%, #000 25%));
+  border: 3px solid var(--banner-decal);
+  color: var(--banner-secondary);
+}
+
+.colored-championship-banner .banner-year,
+.colored-sco-banner .banner-year {
+  background: var(--banner-decal);
+  color: var(--banner-primary);
+  font-weight: 1000;
+}
+
+.colored-championship-banner .section-label,
+.colored-sco-banner .section-label {
+  color: var(--banner-decal);
+}
+
+.colored-championship-banner h3,
+.colored-championship-banner p,
+.colored-championship-banner strong,
+.colored-sco-banner h3,
+.colored-sco-banner p,
+.colored-sco-banner strong {
+  color: var(--banner-secondary);
+}
