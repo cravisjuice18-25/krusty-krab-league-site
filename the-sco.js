@@ -185,16 +185,28 @@ function buildBasementRecords(scoHistory) {
 
   if (validRows.length === 0) return;
 
-  const counts = {};
+  const lossCounts = {};
+  const gameAppearanceCounts = {};
 
   validRows.forEach(row => {
     const ownerId = cleanText(row.owner_id).toLowerCase();
-    const displayName = formatOwnerName(ownerId) || cleanText(row.team);
+    const losingTeamName = formatOwnerName(ownerId) || cleanText(row.team);
+    const opponentName = cleanText(row.sco_opponent);
 
-    counts[displayName] = (counts[displayName] || 0) + 1;
+    if (losingTeamName) {
+      lossCounts[losingTeamName] = (lossCounts[losingTeamName] || 0) + 1;
+      gameAppearanceCounts[losingTeamName] = (gameAppearanceCounts[losingTeamName] || 0) + 1;
+    }
+
+    if (opponentName && opponentName.toLowerCase() !== "tbd" && opponentName.toLowerCase() !== "na") {
+      gameAppearanceCounts[opponentName] = (gameAppearanceCounts[opponentName] || 0) + 1;
+    }
   });
 
-  const mostSco = Object.entries(counts)
+  const mostAppearances = Object.entries(gameAppearanceCounts)
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0];
+
+  const mostLosses = Object.entries(lossCounts)
     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0];
 
   const byAvgPoints = validRows
@@ -233,7 +245,12 @@ function buildBasementRecords(scoHistory) {
 
   setText(
     "sco-most-appearances",
-    mostSco ? `${mostSco[0]} · ${mostSco[1]}` : "TBD"
+    mostAppearances ? `${mostAppearances[0]} · ${mostAppearances[1]}` : "TBD"
+  );
+
+  setText(
+    "sco-most-losses",
+    mostLosses ? `${mostLosses[0]} · ${mostLosses[1]}` : "TBD"
   );
 
   setText(
