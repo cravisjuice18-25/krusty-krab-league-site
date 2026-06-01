@@ -1,23 +1,20 @@
 async function buildScoPage() {
   try {
     const scoHistory = await loadCSV("data/the-sco.csv");
-    const teams = await loadCSV("data/teams.csv");
 
-    const sortedSco = [...scoHistory].sort((a, b) => Number(b.year) - Number(a.year));
+    const sortedSco = [...scoHistory]
+      .filter(row => cleanText(row.year))
+      .sort((a, b) => Number(b.year) - Number(a.year));
 
-    buildScoFeatureCards(sortedSco);
-    buildScoBanners(sortedSco, teams);
+    buildCurrentSco(sortedSco);
+    buildScoCounts(sortedSco);
+    buildScoBanners(sortedSco);
     buildScoHistory(sortedSco);
 
   } catch (error) {
     console.error("The Sco page error:", error);
 
-    const bannerGrid = getFirstElement([
-      "sco-banners-grid",
-      "the-sco-banners-grid",
-      "sco-banner-grid",
-      "the-sco-banner-grid"
-    ]);
+    const bannerGrid = document.getElementById("sco-banners-grid");
 
     if (bannerGrid) {
       bannerGrid.innerHTML = `
@@ -25,7 +22,7 @@ async function buildScoPage() {
           <div class="banner-content">
             <p class="section-label">Error</p>
             <h3>The Sco Not Loaded</h3>
-            <p>Check data/the-sco.csv, data/teams.csv, data-loader.js, and the-sco.js.</p>
+            <p>Check data/the-sco.csv, data-loader.js, and the-sco.js.</p>
           </div>
         </article>
       `;
@@ -33,28 +30,83 @@ async function buildScoPage() {
   }
 }
 
-function buildScoFeatureCards(scoHistory) {
+function buildCurrentSco(scoHistory) {
   const latestSco = scoHistory[0];
 
   if (!latestSco) return;
 
-  setText("latest-sco-year", `${cleanText(latestSco.year)} The Sco`);
-  setText("latest-sco-team", cleanText(latestSco.team));
-  setText("latest-sco-details", `${cleanText(latestSco.final_record)} · ${cleanText(latestSco.avg_points_for)} avg points`);
-
-  setText("sco-feature-year", `${cleanText(latestSco.year)} The Sco`);
-  setText("sco-feature-team", cleanText(latestSco.team));
-  setText("sco-feature-details", `${cleanText(latestSco.final_record)} · ${cleanText(latestSco.avg_points_for)} avg points`);
+  setText("current-sco-year", `${cleanText(latestSco.year)} The Sco`);
+  setText("current-sco-team", cleanText(latestSco.team));
+  setText(
+    "current-sco-details",
+    `${cleanText(latestSco.team)} finished ${cleanText(latestSco.final_finish)} with a ${cleanText(latestSco.final_record)} record and ${cleanText(latestSco.avg_points_for)} average points for.`
+  );
 }
 
-function buildScoBanners(scoHistory, teams) {
+function buildScoCounts(scoHistory) {
+  const scoCounts = {};
+
+  scoHistory.forEach(row => {
+    const team = cleanText(row.team);
+
+    if (!team) return;
+
+    scoCounts[team] = (scoCounts[team] || 0) + 1;
+  });
+
+  const list = document.getElementById("sco-count-list");
+
+  if (!list) return;
+
+  const sortedCounts = Object.entries(scoCounts)
+    .sort((a, b) => b[1] - a[1]);
+
+  list.innerHTML = "";
+
+  sortedCounts.forEach(([team, count]) => {
+    const item = document.createElement("div");
+    item.className = "count-row";
+
+    item.innerHTML = `
+      <span>${team}</span>
+      <strong>${count}</strong>
+    `;
+
+    list.appendChild(item);
+  });
+}
+
+function buildScoBanners(scoHistory) {
+  const bannerGrid = document.getElementById("sco-banners-grid");
+
+  if (!bannerGrid) return;
+
+  bannerGrid.innerHTML = "";
+
+  scoHistory.forEach(row => {
+    const year = cleanText(row.year);
+    const team = cleanText(row.team);
+
+    const banner = document.createElement("article");
+    banner.className = "sco-banner";
+
+    banner.innerHTML = `
+      <div class="banner-year">${year}</div>
+
+      <div class="banner-content">
+        <p class="section-label">The Sco</p>
+        <h3>${team}</h3>
+        <p>${cleanText(row.final_record)} · Finished ${cleanText(row.final_finish)}</p>
+        <strong>${cleanText(row.avg_points_for)} Avg Points For</strong>
+      </div>
+    `;
+
+    bannerGrid.appendChild(banner);
+  });
+}
 
 function buildScoHistory(scoHistory) {
-  const tableBody = getFirstElement([
-    "sco-history-body",
-    "the-sco-history-body",
-    "sco-table-body"
-  ]);
+  const tableBody = document.getElementById("sco-history-body");
 
   if (!tableBody) return;
 
@@ -75,30 +127,6 @@ function buildScoHistory(scoHistory) {
   });
 }
 
-function getOwnerColors(ownerId, teams) {
-  const team = teams.find(row => {
-    return cleanText(row.owner_id).toLowerCase() === ownerId;
-  });
-
-  return {
-    primary: cleanColor(team ? team.primary_color : "", "#111827"),
-    secondary: cleanColor(team ? team.secondary_color : "", "#ffffff"),
-    decal: cleanColor(team ? team.decal_color : "", "#facc15")
-  };
-}
-
-function getFirstElement(ids) {
-  for (const id of ids) {
-    const element = document.getElementById(id);
-
-    if (element) {
-      return element;
-    }
-  }
-
-  return null;
-}
-
 function setText(id, value) {
   const element = document.getElementById(id);
 
@@ -109,24 +137,6 @@ function setText(id, value) {
 
 function cleanText(value) {
   return String(value || "").trim();
-}
-
-function cleanColor(value, fallback) {
-  let color = cleanText(value);
-
-  if (!color || color.toLowerCase() === "tbd" || color.toLowerCase() === "na") {
-    return fallback;
-  }
-
-  color = color.replace(/\s/g, "");
-
-  if (!color.startsWith("#")) {
-    color = `#${color}`;
-  }
-
-  const isValidHex = /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(color);
-
-  return isValidHex ? color : fallback;
 }
 
 buildScoPage();
