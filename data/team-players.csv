@@ -1,4 +1,4 @@
-owner_id,position,player,nfl_team,points,year,notes
+owner_id,position,player,nfl_team,points,year
 bard,QB,Patrick Mahomes,KC,484,2020
 bard,RB,Exekiel Elliott,DAL,271,2019
 bard,WR,Ja'Marr Chase,CIN,252,2024
