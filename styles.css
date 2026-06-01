@@ -2824,3 +2824,158 @@ td strong {
     font-size: 22px;
   }
 }
+/* =========================================================
+   HOMEPAGE PLAYER CARDS - CIRCLE IMAGE VERSION
+   ========================================================= */
+
+.all-time-player-section {
+  width: 100%;
+  max-width: 100%;
+  margin: 28px 0;
+  overflow: hidden;
+}
+
+.all-time-player-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  align-items: stretch;
+}
+
+.player-card {
+  min-width: 0;
+  min-height: 330px;
+  border-radius: 24px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+}
+
+.player-card::before {
+  display: none;
+}
+
+.player-card-header {
+  background: #111827;
+  color: #ffffff;
+  padding: 14px 16px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 1000;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  border-bottom: 5px solid currentColor;
+}
+
+.player-card-image-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 24px 16px 10px;
+}
+
+.player-card-image-placeholder {
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  background: #f3f4f6;
+  border: 5px solid currentColor;
+  color: #111827;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 1000;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.12);
+}
+
+.player-card-body {
+  padding: 8px 18px 18px;
+  text-align: center;
+  flex: 1;
+}
+
+.player-card-body h3 {
+  margin: 0 0 8px;
+  color: #111827;
+  font-size: 23px;
+  line-height: 1.05;
+  font-weight: 950;
+}
+
+.player-card-body p {
+  margin: 0;
+  color: #4b5563;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.player-card-footer {
+  background: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+  padding: 14px 16px;
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.player-card-footer strong {
+  color: #111827;
+  font-size: 13px;
+  line-height: 1.25;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Position accent colors */
+.player-card-qb {
+  color: #ef4444;
+}
+
+.player-card-rb {
+  color: #22c55e;
+}
+
+.player-card-wr {
+  color: #06b6d4;
+}
+
+.player-card-te {
+  color: #8b5cf6;
+}
+
+.player-card-dst {
+  color: #f97316;
+}
+
+.player-card-k {
+  color: #64748b;
+}
+
+@media (max-width: 1100px) {
+  .all-time-player-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .all-time-player-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .player-card {
+    min-height: 300px;
+  }
+
+  .player-card-image-placeholder {
+    width: 96px;
+    height: 96px;
+    font-size: 24px;
+  }
+}
