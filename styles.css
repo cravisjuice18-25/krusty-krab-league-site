@@ -3099,3 +3099,34 @@ td strong {
 #championship-history td:nth-child(5) {
   overflow-wrap: normal;
 }
+/* =========================================================
+   BANNER STYLE RESET - RESTORE ORIGINAL LOOK
+   ========================================================= */
+
+.colored-championship-banner,
+.colored-sco-banner {
+  background: inherit;
+  border: inherit;
+  color: inherit;
+  box-shadow: inherit;
+}
+
+.colored-championship-banner::after,
+.colored-sco-banner::after {
+  display: none;
+}
+
+.colored-championship-banner .banner-year,
+.colored-sco-banner .banner-year,
+.colored-championship-banner .section-label,
+.colored-sco-banner .section-label,
+.colored-championship-banner h3,
+.colored-championship-banner p,
+.colored-championship-banner strong,
+.colored-sco-banner h3,
+.colored-sco-banner p,
+.colored-sco-banner strong {
+  color: inherit;
+  background: inherit;
+  border: inherit;
+}
