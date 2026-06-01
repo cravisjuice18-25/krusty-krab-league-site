@@ -48,44 +48,6 @@ function buildScoFeatureCards(scoHistory) {
 }
 
 function buildScoBanners(scoHistory, teams) {
-  const bannerGrid = getFirstElement([
-    "sco-banners-grid",
-    "the-sco-banners-grid",
-    "sco-banner-grid",
-    "the-sco-banner-grid"
-  ]);
-
-  if (!bannerGrid) return;
-
-  bannerGrid.innerHTML = "";
-
-  scoHistory.forEach(row => {
-    const year = cleanText(row.year);
-    const team = cleanText(row.team);
-    const ownerId = cleanText(row.owner_id).toLowerCase();
-    const colors = getOwnerColors(ownerId, teams);
-
-    const banner = document.createElement("article");
-    banner.className = "sco-banner colored-sco-banner";
-
-    banner.style.setProperty("--banner-primary", colors.primary);
-    banner.style.setProperty("--banner-secondary", colors.secondary);
-    banner.style.setProperty("--banner-decal", colors.decal);
-
-    banner.innerHTML = `
-      <div class="banner-year">${year}</div>
-
-      <div class="banner-content">
-        <p class="section-label">The Sco</p>
-        <h3>${team}</h3>
-        <p>${cleanText(row.final_record) || "Final record TBD"}</p>
-        <strong>${cleanText(row.avg_points_for) || "Avg points TBD"} Avg Points</strong>
-      </div>
-    `;
-
-    bannerGrid.appendChild(banner);
-  });
-}
 
 function buildScoHistory(scoHistory) {
   const tableBody = getFirstElement([
