@@ -1,31 +1,29 @@
 async function buildChampionsPage() {
   try {
     const champions = await loadCSV("data/champions.csv");
-    const teams = await loadCSV("data/teams.csv");
 
-    const sortedChampions = [...champions].sort((a, b) => Number(b.year) - Number(a.year));
+    const sortedChampions = [...champions]
+      .filter(row => cleanText(row.year))
+      .sort((a, b) => Number(b.year) - Number(a.year));
 
     buildChampionFeatureCards(sortedChampions);
-    buildChampionBanners(sortedChampions, teams);
+    buildChampionBanners(sortedChampions);
     buildChampionshipHistory(sortedChampions);
 
   } catch (error) {
     console.error("Champions page error:", error);
 
-    const bannerGrid = getFirstElement([
-      "championship-banners-grid",
-      "champion-banners-grid",
-      "championship-banner-grid",
-      "champions-banner-grid"
-    ]);
+    const bannerGrid = getChampionBannerGrid();
 
     if (bannerGrid) {
       bannerGrid.innerHTML = `
         <article class="championship-banner">
+          <div class="banner-year">Error</div>
           <div class="banner-content">
             <p class="section-label">Error</p>
             <h3>Champions Not Loaded</h3>
-            <p>Check data/champions.csv, data/teams.csv, data-loader.js, and champions.js.</p>
+            <p>Check data/champions.csv, data-loader.js, and champions.js.</p>
+            <strong>Data Error</strong>
           </div>
         </article>
       `;
@@ -40,42 +38,54 @@ function buildChampionFeatureCards(champions) {
 
   if (!latestChampion) return;
 
-  setText("latest-champion-year", `${cleanText(latestChampion.year)} Champion`);
-  setText("latest-champion-team", cleanText(latestChampion.champion));
-  setText("latest-champion-details", `${cleanText(latestChampion.final_score)} · ${cleanText(latestChampion.champion_record)}`);
+  const year = cleanText(latestChampion.year);
+  const champion = cleanText(latestChampion.champion);
+  const finalScore = cleanText(latestChampion.final_score);
+  const championRecord = cleanText(latestChampion.champion_record);
 
-  setText("champion-feature-year", `${cleanText(latestChampion.year)} Champion`);
-  setText("champion-feature-team", cleanText(latestChampion.champion));
-  setText("champion-feature-details", `${cleanText(latestChampion.final_score)} · ${cleanText(latestChampion.champion_record)}`);
+  setText("latest-champion-year", `${year} Champion`);
+  setText("latest-champion-team", champion);
+  setText("latest-champion-details", `${finalScore} · ${championRecord}`);
+
+  setText("champion-feature-year", `${year} Champion`);
+  setText("champion-feature-team", champion);
+  setText("champion-feature-details", `${finalScore} · ${championRecord}`);
+
+  setText("champion-feature-score", finalScore);
+  setText("champion-feature-record", championRecord);
 }
 
-function buildScoBanners(scoHistory, teams) {
-  const bannerGrid = getFirstElement([
-    "sco-banners-grid",
-    "the-sco-banners-grid",
-    "sco-banner-grid",
-    "the-sco-banner-grid"
-  ]);
+function buildChampionBanners(champions) {
+  const bannerGrid = getChampionBannerGrid();
 
-  if (!bannerGrid) return;
+  if (!bannerGrid) {
+    console.warn("Champion banner grid not found.");
+    return;
+  }
 
   bannerGrid.innerHTML = "";
 
-  scoHistory.forEach(row => {
+  champions.forEach(row => {
     const year = cleanText(row.year);
-    const team = cleanText(row.team);
+    const champion = cleanText(row.champion);
+    const finalScore = cleanText(row.final_score);
+    const championRecord = cleanText(row.champion_record);
+
+    if (!year || champion.toLowerCase() === "no winner") {
+      return;
+    }
 
     const banner = document.createElement("article");
-    banner.className = "sco-banner";
+    banner.className = "championship-banner";
 
     banner.innerHTML = `
       <div class="banner-year">${year}</div>
 
       <div class="banner-content">
-        <p class="section-label">The Sco</p>
-        <h3>${team}</h3>
-        <p>${cleanText(row.final_record) || "Final record TBD"}</p>
-        <strong>${cleanText(row.avg_points_for) || "Avg points TBD"} Avg Points</strong>
+        <p class="section-label">League Champion</p>
+        <h3>${champion}</h3>
+        <p>${finalScore || "Final score TBD"}</p>
+        <strong>${championRecord || "Record TBD"}</strong>
       </div>
     `;
 
@@ -84,13 +94,12 @@ function buildScoBanners(scoHistory, teams) {
 }
 
 function buildChampionshipHistory(champions) {
-  const tableBody = getFirstElement([
-    "championship-history-body",
-    "champions-history-body",
-    "champion-history-body"
-  ]);
+  const tableBody = getChampionshipHistoryBody();
 
-  if (!tableBody) return;
+  if (!tableBody) {
+    console.warn("Championship history table body not found.");
+    return;
+  }
 
   tableBody.innerHTML = "";
 
@@ -109,19 +118,29 @@ function buildChampionshipHistory(champions) {
   });
 }
 
-function getOwnerColors(ownerId, teams) {
-  const team = teams.find(row => {
-    return cleanText(row.owner_id).toLowerCase() === ownerId;
-  });
-
-  return {
-    primary: cleanColor(team ? team.primary_color : "", "#111827"),
-    secondary: cleanColor(team ? team.secondary_color : "", "#ffffff"),
-    decal: cleanColor(team ? team.decal_color : "", "#facc15")
-  };
+function getChampionBannerGrid() {
+  return getFirstElementById([
+    "championship-banners-grid",
+    "champion-banners-grid",
+    "championship-banner-grid",
+    "champions-banner-grid"
+  ]) || document.querySelector(".championship-banners-grid")
+     || document.querySelector(".champion-banners-grid")
+     || document.querySelector(".championship-banner-grid")
+     || document.querySelector(".champions-banner-grid");
 }
 
-function getFirstElement(ids) {
+function getChampionshipHistoryBody() {
+  return getFirstElementById([
+    "championship-history-body",
+    "champions-history-body",
+    "champion-history-body"
+  ]) || document.querySelector("#championship-history tbody")
+     || document.querySelector(".championship-history tbody")
+     || document.querySelector(".champions-history tbody");
+}
+
+function getFirstElementById(ids) {
   for (const id of ids) {
     const element = document.getElementById(id);
 
@@ -143,24 +162,6 @@ function setText(id, value) {
 
 function cleanText(value) {
   return String(value || "").trim();
-}
-
-function cleanColor(value, fallback) {
-  let color = cleanText(value);
-
-  if (!color || color.toLowerCase() === "tbd" || color.toLowerCase() === "na") {
-    return fallback;
-  }
-
-  color = color.replace(/\s/g, "");
-
-  if (!color.startsWith("#")) {
-    color = `#${color}`;
-  }
-
-  const isValidHex = /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(color);
-
-  return isValidHex ? color : fallback;
 }
 
 buildChampionsPage();
