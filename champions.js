@@ -15,11 +15,17 @@ async function buildChampionsPage() {
   } catch (error) {
     console.error("Champions page error:", error);
 
-    const bannerGrid = document.getElementById("championship-banners-grid");
+    const bannerGrid = getElement([
+      "championship-banners-grid",
+      "champion-banners-grid",
+      "champions-banner-grid",
+      "championship-banner-grid"
+    ]);
 
     if (bannerGrid) {
       bannerGrid.innerHTML = `
         <article class="championship-banner">
+          <div class="banner-year">Error</div>
           <div class="banner-content">
             <p class="section-label">Error</p>
             <h3>Champions Not Loaded</h3>
@@ -38,12 +44,23 @@ function buildCurrentChampion(champions) {
 
   if (!latestChampion) return;
 
-  setText("current-champion-year", `${cleanText(latestChampion.year)} Champion`);
-  setText("current-champion-team", cleanText(latestChampion.champion));
-  setText(
-    "current-champion-details",
-    `${cleanText(latestChampion.champion)} defeated ${cleanText(latestChampion.runner_up)} ${cleanText(latestChampion.final_score)}. Regular season record: ${cleanText(latestChampion.champion_record)}.`
-  );
+  const year = cleanText(latestChampion.year);
+  const champion = cleanText(latestChampion.champion);
+  const runnerUp = cleanText(latestChampion.runner_up);
+  const finalScore = cleanText(latestChampion.final_score);
+  const championRecord = cleanText(latestChampion.champion_record);
+
+  setText("current-champion-year", `${year} Champion`);
+  setText("current-champion-team", champion);
+  setText("current-champion-details", `${champion} defeated ${runnerUp} ${finalScore}. Regular season record: ${championRecord}.`);
+
+  setText("latest-champion-year", `${year} Champion`);
+  setText("latest-champion-team", champion);
+  setText("latest-champion-details", `${finalScore} · ${championRecord}`);
+
+  setText("champion-feature-year", `${year} Champion`);
+  setText("champion-feature-team", champion);
+  setText("champion-feature-details", `${finalScore} · ${championRecord}`);
 }
 
 function buildTitleCounts(champions) {
@@ -52,17 +69,32 @@ function buildTitleCounts(champions) {
   champions.forEach(row => {
     const champion = cleanText(row.champion);
 
-    if (!champion || champion.toLowerCase() === "no winner") return;
+    if (!champion || champion.toLowerCase() === "no winner" || champion.toLowerCase() === "na") return;
 
     titleCounts[champion] = (titleCounts[champion] || 0) + 1;
   });
 
-  const list = document.getElementById("champion-title-count-list");
+  const list = getElement([
+    "champion-title-count-list",
+    "title-count-list",
+    "championship-title-count-list",
+    "league-title-count-list"
+  ]);
 
   if (!list) return;
 
   const sortedCounts = Object.entries(titleCounts)
-    .sort((a, b) => b[1] - a[1]);
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+
+  if (sortedCounts.length === 0) {
+    list.innerHTML = `
+      <div class="count-row">
+        <span>No titles loaded</span>
+        <strong>0</strong>
+      </div>
+    `;
+    return;
+  }
 
   list.innerHTML = "";
 
@@ -80,7 +112,12 @@ function buildTitleCounts(champions) {
 }
 
 function buildChampionBanners(champions) {
-  const bannerGrid = document.getElementById("championship-banners-grid");
+  const bannerGrid = getElement([
+    "championship-banners-grid",
+    "champion-banners-grid",
+    "champions-banner-grid",
+    "championship-banner-grid"
+  ]);
 
   if (!bannerGrid) return;
 
@@ -89,6 +126,9 @@ function buildChampionBanners(champions) {
   champions.forEach(row => {
     const year = cleanText(row.year);
     const champion = cleanText(row.champion);
+    const runnerUp = cleanText(row.runner_up);
+    const finalScore = cleanText(row.final_score);
+    const championRecord = cleanText(row.champion_record);
 
     if (!year || champion.toLowerCase() === "no winner") return;
 
@@ -101,8 +141,8 @@ function buildChampionBanners(champions) {
       <div class="banner-content">
         <p class="section-label">League Champion</p>
         <h3>${champion}</h3>
-        <p>Defeated ${cleanText(row.runner_up)} · ${cleanText(row.final_score)}</p>
-        <strong>${cleanText(row.champion_record)}</strong>
+        <p>Defeated ${runnerUp} · ${finalScore}</p>
+        <strong>${championRecord}</strong>
       </div>
     `;
 
@@ -111,7 +151,11 @@ function buildChampionBanners(champions) {
 }
 
 function buildChampionshipHistory(champions) {
-  const tableBody = document.getElementById("championship-history-body");
+  const tableBody = getElement([
+    "championship-history-body",
+    "champions-history-body",
+    "champion-history-body"
+  ]);
 
   if (!tableBody) return;
 
@@ -166,6 +210,16 @@ function buildChampionshipRecords(champions) {
   setText("lowest-championship-score", `${lowestScore.high} · ${lowestScore.champion} · ${lowestScore.year}`);
   setText("closest-championship-game", `${closestGame.finalScore} · ${closestGame.year}`);
   setText("biggest-championship-blowout", `${biggestBlowout.margin} points · ${biggestBlowout.year}`);
+}
+
+function getElement(ids) {
+  for (const id of ids) {
+    const element = document.getElementById(id);
+
+    if (element) return element;
+  }
+
+  return null;
 }
 
 function setText(id, value) {
