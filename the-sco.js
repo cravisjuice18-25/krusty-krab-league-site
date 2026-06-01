@@ -14,11 +14,17 @@ async function buildScoPage() {
   } catch (error) {
     console.error("The Sco page error:", error);
 
-    const bannerGrid = document.getElementById("sco-banners-grid");
+    const bannerGrid = getElement([
+      "sco-banners-grid",
+      "the-sco-banners-grid",
+      "sco-banner-grid",
+      "the-sco-banner-grid"
+    ]);
 
     if (bannerGrid) {
       bannerGrid.innerHTML = `
         <article class="sco-banner">
+          <div class="banner-year">Error</div>
           <div class="banner-content">
             <p class="section-label">Error</p>
             <h3>The Sco Not Loaded</h3>
@@ -35,31 +41,59 @@ function buildCurrentSco(scoHistory) {
 
   if (!latestSco) return;
 
-  setText("current-sco-year", `${cleanText(latestSco.year)} The Sco`);
-  setText("current-sco-team", cleanText(latestSco.team));
-  setText(
-    "current-sco-details",
-    `${cleanText(latestSco.team)} finished ${cleanText(latestSco.final_finish)} with a ${cleanText(latestSco.final_record)} record and ${cleanText(latestSco.avg_points_for)} average points for.`
-  );
+  const year = cleanText(latestSco.year);
+  const team = cleanText(latestSco.team);
+  const record = cleanText(latestSco.final_record);
+  const finish = cleanText(latestSco.final_finish);
+  const avgPoints = cleanText(latestSco.avg_points_for);
+
+  setText("current-sco-year", `${year} The Sco`);
+  setText("current-sco-team", team);
+  setText("current-sco-details", `${team} finished ${finish} with a ${record} record and ${avgPoints} average points for.`);
+
+  setText("latest-sco-year", `${year} The Sco`);
+  setText("latest-sco-team", team);
+  setText("latest-sco-details", `${record} · ${avgPoints} avg points`);
+
+  setText("sco-feature-year", `${year} The Sco`);
+  setText("sco-feature-team", team);
+  setText("sco-feature-details", `${record} · ${avgPoints} avg points`);
 }
 
 function buildScoCounts(scoHistory) {
   const scoCounts = {};
 
   scoHistory.forEach(row => {
+    const ownerId = cleanText(row.owner_id).toLowerCase();
     const team = cleanText(row.team);
 
     if (!team) return;
 
-    scoCounts[team] = (scoCounts[team] || 0) + 1;
+    const displayName = formatOwnerName(ownerId) || team;
+
+    scoCounts[displayName] = (scoCounts[displayName] || 0) + 1;
   });
 
-  const list = document.getElementById("sco-count-list");
+  const list = getElement([
+    "sco-count-list",
+    "the-sco-count-list",
+    "last-place-count-list"
+  ]);
 
   if (!list) return;
 
   const sortedCounts = Object.entries(scoCounts)
-    .sort((a, b) => b[1] - a[1]);
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+
+  if (sortedCounts.length === 0) {
+    list.innerHTML = `
+      <div class="count-row">
+        <span>No Sco counts loaded</span>
+        <strong>0</strong>
+      </div>
+    `;
+    return;
+  }
 
   list.innerHTML = "";
 
@@ -77,7 +111,12 @@ function buildScoCounts(scoHistory) {
 }
 
 function buildScoBanners(scoHistory) {
-  const bannerGrid = document.getElementById("sco-banners-grid");
+  const bannerGrid = getElement([
+    "sco-banners-grid",
+    "the-sco-banners-grid",
+    "sco-banner-grid",
+    "the-sco-banner-grid"
+  ]);
 
   if (!bannerGrid) return;
 
@@ -86,6 +125,9 @@ function buildScoBanners(scoHistory) {
   scoHistory.forEach(row => {
     const year = cleanText(row.year);
     const team = cleanText(row.team);
+    const record = cleanText(row.final_record);
+    const finish = cleanText(row.final_finish);
+    const avgPoints = cleanText(row.avg_points_for);
 
     const banner = document.createElement("article");
     banner.className = "sco-banner";
@@ -96,8 +138,8 @@ function buildScoBanners(scoHistory) {
       <div class="banner-content">
         <p class="section-label">The Sco</p>
         <h3>${team}</h3>
-        <p>${cleanText(row.final_record)} · Finished ${cleanText(row.final_finish)}</p>
-        <strong>${cleanText(row.avg_points_for)} Avg Points For</strong>
+        <p>${record} · Finished ${finish}</p>
+        <strong>${avgPoints} Avg Points For</strong>
       </div>
     `;
 
@@ -106,7 +148,11 @@ function buildScoBanners(scoHistory) {
 }
 
 function buildScoHistory(scoHistory) {
-  const tableBody = document.getElementById("sco-history-body");
+  const tableBody = getElement([
+    "sco-history-body",
+    "the-sco-history-body",
+    "sco-table-body"
+  ]);
 
   if (!tableBody) return;
 
@@ -125,6 +171,35 @@ function buildScoHistory(scoHistory) {
 
     tableBody.appendChild(tr);
   });
+}
+
+function formatOwnerName(ownerId) {
+  const ownerMap = {
+    bard: "Bard",
+    sco: "Sco",
+    jake: "Jake",
+    muffin: "Muffin",
+    miner: "Miner",
+    hunter: "Hunter",
+    kyle: "Kyle",
+    gary: "Gary",
+    eric: "Eric",
+    sabella: "Sabella",
+    charlie: "Charlie",
+    miller: "Miller"
+  };
+
+  return ownerMap[ownerId] || "";
+}
+
+function getElement(ids) {
+  for (const id of ids) {
+    const element = document.getElementById(id);
+
+    if (element) return element;
+  }
+
+  return null;
 }
 
 function setText(id, value) {
