@@ -3,13 +3,11 @@ async function buildTeamsPage() {
     const teams = await loadCSV("data/teams.csv");
 
     const activeTeams = teams.filter(team => {
-      const status = cleanText(team.status).toLowerCase();
-      return status === "active";
+      return cleanText(team.status).toLowerCase() === "active";
     });
 
     const inactiveTeams = teams.filter(team => {
-      const status = cleanText(team.status).toLowerCase();
-      return status !== "active";
+      return cleanText(team.status).toLowerCase() !== "active";
     });
 
     renderTeamsGrid(activeTeams, [
@@ -29,19 +27,19 @@ async function buildTeamsPage() {
   } catch (error) {
     console.error("Teams page error:", error);
 
-    const activeGrid = getElement([
+    const grid = getElement([
       "active-teams-grid",
       "teams-grid",
       "current-teams-grid",
       "active-franchises-grid"
     ]);
 
-    if (activeGrid) {
-      activeGrid.innerHTML = `
+    if (grid) {
+      grid.innerHTML = `
         <article class="content-card">
           <p class="section-label">Teams Error</p>
           <h3>Teams could not load</h3>
-          <p>Check <code>data/teams.csv</code>, <code>data-loader.js</code>, and <code>teams.js</code>.</p>
+          <p>Check data/teams.csv, data-loader.js, and teams.js.</p>
         </article>
       `;
     }
@@ -54,13 +52,7 @@ function renderTeamsGrid(teams, possibleIds) {
   if (!grid) return;
 
   if (!teams || teams.length === 0) {
-    grid.innerHTML = `
-      <article class="content-card">
-        <p class="section-label">No Teams Found</p>
-        <h3>No teams loaded yet</h3>
-        <p>This section is ready, but no matching teams were found in <code>data/teams.csv</code>.</p>
-      </article>
-    `;
+    grid.innerHTML = "";
     return;
   }
 
@@ -68,43 +60,41 @@ function renderTeamsGrid(teams, possibleIds) {
 
   teams.forEach(team => {
     const card = document.createElement("article");
-    card.className = "team-card";
+    card.className = "content-card team-card";
 
     const ownerId = cleanText(team.owner_id);
-    const teamName = cleanText(team.team_name) || "Team Name Coming Soon";
-    const owner = cleanText(team.owner) || formatOwnerName(ownerId) || "Owner Coming Soon";
-    const location = cleanText(team.location) || "Location Coming Soon";
-    const record = cleanText(team.record) || "Record Coming Soon";
+    const teamName = cleanText(team.team_name) || "Team Name";
+    const owner = cleanText(team.owner) || formatOwnerName(ownerId);
+    const location = cleanText(team.location);
+    const record = cleanText(team.record) || "—";
     const titles = cleanText(team.titles) || "0";
-    const playoffApps = cleanText(team.playoff_appearances) || "Coming Soon";
-    const tagline = cleanText(team.tagline) || "Franchise profile under construction.";
+    const playoffApps = cleanText(team.playoff_appearances) || "—";
+    const logo = cleanText(team.primary_logo);
+    const teamPage = cleanText(team.team_page) || `team.html?owner=${ownerId}`;
+
     const primaryColor = cleanText(team.primary_color) || "#0f172a";
     const secondaryColor = cleanText(team.secondary_color) || "#1e293b";
     const decalColor = cleanText(team.decal_color) || "#facc15";
-    const logo = cleanText(team.primary_logo);
-    const teamPage = cleanText(team.team_page) || `team.html?owner=${ownerId}`;
 
     card.style.setProperty("--team-primary", primaryColor);
     card.style.setProperty("--team-secondary", secondaryColor);
     card.style.setProperty("--team-decal", decalColor);
 
     card.innerHTML = `
-      <div class="team-card-top" style="border-color: ${decalColor};">
-        <div class="team-logo-wrap">
+      <div class="team-card-header">
+        <div class="team-logo">
           ${isMissing(logo)
             ? `<div class="team-logo-placeholder">${initials(teamName)}</div>`
             : `<img src="${logo}" alt="${teamName} logo">`
           }
         </div>
 
-        <div>
+        <div class="team-card-title">
           <p class="section-label">${owner}</p>
           <h3>${teamName}</h3>
-          <p>${location}</p>
+          ${location ? `<p>${location}</p>` : ""}
         </div>
       </div>
-
-      <p class="team-tagline">${tagline}</p>
 
       <div class="team-card-stats">
         <div>
@@ -123,9 +113,7 @@ function renderTeamsGrid(teams, possibleIds) {
         </div>
       </div>
 
-      <a class="button-link" href="${teamPage}">
-        View Franchise
-      </a>
+      <a class="button-link" href="${teamPage}">View Franchise</a>
     `;
 
     grid.appendChild(card);
