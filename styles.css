@@ -3352,3 +3352,70 @@ function buildBasementRecords(scoHistory) {
     lowestAvg ? `${cleanText(lowestAvg.team)} · ${cleanText(lowestAvg.avg_points_for)} · ${cleanText(lowestAvg.year)}` : "TBD"
   );
 }
+/* =========================================================
+   DYNAMIC TEAM PAGE PLACEHOLDER CLEANUP
+   ========================================================= */
+
+.team-placeholder,
+.logo-placeholder,
+.uniform-placeholder,
+.empty-state-card {
+  border: 1px dashed rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.035);
+  color: rgba(255, 255, 255, 0.72);
+  border-radius: 14px;
+}
+
+.logo-placeholder,
+.uniform-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 160px;
+  padding: 20px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.logo-placeholder {
+  min-height: 120px;
+}
+
+.uniform-placeholder {
+  min-height: 240px;
+}
+
+.empty-state-card {
+  padding: 18px;
+  margin-top: 12px;
+}
+
+.empty-state-card strong {
+  display: block;
+  color: #ffffff;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.empty-state-card span,
+.empty-state-card p {
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 13px;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.team-data-note {
+  margin-top: 10px;
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.team-page img[src=""],
+.team-page img:not([src]) {
+  display: none;
+}
