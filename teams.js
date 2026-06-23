@@ -137,5 +137,26 @@ function cleanColor(value, fallback) {
 
   return isValidHex ? color : fallback;
 }
+function isMissing(value) {
+  const text = cleanText(value).toLowerCase();
 
+  return (
+    !text ||
+    text === "tbd" ||
+    text === "na" ||
+    text === "n/a" ||
+    text === "coming soon" ||
+    text === "undefined" ||
+    text === "null"
+  );
+}
+
+function emptyState(title, message) {
+  return `
+    <div class="empty-state-card">
+      <strong>${title}</strong>
+      <span>${message}</span>
+    </div>
+  `;
+}
 buildTeamsPage();
