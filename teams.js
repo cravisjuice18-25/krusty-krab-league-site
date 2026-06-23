@@ -60,7 +60,7 @@ function renderTeamsGrid(teams, possibleIds) {
 
   teams.forEach(team => {
     const card = document.createElement("article");
-    card.className = "content-card team-card";
+    card.className = "team-directory-card";
 
     const ownerId = cleanText(team.owner_id);
     const teamName = cleanText(team.team_name) || "Team Name";
@@ -69,6 +69,7 @@ function renderTeamsGrid(teams, possibleIds) {
     const record = cleanText(team.record) || "—";
     const titles = cleanText(team.titles) || "0";
     const playoffApps = cleanText(team.playoff_appearances) || "—";
+    const tagline = cleanText(team.tagline);
     const logo = cleanText(team.primary_logo);
     const teamPage = cleanText(team.team_page) || `team.html?owner=${ownerId}`;
 
@@ -81,22 +82,24 @@ function renderTeamsGrid(teams, possibleIds) {
     card.style.setProperty("--team-decal", decalColor);
 
     card.innerHTML = `
-      <div class="team-card-header">
-        <div class="team-logo">
+      <div class="team-directory-header">
+        <div class="team-directory-logo">
           ${isMissing(logo)
-            ? `<div class="team-logo-placeholder">${initials(teamName)}</div>`
+            ? `<div class="team-directory-logo-placeholder">${initials(teamName)}</div>`
             : `<img src="${logo}" alt="${teamName} logo">`
           }
         </div>
 
-        <div class="team-card-title">
+        <div class="team-directory-title">
           <p class="section-label">${owner}</p>
           <h3>${teamName}</h3>
           ${location ? `<p>${location}</p>` : ""}
         </div>
       </div>
 
-      <div class="team-card-stats">
+      ${!isMissing(tagline) ? `<p class="team-directory-tagline">${tagline}</p>` : ""}
+
+      <div class="team-directory-stats">
         <div>
           <span>Record</span>
           <strong>${record}</strong>
@@ -113,7 +116,7 @@ function renderTeamsGrid(teams, possibleIds) {
         </div>
       </div>
 
-      <a class="button-link" href="${teamPage}">View Franchise</a>
+      <a class="team-directory-button" href="${teamPage}">View Franchise</a>
     `;
 
     grid.appendChild(card);
