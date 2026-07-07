@@ -1,72 +1,147 @@
 async function buildTrophyRoomPage() {
   try {
-    const trophyRoom = await loadCSV("data/trophy-room.csv");
+    const trophyRoom = await loadOptionalCSV("data/trophy-room.csv");
+    const miniGames = await loadOptionalCSV("data/mini-games.csv");
 
-    let miniGames = [];
-
-    try {
-      miniGames = await loadCSV("data/mini-games.csv");
-    } catch (error) {
-      console.warn("mini-games.csv did not load:", error);
-      miniGames = [];
-    }
-
-    const years = getYears(trophyRoom);
+    const validTrophyRows = trophyRoom.filter(isValidAwardRow);
+    const years = getYears(validTrophyRows);
     const latestYear = years[0];
 
-    buildFeatureCards(trophyRoom, latestYear);
-    buildMajorAwards(trophyRoom, latestYear);
-    buildSeasonAwards(trophyRoom, latestYear);
+    buildFeatureCards(validTrophyRows, latestYear);
+    buildMajorAwards(validTrophyRows, latestYear);
+    buildSeasonAwards(validTrophyRows, latestYear);
     buildMiniGames(miniGames);
-    buildYearByYearAwards(trophyRoom, miniGames, years);
-    buildFunAwards(trophyRoom, latestYear);
+    buildYearByYearAwards(validTrophyRows, miniGames, years);
+    buildFunAwards(validTrophyRows, latestYear);
 
   } catch (error) {
-    console.error("Trophy Room error:", error);
-    showTrophyError();
+    console.warn("Trophy Room issue:", error);
+    hideTrophyPlaceholders();
   }
 }
 
+/* =========================================================
+   DATA LOADING
+   ========================================================= */
+
+async function loadOptionalCSV(path) {
+  try {
+    return await loadCSV(path);
+  } catch (error) {
+    console.warn(`${path} did not load. Skipping.`, error);
+    return [];
+  }
+}
+
+/* =========================================================
+   DATA HELPERS
+   ========================================================= */
+
 function getYears(rows) {
   return [...new Set(rows.map(row => cleanText(row.year)))]
-    .filter(year => year && year.toLowerCase() !== "tbd")
+    .filter(year => !isMissing(year))
     .sort((a, b) => Number(b) - Number(a));
+}
+
+function isValidAwardRow(row) {
+  const year = cleanText(row.year);
+  const award = cleanText(row.award);
+  const display = getAwardDisplay(row);
+
+  return !isMissing(year) && !isMissing(award) && !isMissing(display);
 }
 
 function getAward(rows, year, awardName) {
   return rows.find(row => {
     return cleanText(row.year) === cleanText(year) &&
-      cleanText(row.award).toLowerCase() === awardName.toLowerCase();
+      cleanText(row.award).toLowerCase() === awardName.toLowerCase() &&
+      !isMissing(getAwardDisplay(row));
   });
 }
 
 function getAwardDisplay(row) {
-  if (!row) return "TBD";
+  if (!row) return "";
 
   const team = cleanText(row.winner_team);
   const name = cleanText(row.winner_name);
   const value = cleanText(row.value);
 
   const displayParts = [
-    team && team.toLowerCase() !== "tbd" ? team : "",
-    name && name.toLowerCase() !== "tbd" ? name : "",
-    value && value.toLowerCase() !== "tbd" ? value : ""
+    !isMissing(team) ? team : "",
+    !isMissing(name) ? name : "",
+    !isMissing(value) ? value : ""
   ].filter(Boolean);
 
-  return displayParts.length ? displayParts.join(" · ") : "TBD";
+  return displayParts.join(" · ");
 }
+
+function getMiniGameDisplay(row) {
+  const team = cleanText(row.winner_team);
+  const winner = cleanText(row.winner_name);
+  const result = cleanText(row.result);
+
+  const parts = [
+    !isMissing(team) ? team : "",
+    !isMissing(winner) ? winner : "",
+    !isMissing(result) ? result : ""
+  ].filter(Boolean);
+
+  return parts.join(" · ");
+}
+
+/* =========================================================
+   FEATURE CARDS
+   ========================================================= */
 
 function buildFeatureCards(rows, latestYear) {
-  const champion = getAward(rows, latestYear, "League Champion");
-  const regularSeason = getAward(rows, latestYear, "Regular Season Winner");
-  const mostPoints = getAward(rows, latestYear, "Most Points");
-  const theSco = getAward(rows, latestYear, "The Sco");
+  const featureItems = [
+    {
+      id: "trophy-latest-champion",
+      award: "League Champion"
+    },
+    {
+      id: "trophy-regular-season-winner",
+      award: "Regular Season Winner"
+    },
+    {
+      id: "trophy-most-points",
+      award: "Most Points"
+    },
+    {
+      id: "trophy-the-sco",
+      award: "The Sco"
+    }
+  ];
 
-  setText("trophy-latest-champion", `${latestYear || "Latest"} · ${getAwardDisplay(champion)}`);
-  setText("trophy-regular-season-winner", `${latestYear || "Latest"} · ${getAwardDisplay(regularSeason)}`);
-  setText("trophy-most-points", `${latestYear || "Latest"} · ${getAwardDisplay(mostPoints)}`);
-  setText("trophy-the-sco", `${latestYear || "Latest"} · ${getAwardDisplay(theSco)}`);
+  featureItems.forEach(item => {
+    const row = getAward(rows, latestYear, item.award);
+    const element = document.getElementById(item.id);
+
+    if (!element) return;
+
+    if (!row) {
+      hideFeatureCard(element);
+      return;
+    }
+
+    element.textContent = `${latestYear} · ${getAwardDisplay(row)}`;
+  });
 }
+
+function hideFeatureCard(element) {
+  const card =
+    element.closest(".record-feature-card") ||
+    element.closest(".content-card") ||
+    element.parentElement;
+
+  if (card) {
+    card.style.display = "none";
+  }
+}
+
+/* =========================================================
+   MAJOR AWARDS
+   ========================================================= */
 
 function buildMajorAwards(rows, latestYear) {
   const grid = document.getElementById("major-awards-grid");
@@ -103,6 +178,9 @@ function buildMajorAwards(rows, latestYear) {
 
   awards.forEach(award => {
     const row = getAward(rows, latestYear, award.name);
+
+    if (!row) return;
+
     const card = document.createElement("div");
     card.className = `award-cabinet-card ${award.className}`.trim();
 
@@ -110,12 +188,18 @@ function buildMajorAwards(rows, latestYear) {
       <span>${award.icon}</span>
       <h3>${award.name}</h3>
       <p>${award.description}</p>
-      <strong>${latestYear || "Latest"}: ${getAwardDisplay(row)}</strong>
+      <strong>${latestYear}: ${getAwardDisplay(row)}</strong>
     `;
 
     grid.appendChild(card);
   });
+
+  hideSectionIfEmpty(grid);
 }
+
+/* =========================================================
+   SEASON AWARDS
+   ========================================================= */
 
 function buildSeasonAwards(rows, latestYear) {
   const grid = document.getElementById("season-awards-grid");
@@ -143,6 +227,9 @@ function buildSeasonAwards(rows, latestYear) {
 
   awards.forEach(award => {
     const row = getAward(rows, latestYear, award.name);
+
+    if (!row) return;
+
     const card = document.createElement("div");
     card.className = "award-cabinet-card";
 
@@ -150,28 +237,37 @@ function buildSeasonAwards(rows, latestYear) {
       <span>${award.icon}</span>
       <h3>${award.name}</h3>
       <p>${award.description}</p>
-      <strong>${latestYear || "Latest"}: ${getAwardDisplay(row)}</strong>
+      <strong>${latestYear}: ${getAwardDisplay(row)}</strong>
     `;
 
     grid.appendChild(card);
   });
+
+  hideSectionIfEmpty(grid);
 }
+
+/* =========================================================
+   MINI GAMES
+   ========================================================= */
 
 function buildMiniGames(miniGames) {
   const list = document.getElementById("mini-games-list");
   if (!list) return;
 
-  if (!miniGames || miniGames.length === 0) {
-    list.innerHTML = `
-      <div class="record-item">
-        <strong>Mini Games</strong>
-        <span>No mini game data entered yet.</span>
-      </div>
-    `;
+  const validGames = miniGames.filter(row => {
+    const year = cleanText(row.year);
+    const game = cleanText(row.game);
+    const display = getMiniGameDisplay(row);
+
+    return !isMissing(year) && !isMissing(game) && !isMissing(display);
+  });
+
+  if (validGames.length === 0) {
+    hideSectionAround(list);
     return;
   }
 
-  const sortedGames = [...miniGames].sort((a, b) => {
+  const sortedGames = [...validGames].sort((a, b) => {
     return Number(b.year) - Number(a.year) || cleanText(a.game).localeCompare(cleanText(b.game));
   });
 
@@ -181,37 +277,29 @@ function buildMiniGames(miniGames) {
     const item = document.createElement("div");
     item.className = "record-item";
 
-    const year = cleanText(row.year) || "TBD";
-    const game = cleanText(row.game) || "Mini Game";
-    const team = cleanText(row.winner_team);
-    const winner = cleanText(row.winner_name);
-    const result = cleanText(row.result);
-
-    const details = [
-      team && team.toLowerCase() !== "tbd" ? team : "",
-      winner && winner.toLowerCase() !== "tbd" ? winner : "",
-      result && result.toLowerCase() !== "tbd" ? result : ""
-    ].filter(Boolean).join(" · ");
+    const year = cleanText(row.year);
+    const game = cleanText(row.game);
+    const details = getMiniGameDisplay(row);
 
     item.innerHTML = `
       <strong>${year} · ${game}</strong>
-      <span>${details || "TBD"}</span>
+      <span>${details}</span>
     `;
 
     list.appendChild(item);
   });
 }
 
+/* =========================================================
+   YEAR BY YEAR AWARDS
+   ========================================================= */
+
 function buildYearByYearAwards(rows, miniGames, years) {
   const body = document.getElementById("yearly-awards-body");
   if (!body) return;
 
   if (!years || years.length === 0) {
-    body.innerHTML = `
-      <tr>
-        <td colspan="7">No award history entered yet.</td>
-      </tr>
-    `;
+    hideSectionAround(body);
     return;
   }
 
@@ -224,40 +312,50 @@ function buildYearByYearAwards(rows, miniGames, years) {
     const mostPoints = getAward(rows, year, "Most Points");
     const theSco = getAward(rows, year, "The Sco");
 
-    const yearMiniGames = miniGames.filter(row => cleanText(row.year) === cleanText(year));
+    const yearMiniGames = miniGames.filter(row => {
+      return cleanText(row.year) === cleanText(year) &&
+        !isMissing(cleanText(row.game)) &&
+        !isMissing(getMiniGameDisplay(row));
+    });
+
     const miniGameSummary = yearMiniGames.length
       ? yearMiniGames.map(row => `${cleanText(row.game)}: ${getMiniGameDisplay(row)}`).join(" / ")
-      : "TBD";
+      : "";
+
+    const rowValues = [
+      getAwardDisplay(champion),
+      getAwardDisplay(runnerUp),
+      getAwardDisplay(regularSeason),
+      getAwardDisplay(mostPoints),
+      getAwardDisplay(theSco),
+      miniGameSummary
+    ];
+
+    const hasAnyData = rowValues.some(value => !isMissing(value));
+
+    if (!hasAnyData) return;
 
     const tr = document.createElement("tr");
 
     tr.innerHTML = `
       <td>${year}</td>
-      <td>${getAwardDisplay(champion)}</td>
-      <td>${getAwardDisplay(runnerUp)}</td>
-      <td>${getAwardDisplay(regularSeason)}</td>
-      <td>${getAwardDisplay(mostPoints)}</td>
-      <td>${getAwardDisplay(theSco)}</td>
-      <td>${miniGameSummary}</td>
+      <td>${getAwardDisplay(champion) || "—"}</td>
+      <td>${getAwardDisplay(runnerUp) || "—"}</td>
+      <td>${getAwardDisplay(regularSeason) || "—"}</td>
+      <td>${getAwardDisplay(mostPoints) || "—"}</td>
+      <td>${getAwardDisplay(theSco) || "—"}</td>
+      <td>${miniGameSummary || "—"}</td>
     `;
 
     body.appendChild(tr);
   });
+
+  hideSectionIfEmpty(body);
 }
 
-function getMiniGameDisplay(row) {
-  const team = cleanText(row.winner_team);
-  const winner = cleanText(row.winner_name);
-  const result = cleanText(row.result);
-
-  const parts = [
-    team && team.toLowerCase() !== "tbd" ? team : "",
-    winner && winner.toLowerCase() !== "tbd" ? winner : "",
-    result && result.toLowerCase() !== "tbd" ? result : ""
-  ].filter(Boolean);
-
-  return parts.length ? parts.join(" · ") : "TBD";
-}
+/* =========================================================
+   FUN AWARDS
+   ========================================================= */
 
 function buildFunAwards(rows, latestYear) {
   const grid = document.getElementById("fun-awards-grid");
@@ -290,6 +388,9 @@ function buildFunAwards(rows, latestYear) {
 
   awards.forEach(award => {
     const row = getAward(rows, latestYear, award.name);
+
+    if (!row) return;
+
     const card = document.createElement("div");
     card.className = "award-cabinet-card";
 
@@ -297,56 +398,60 @@ function buildFunAwards(rows, latestYear) {
       <span>${award.icon}</span>
       <h3>${award.name}</h3>
       <p>${award.description}</p>
-      <strong>${latestYear || "Latest"}: ${getAwardDisplay(row)}</strong>
+      <strong>${latestYear}: ${getAwardDisplay(row)}</strong>
     `;
 
     grid.appendChild(card);
   });
+
+  hideSectionIfEmpty(grid);
 }
 
-function showTrophyError() {
-  const grids = [
+/* =========================================================
+   HIDE HELPERS
+   ========================================================= */
+
+function hideSectionIfEmpty(element) {
+  if (!element) return;
+
+  const hasChildren = element.children && element.children.length > 0;
+  const hasTableRows = element.querySelectorAll && element.querySelectorAll("tr").length > 0;
+
+  if (!hasChildren && !hasTableRows) {
+    hideSectionAround(element);
+  }
+}
+
+function hideSectionAround(element) {
+  const section =
+    element.closest("section") ||
+    element.closest(".content-card") ||
+    element.parentElement;
+
+  if (section) {
+    section.style.display = "none";
+  }
+}
+
+function hideTrophyPlaceholders() {
+  [
     "major-awards-grid",
     "season-awards-grid",
-    "fun-awards-grid"
-  ];
+    "fun-awards-grid",
+    "mini-games-list",
+    "yearly-awards-body"
+  ].forEach(id => {
+    const element = document.getElementById(id);
 
-  grids.forEach(id => {
-    const grid = document.getElementById(id);
-
-    if (grid) {
-      grid.innerHTML = `
-        <div class="award-cabinet-card">
-          <span>⚠️</span>
-          <h3>Data Not Loaded</h3>
-          <p>Check data/trophy-room.csv, data-loader.js, and trophy-room.js.</p>
-          <strong>Error</strong>
-        </div>
-      `;
+    if (element) {
+      hideSectionAround(element);
     }
   });
-
-  const list = document.getElementById("mini-games-list");
-
-  if (list) {
-    list.innerHTML = `
-      <div class="record-item">
-        <strong>Mini Games Not Loaded</strong>
-        <span>Check data/mini-games.csv.</span>
-      </div>
-    `;
-  }
-
-  const body = document.getElementById("yearly-awards-body");
-
-  if (body) {
-    body.innerHTML = `
-      <tr>
-        <td colspan="7">Award history failed to load.</td>
-      </tr>
-    `;
-  }
 }
+
+/* =========================================================
+   GENERAL HELPERS
+   ========================================================= */
 
 function setText(id, value) {
   const element = document.getElementById(id);
@@ -358,6 +463,21 @@ function setText(id, value) {
 
 function cleanText(value) {
   return String(value || "").trim();
+}
+
+function isMissing(value) {
+  const text = cleanText(value).toLowerCase();
+
+  return (
+    !text ||
+    text === "tbd" ||
+    text === "na" ||
+    text === "n/a" ||
+    text === "coming soon" ||
+    text === "undefined" ||
+    text === "null" ||
+    text === "-"
+  );
 }
 
 buildTrophyRoomPage();
