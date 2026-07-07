@@ -10,6 +10,7 @@ async function buildTrophyRoomPage() {
     buildFeatureCards(validTrophyRows, latestYear);
     buildMajorAwards(validTrophyRows, latestYear);
     buildSeasonAwards(validTrophyRows, latestYear);
+    buildWeeklyAwards(validTrophyRows, latestYear);
     buildMiniGames(miniGames);
     buildYearByYearAwards(validTrophyRows, miniGames, years);
     buildFunAwards(validTrophyRows, latestYear);
@@ -168,9 +169,9 @@ function buildMajorAwards(rows, latestYear) {
     },
     {
       name: "The Sco",
-      icon: "💀",
+      icon: "📣",
       className: "shame-award",
-      description: "Last place. Basement resident. Permanent history."
+      description: "Lost two straight in the consolation bracket and earned league infamy."
     }
   ];
 
@@ -212,6 +213,21 @@ function buildSeasonAwards(rows, latestYear) {
       description: "Highest total points for the regular season."
     },
     {
+      name: "Most Waiver Adds",
+      icon: "🔁",
+      description: "Most roster moves made during the season."
+    },
+    {
+      name: "Most Points by a Player",
+      icon: "⭐",
+      description: "Highest scoring fantasy player season."
+    },
+    {
+      name: "Point Margin Per Game",
+      icon: "📈",
+      description: "Best average scoring margin per matchup."
+    },
+    {
       name: "Best Draft Pick",
       icon: "🎯",
       description: "The pick that aged the best."
@@ -247,12 +263,64 @@ function buildSeasonAwards(rows, latestYear) {
 }
 
 /* =========================================================
-   MINI GAMES
+   WEEKLY AWARDS
+   ========================================================= */
+
+function buildWeeklyAwards(rows, latestYear) {
+  const grid = document.getElementById("weekly-awards-grid");
+  if (!grid) return;
+
+  const awards = [
+    {
+      name: "Highest Scoring Player",
+      icon: "⚡",
+      description: "Best individual player score from any week that season."
+    },
+    {
+      name: "Highest Weekly Score",
+      icon: "🚀",
+      description: "Highest team score in a single week."
+    },
+    {
+      name: "Biggest Weekly Blowout",
+      icon: "💥",
+      description: "Largest margin of victory in a single week."
+    }
+  ];
+
+  grid.innerHTML = "";
+
+  awards.forEach(award => {
+    const row = getAward(rows, latestYear, award.name);
+
+    if (!row) return;
+
+    const card = document.createElement("div");
+    card.className = "award-cabinet-card";
+
+    card.innerHTML = `
+      <span>${award.icon}</span>
+      <h3>${award.name}</h3>
+      <p>${award.description}</p>
+      <strong>${latestYear}: ${getAwardDisplay(row)}</strong>
+    `;
+
+    grid.appendChild(card);
+  });
+
+  hideSectionIfEmpty(grid);
+}
+
+/* =========================================================
+   SIDE COMPETITIONS / MINI GAMES
    ========================================================= */
 
 function buildMiniGames(miniGames) {
-  const list = document.getElementById("mini-games-list");
-  if (!list) return;
+  const container =
+    document.getElementById("side-competitions-grid") ||
+    document.getElementById("mini-games-list");
+
+  if (!container) return;
 
   const validGames = miniGames.filter(row => {
     const year = cleanText(row.year);
@@ -263,31 +331,52 @@ function buildMiniGames(miniGames) {
   });
 
   if (validGames.length === 0) {
-    hideSectionAround(list);
+    hideSectionAround(container);
     return;
   }
 
-  const sortedGames = [...validGames].sort((a, b) => {
-    return Number(b.year) - Number(a.year) || cleanText(a.game).localeCompare(cleanText(b.game));
-  });
+  const gamesByName = {};
 
-  list.innerHTML = "";
-
-  sortedGames.slice(0, 8).forEach(row => {
-    const item = document.createElement("div");
-    item.className = "record-item";
-
-    const year = cleanText(row.year);
+  validGames.forEach(row => {
     const game = cleanText(row.game);
-    const details = getMiniGameDisplay(row);
 
-    item.innerHTML = `
-      <strong>${year} · ${game}</strong>
-      <span>${details}</span>
-    `;
+    if (!gamesByName[game]) {
+      gamesByName[game] = [];
+    }
 
-    list.appendChild(item);
+    gamesByName[game].push(row);
   });
+
+  container.innerHTML = "";
+
+  Object.entries(gamesByName)
+    .sort((a, b) => a[0].localeCompare(b[0]))
+    .forEach(([gameName, rows]) => {
+      const sortedRows = [...rows].sort((a, b) => Number(b.year) - Number(a.year));
+
+      const card = document.createElement("article");
+      card.className = "content-card side-competition-card";
+
+      card.innerHTML = `
+        <p class="section-label">Side Competition</p>
+        <h3>${gameName}</h3>
+
+        <div class="records-list">
+          ${sortedRows.slice(0, 8).map(row => {
+            return `
+              <div class="record-item">
+                <strong>${cleanText(row.year)}</strong>
+                <span>${getMiniGameDisplay(row)}</span>
+              </div>
+            `;
+          }).join("")}
+        </div>
+      `;
+
+      container.appendChild(card);
+    });
+
+  hideSectionIfEmpty(container);
 }
 
 /* =========================================================
@@ -437,8 +526,10 @@ function hideTrophyPlaceholders() {
   [
     "major-awards-grid",
     "season-awards-grid",
+    "weekly-awards-grid",
     "fun-awards-grid",
     "mini-games-list",
+    "side-competitions-grid",
     "yearly-awards-body"
   ].forEach(id => {
     const element = document.getElementById(id);
