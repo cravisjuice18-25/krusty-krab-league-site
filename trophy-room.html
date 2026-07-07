@@ -13,7 +13,7 @@
   <header class="page-hero small-hero trophy-hero">
     <p class="eyebrow">Awards Cabinet</p>
     <h1>Trophy Room</h1>
-    <p>League hardware, season awards, mini game winners, scoring titles, and the yearly awards that define the league.</p>
+    <p>League hardware, season awards, mini game winners, scoring titles, weekly chaos, and the yearly awards that define the league.</p>
   </header>
 
   <nav class="top-nav">
@@ -36,28 +36,28 @@
         <p class="section-label">Top Honor</p>
         <span class="trophy-icon">🏆</span>
         <h2>League Champion</h2>
-        <strong id="trophy-latest-champion">TBD</strong>
+        <strong id="trophy-latest-champion"></strong>
       </div>
 
       <div class="trophy-feature-card">
         <p class="section-label">Regular Season</p>
         <span class="trophy-icon">👑</span>
         <h2>Regular Season Winner</h2>
-        <strong id="trophy-regular-season-winner">TBD</strong>
+        <strong id="trophy-regular-season-winner"></strong>
       </div>
 
       <div class="trophy-feature-card">
         <p class="section-label">Scoring Title</p>
         <span class="trophy-icon">🔥</span>
         <h2>Most Points</h2>
-        <strong id="trophy-most-points">TBD</strong>
+        <strong id="trophy-most-points"></strong>
       </div>
 
       <div class="trophy-feature-card">
         <p class="section-label">The Basement</p>
-        <span class="trophy-icon">💀</span>
+        <span class="trophy-icon">📣</span>
         <h2>The Sco</h2>
-        <strong id="trophy-the-sco">TBD</strong>
+        <strong id="trophy-the-sco"></strong>
       </div>
 
     </section>
@@ -65,7 +65,8 @@
     <section class="trophy-category-nav">
       <a href="#major-awards">Major Awards</a>
       <a href="#season-awards">Season Awards</a>
-      <a href="#mini-games">Mini Games</a>
+      <a href="#weekly-awards">Weekly Awards</a>
+      <a href="#side-competitions">Side Competitions</a>
       <a href="#year-by-year-awards">Year-by-Year</a>
       <a href="#fun-awards">Fun Awards</a>
     </section>
@@ -78,14 +79,7 @@
         </div>
       </div>
 
-      <div class="award-cabinet-grid" id="major-awards-grid">
-        <div class="award-cabinet-card gold-award">
-          <span>🏆</span>
-          <h3>League Champion</h3>
-          <p>Winner of the championship bracket.</p>
-          <strong>Loading...</strong>
-        </div>
-      </div>
+      <div class="award-cabinet-grid" id="major-awards-grid"></div>
     </section>
 
     <section class="content-card" id="season-awards">
@@ -96,47 +90,50 @@
         </div>
       </div>
 
-      <div class="award-cabinet-grid" id="season-awards-grid">
-        <div class="award-cabinet-card">
-          <span>🔥</span>
-          <h3>Most Points</h3>
-          <p>Highest total points for the regular season.</p>
-          <strong>Loading...</strong>
-        </div>
-      </div>
+      <div class="award-cabinet-grid" id="season-awards-grid"></div>
     </section>
 
-    <section class="content-row">
-
-      <div class="content-card" id="mini-games">
-        <p class="section-label">Mini Games</p>
-        <h2>Side Competition Winners</h2>
-
-        <div class="records-list" id="mini-games-list">
-          <div class="record-item">
-            <strong>Mini Games</strong>
-            <span>Loading...</span>
-          </div>
+    <section class="content-card" id="weekly-awards">
+      <div class="card-header">
+        <div>
+          <p class="section-label">Weekly Awards</p>
+          <h2>Single-Week Chaos</h2>
         </div>
       </div>
 
-      <div class="content-card">
-        <p class="section-label">Draft Weekend</p>
-        <h2>Draft Room Honor</h2>
+      <div class="award-cabinet-grid" id="weekly-awards-grid"></div>
+    </section>
 
-        <div class="records-list">
-          <div class="record-item">
-            <strong>Next Draft Weekend</strong>
-            <span>2026 · Sparrow Bush, New York</span>
-          </div>
-
-          <div class="record-item">
-            <strong>Draft Archive</strong>
-            <span><a href="draft.html">View full draft history</a></span>
-          </div>
+    <section class="content-card" id="side-competitions">
+      <div class="card-header">
+        <div>
+          <p class="section-label">Side Competitions</p>
+          <h2>Mini Games</h2>
         </div>
       </div>
 
+      <div class="content-row" id="side-competitions-grid"></div>
+    </section>
+
+    <section class="content-card" id="draft-room-honor">
+      <div class="card-header">
+        <div>
+          <p class="section-label">Draft Weekend</p>
+          <h2>Draft Room Honor</h2>
+        </div>
+      </div>
+
+      <div class="records-list">
+        <div class="record-item">
+          <strong>Next Draft Weekend</strong>
+          <span>2026 · Sparrow Bush, New York</span>
+        </div>
+
+        <div class="record-item">
+          <strong>Draft Archive</strong>
+          <span><a href="draft.html">View full draft history</a></span>
+        </div>
+      </div>
     </section>
 
     <section class="content-card" id="year-by-year-awards">
@@ -161,11 +158,7 @@
             </tr>
           </thead>
 
-          <tbody id="yearly-awards-body">
-            <tr>
-              <td colspan="7">Awards will load here.</td>
-            </tr>
-          </tbody>
+          <tbody id="yearly-awards-body"></tbody>
         </table>
       </div>
     </section>
@@ -178,14 +171,7 @@
         </div>
       </div>
 
-      <div class="award-cabinet-grid" id="fun-awards-grid">
-        <div class="award-cabinet-card">
-          <span>🎭</span>
-          <h3>Biggest Fraud</h3>
-          <p>For the team that looked dangerous until everyone realized they were not.</p>
-          <strong>Loading...</strong>
-        </div>
-      </div>
+      <div class="award-cabinet-grid" id="fun-awards-grid"></div>
     </section>
 
   </main>
