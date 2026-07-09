@@ -69,10 +69,6 @@ function buildUniformLocker(activeTeams) {
 
     const teamName = cleanText(team.team_name) || "TBD";
     const owner = cleanText(team.owner) || "TBD";
-    const location = cleanText(team.location) || "TBD";
-    const record = cleanText(team.record) || "TBD";
-    const titles = cleanText(team.titles) || "TBD";
-    const playoffAppearances = cleanText(team.playoff_appearances) || "TBD";
 
     const primaryLogo = cleanText(team.primary_logo);
     const secondaryLogo = cleanText(team.secondary_logo);
@@ -89,9 +85,8 @@ function buildUniformLocker(activeTeams) {
     card.innerHTML = `
       <div class="uniform-locker-header">
         <div>
-          <p class="section-label">Owner: ${owner}</p>
+          <p class="section-label">${owner}</p>
           <h3>${teamName}</h3>
-          <p>${location}</p>
         </div>
 
         <div class="uniform-color-stack" title="Primary / Secondary / Decal colors">
@@ -101,26 +96,10 @@ function buildUniformLocker(activeTeams) {
         </div>
       </div>
 
-      <div class="uniform-team-meta">
-        <div>
-          <span>Record</span>
-          <strong>${record}</strong>
-        </div>
-
-        <div>
-          <span>Titles</span>
-          <strong>${titles}</strong>
-        </div>
-
-        <div>
-          <span>Playoffs</span>
-          <strong>${playoffAppearances}</strong>
-        </div>
-      </div>
-
       <div class="uniform-assets-grid">
         ${buildAssetBox("Primary Logo", primaryLogo, `${teamName} primary logo`, initials(teamName))}
         ${buildAssetBox("Secondary Logo", secondaryLogo, `${teamName} secondary logo`, initials(teamName))}
+        ${buildDecalBox("Decal", decalColor)}
       </div>
 
       <div class="uniform-image-panel">
@@ -150,6 +129,16 @@ function buildAssetBox(label, imagePath, altText, fallbackText) {
         alt="${altText}" 
         onerror="this.parentElement.classList.add('image-missing'); this.remove();"
       >
+    </div>
+  `;
+}
+
+function buildDecalBox(label, decalColor) {
+  return `
+    <div class="uniform-logo-box uniform-decal-box">
+      <span>${label}</span>
+      <div class="uniform-decal-preview"></div>
+      <strong>${decalColor}</strong>
     </div>
   `;
 }
