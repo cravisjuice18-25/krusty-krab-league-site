@@ -3962,3 +3962,211 @@ function buildBasementRecords(scoHistory) {
 .draft-board-empty p {
   margin: 0;
 }
+/* =========================================================
+   TEAM DIRECTORY CLEANUP - ACTIVE + DEFUNCT
+   ========================================================= */
+
+.teams-grid,
+#active-teams-grid,
+#inactive-teams-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  width: 100%;
+}
+
+.team-directory-card {
+  min-height: 208px;
+  padding: 16px;
+  border-radius: 14px;
+  background: var(--team-secondary, #111827);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: none;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Reduce the glossy overlay that is making some cards too washed out */
+.team-directory-card::before {
+  opacity: 0.18;
+}
+
+/* Header: logo + title */
+.team-directory-header {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+}
+
+.team-directory-logo {
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--team-primary, #061629);
+  border: 2px solid var(--team-decal, #facc15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.team-directory-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.team-directory-logo-placeholder {
+  width: 100%;
+  height: 100%;
+  background: var(--team-primary, #061629);
+  color: var(--team-decal, #facc15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 1000;
+  letter-spacing: 0.4px;
+}
+
+/* Title text */
+.team-directory-title {
+  min-width: 0;
+}
+
+.team-directory-title .section-label,
+.team-directory-card .section-label {
+  margin: 0 0 4px;
+  color: var(--team-decal, #facc15);
+  font-size: 9px;
+  line-height: 1;
+  letter-spacing: 1.7px;
+  font-weight: 1000;
+}
+
+.team-directory-title h3 {
+  margin: 0 0 3px;
+  color: #ffffff;
+  font-size: 15px;
+  line-height: 1.08;
+  font-weight: 1000;
+  max-width: 100%;
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
+}
+
+.team-directory-title p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 11px;
+  line-height: 1.2;
+}
+
+/* Hide tagline on directory cards to reduce clutter */
+.team-directory-tagline {
+  display: none;
+}
+
+/* Stats */
+.team-directory-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+  margin-top: auto;
+}
+
+.team-directory-stats div {
+  padding: 8px 7px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.17);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  min-width: 0;
+}
+
+.team-directory-stats span {
+  display: block;
+  font-size: 7px;
+  line-height: 1.05;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.72);
+  margin-bottom: 4px;
+}
+
+.team-directory-stats strong {
+  display: block;
+  color: #ffffff;
+  font-size: 10px;
+  line-height: 1.1;
+  font-weight: 1000;
+  overflow-wrap: anywhere;
+}
+
+/* Button */
+.team-directory-button {
+  margin-top: 2px;
+  width: fit-content;
+  padding: 8px 11px;
+  border-radius: 999px;
+  background: var(--team-decal, #facc15);
+  color: #061629;
+  font-size: 9px;
+  font-weight: 1000;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  text-decoration: none;
+}
+
+/* Defunct / inactive cards should be less intense but still readable */
+#inactive-teams-grid .team-directory-card {
+  opacity: 0.92;
+}
+
+#inactive-teams-grid .team-directory-button {
+  opacity: 0.8;
+}
+
+/* Prevent ugly image alt-text wrapping when image path is broken */
+.team-directory-logo img:not([src]),
+.team-directory-logo img[src=""] {
+  display: none;
+}
+
+/* Responsive */
+@media (max-width: 1050px) {
+  .teams-grid,
+  #active-teams-grid,
+  #inactive-teams-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 780px) {
+  .teams-grid,
+  #active-teams-grid,
+  #inactive-teams-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .team-directory-title h3 {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 520px) {
+  .teams-grid,
+  #active-teams-grid,
+  #inactive-teams-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .team-directory-card {
+    min-height: auto;
+  }
+}
