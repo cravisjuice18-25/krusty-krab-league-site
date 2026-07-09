@@ -3667,3 +3667,37 @@ function buildBasementRecords(scoHistory) {
     grid-template-columns: 1fr;
   }
 }
+.uniform-team-meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 14px 0;
+}
+
+.uniform-team-meta div {
+  padding: 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.uniform-team-meta span {
+  display: block;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  opacity: 0.7;
+  margin-bottom: 4px;
+}
+
+.uniform-team-meta strong {
+  display: block;
+  color: #ffffff;
+  font-size: 14px;
+}
+
+@media (max-width: 560px) {
+  .uniform-team-meta {
+    grid-template-columns: 1fr;
+  }
+}
