@@ -3820,3 +3820,145 @@ function buildBasementRecords(scoHistory) {
 .draft-board-empty p {
   margin: 0;
 }
+/* =========================================================
+   DRAFT ARCHIVE CARD CONSISTENCY
+   ========================================================= */
+
+.draft-season-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+  align-items: stretch;
+}
+
+.draft-season-card,
+.draft-accordion-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.draft-card-toggle {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  padding: 20px;
+  font: inherit;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.draft-card-summary {
+  display: grid;
+  grid-template-rows: auto minmax(56px, auto) minmax(48px, auto) auto auto;
+  gap: 10px;
+  align-content: start;
+  height: 100%;
+}
+
+.draft-card-summary > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  min-width: 64px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #061629;
+  color: #facc15;
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.draft-card-summary h3 {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.2;
+  display: flex;
+  align-items: flex-start;
+}
+
+.draft-card-summary p {
+  margin: 0;
+  color: #6b7280;
+  line-height: 1.35;
+  display: flex;
+  align-items: flex-start;
+}
+
+.draft-card-summary strong {
+  display: block;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.draft-card-summary em {
+  display: block;
+  margin: 0;
+  font-style: normal;
+  opacity: 0.75;
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+.draft-expand-label {
+  margin-top: 14px;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  opacity: 0.75;
+}
+
+.draft-expand-label .open-label {
+  display: none;
+}
+
+.draft-accordion-card.is-open .draft-expand-label .closed-label {
+  display: none;
+}
+
+.draft-accordion-card.is-open .draft-expand-label .open-label {
+  display: inline;
+}
+
+.draft-year-details {
+  display: none;
+  padding: 0 20px 20px;
+}
+
+.draft-accordion-card.is-open .draft-year-details {
+  display: block;
+}
+
+.draft-board-wrap {
+  margin-top: 4px;
+}
+
+.draft-board-table th,
+.draft-board-table td {
+  font-size: 12px;
+  padding: 9px 8px;
+}
+
+.draft-board-empty {
+  margin-top: 4px;
+  padding: 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.draft-board-empty strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.draft-board-empty p {
+  margin: 0;
+}
