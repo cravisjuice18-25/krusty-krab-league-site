@@ -3720,3 +3720,103 @@ function buildBasementRecords(scoHistory) {
   font-size: 11px;
   opacity: 0.85;
 }
+/* =========================================================
+   DRAFT ARCHIVE ACCORDION
+   ========================================================= */
+
+.draft-accordion-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.draft-card-toggle {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  padding: 20px;
+  font: inherit;
+}
+
+.draft-card-summary span {
+  display: block;
+}
+
+.draft-card-summary h3 {
+  margin: 6px 0;
+}
+
+.draft-card-summary p {
+  margin: 0 0 8px;
+}
+
+.draft-card-summary strong {
+  display: block;
+}
+
+.draft-card-summary em {
+  display: block;
+  margin-top: 4px;
+  font-style: normal;
+  opacity: 0.75;
+  font-size: 13px;
+}
+
+.draft-expand-label {
+  margin-top: 14px;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  opacity: 0.75;
+}
+
+.draft-expand-label .open-label {
+  display: none;
+}
+
+.draft-accordion-card.is-open .draft-expand-label .closed-label {
+  display: none;
+}
+
+.draft-accordion-card.is-open .draft-expand-label .open-label {
+  display: inline;
+}
+
+.draft-year-details {
+  display: none;
+  padding: 0 20px 20px;
+}
+
+.draft-accordion-card.is-open .draft-year-details {
+  display: block;
+}
+
+.draft-board-wrap {
+  margin-top: 4px;
+}
+
+.draft-board-table th,
+.draft-board-table td {
+  font-size: 12px;
+  padding: 9px 8px;
+}
+
+.draft-board-empty {
+  margin-top: 4px;
+  padding: 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.draft-board-empty strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.draft-board-empty p {
+  margin: 0;
+}
