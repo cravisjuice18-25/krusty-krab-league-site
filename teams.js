@@ -86,7 +86,7 @@ function renderTeamsGrid(teams, possibleIds) {
         <div class="team-directory-logo">
           ${isMissing(logo)
             ? `<div class="team-directory-logo-placeholder">${initials(teamName)}</div>`
-            : `<img src="${logo}" alt="${teamName} logo">`
+            : `<img src="${logo}" alt="${teamName} logo" onerror="this.parentElement.innerHTML = '<div class=&quot;team-directory-logo-placeholder&quot;>${initials(teamName)}</div>';">`
           }
         </div>
 
