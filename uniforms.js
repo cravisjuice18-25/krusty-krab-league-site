@@ -34,7 +34,7 @@ async function buildUniformsPage() {
 }
 
 function buildUniformFeatureCards(activeTeams) {
-  setText("uniform-active-count", `${activeTeams.length || 8} Active Franchises`);
+  setText("uniform-active-count", `${activeTeams.length} Active Franchises`);
 }
 
 function buildUniformLocker(activeTeams) {
@@ -67,8 +67,13 @@ function buildUniformLocker(activeTeams) {
     const secondaryColor = cleanColor(team.secondary_color, "#ffffff");
     const decalColor = cleanColor(team.decal_color, "#facc15");
 
-    const teamName = cleanText(team.team_name) || "Team Name";
+    const teamName = cleanText(team.team_name) || "TBD";
     const owner = cleanText(team.owner) || "TBD";
+    const location = cleanText(team.location) || "TBD";
+    const record = cleanText(team.record) || "TBD";
+    const titles = cleanText(team.titles) || "TBD";
+    const playoffAppearances = cleanText(team.playoff_appearances) || "TBD";
+
     const primaryLogo = cleanText(team.primary_logo);
     const secondaryLogo = cleanText(team.secondary_logo);
     const uniformImage = cleanText(team.uniform_image);
@@ -86,22 +91,40 @@ function buildUniformLocker(activeTeams) {
         <div>
           <p class="section-label">Owner: ${owner}</p>
           <h3>${teamName}</h3>
+          <p>${location}</p>
         </div>
 
-        <div class="uniform-color-stack">
+        <div class="uniform-color-stack" title="Primary / Secondary / Decal colors">
           <span class="uniform-color-dot primary-dot"></span>
           <span class="uniform-color-dot secondary-dot"></span>
           <span class="uniform-color-dot decal-dot"></span>
         </div>
       </div>
 
+      <div class="uniform-team-meta">
+        <div>
+          <span>Record</span>
+          <strong>${record}</strong>
+        </div>
+
+        <div>
+          <span>Titles</span>
+          <strong>${titles}</strong>
+        </div>
+
+        <div>
+          <span>Playoffs</span>
+          <strong>${playoffAppearances}</strong>
+        </div>
+      </div>
+
       <div class="uniform-assets-grid">
-        ${buildAssetBox("Primary Logo", primaryLogo, `${teamName} primary logo`)}
-        ${buildAssetBox("Secondary Logo", secondaryLogo, `${teamName} secondary logo`)}
+        ${buildAssetBox("Primary Logo", primaryLogo, `${teamName} primary logo`, initials(teamName))}
+        ${buildAssetBox("Secondary Logo", secondaryLogo, `${teamName} secondary logo`, initials(teamName))}
       </div>
 
       <div class="uniform-image-panel">
-        ${buildUniformImage(uniformImage, `${teamName} uniform`)}
+        ${buildUniformImage(uniformImage, `${teamName} uniform`, teamName)}
       </div>
     `;
 
@@ -109,12 +132,12 @@ function buildUniformLocker(activeTeams) {
   });
 }
 
-function buildAssetBox(label, imagePath, altText) {
+function buildAssetBox(label, imagePath, altText, fallbackText) {
   if (!isRealImagePath(imagePath)) {
     return `
       <div class="uniform-logo-box uniform-placeholder-box">
         <span>${label}</span>
-        <strong>Coming Soon</strong>
+        <strong>${fallbackText || "TBD"}</strong>
       </div>
     `;
   }
@@ -122,23 +145,31 @@ function buildAssetBox(label, imagePath, altText) {
   return `
     <div class="uniform-logo-box">
       <span>${label}</span>
-      <img src="${imagePath}" alt="${altText}" onerror="this.parentElement.classList.add('image-missing'); this.remove();">
+      <img 
+        src="${imagePath}" 
+        alt="${altText}" 
+        onerror="this.parentElement.classList.add('image-missing'); this.remove();"
+      >
     </div>
   `;
 }
 
-function buildUniformImage(imagePath, altText) {
+function buildUniformImage(imagePath, altText, fallbackText) {
   if (!isRealImagePath(imagePath)) {
     return `
       <div class="uniform-placeholder-large">
-        <strong>Uniform Coming Soon</strong>
-        <span>Add the image path in teams.csv under uniform_image.</span>
+        <strong>${fallbackText || "TBD"}</strong>
+        <span>Uniform image: TBD</span>
       </div>
     `;
   }
 
   return `
-    <img src="${imagePath}" alt="${altText}" onerror="this.parentElement.innerHTML = '<div class=&quot;uniform-placeholder-large&quot;><strong>Uniform Coming Soon</strong><span>Image path not found.</span></div>';">
+    <img 
+      src="${imagePath}" 
+      alt="${altText}" 
+      onerror="this.parentElement.innerHTML = '<div class=&quot;uniform-placeholder-large&quot;><strong>${escapeForInline(fallbackText || "TBD")}</strong><span>Uniform image: TBD</span></div>';"
+    >
   `;
 }
 
@@ -149,6 +180,7 @@ function isRealImagePath(value) {
   if (text === "tbd") return false;
   if (text === "n/a") return false;
   if (text === "na") return false;
+  if (text === "-") return false;
 
   return true;
 }
@@ -168,7 +200,9 @@ function cleanText(value) {
 function cleanColor(value, fallback) {
   let color = cleanText(value);
 
-  if (!color) return fallback;
+  if (!color || color.toLowerCase() === "tbd" || color.toLowerCase() === "na" || color.toLowerCase() === "n/a") {
+    return fallback;
+  }
 
   color = color.replace(/\s/g, "");
 
@@ -179,6 +213,27 @@ function cleanColor(value, fallback) {
   const isValidHex = /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(color);
 
   return isValidHex ? color : fallback;
+}
+
+function initials(value) {
+  const words = cleanText(value)
+    .split(" ")
+    .filter(Boolean);
+
+  if (words.length === 0) return "TBD";
+
+  if (words.length === 1) {
+    return words[0].slice(0, 2).toUpperCase();
+  }
+
+  return `${words[0][0]}${words[1][0]}`.toUpperCase();
+}
+
+function escapeForInline(value) {
+  return cleanText(value)
+    .replace(/\\/g, "\\\\")
+    .replace(/'/g, "\\'")
+    .replace(/"/g, "&quot;");
 }
 
 buildUniformsPage();
