@@ -3701,3 +3701,22 @@ function buildBasementRecords(scoHistory) {
     grid-template-columns: 1fr;
   }
 }
+.uniform-decal-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.uniform-decal-preview {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: var(--decal-color, #facc15);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  margin: 8px auto 6px;
+}
+
+.uniform-decal-box strong {
+  font-size: 11px;
+  opacity: 0.85;
+}
