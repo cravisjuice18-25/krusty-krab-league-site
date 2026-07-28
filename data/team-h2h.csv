@@ -1,4 +1,122 @@
-owner_id,opponent_id,opponent_name,record,win_pct,points_for,points_against,best_win,worst_loss
-bard,jake,Cincinnati Harambes,TBD,TBD,TBD,TBD,TBD,TBD
-bard,hunter,Most Valuable Potheads,TBD,TBD,TBD,TBD,TBD,TBD
-bard,kyle,Life Sucks then You Die,TBD,TBD,TBD,TBD,TBD,TBD
+owner_id,opponent_id,opponent_name,total Games,,win_pct,points_for,points_against,margin
+Bard,Charlie,Shivakamini Somakandarkram,6,5-1,0.833,542,461,81
+Bard,Eric,A.A. Ron Rodgers,10,5-4-1,0.5,1142,999,143
+Bard,Gary,The Fantasy Football Team ,22,15-7,0.682,3033,2740,293
+Bard,Hunter,Most Valuable Potheads,26,21-5,0.808,3398,2925,473
+Bard,Jake,Cincinnati Harambes ,24,14-10,0.583,3134,2897,237
+Bard,Kyle,Life Sucks then You Die,18,11-7,0.611,2444,2256,188
+Bard,Miller,Team Miller,2,1-1,0.5,196,182,14
+Bard,Miner,Jakes Brothers and Sisters,27,20-7,0.741,3458,3185,273
+Bard,Muffin,Committed Not Addicted,30,17-13,0.567,3828,3736,92
+Bard,Sabella,Team Sabella,9,5-4,0.556,1060,948,112
+Bard,Sco,Trin Coll Pest Control,19,9-10,0.474,2473,2406,67
+
+Chaz,Bard,The Commish,6,1-5,0.167,461,542,-81
+Chaz,Eric,A.A. Ron Rodgers,6,3-3,0.5,628,737,-109
+Chaz,Hunter,Most Valuable Potheads,7,1-6,0.143,614,810,-196
+Chaz,Jake,Cincinnati Harambes ,4,0-3-1,0,308,390,-82
+Chaz,Miller,Team Miller,2,1-1,0.5,210,191,19
+Chaz,Miner,Jakes Brothers and Sisters,7,3-4,0.429,698,749,-51
+Chaz,Muffin,Committed Not Addicted,6,1-5,0.167,647,626,21
+Chaz,Sabella,Team Sabella,6,0-6,0,387,573,-186
+
+Eric,Bard,The Commish,10,4-5-1,0.4,999,1142,-143
+Eric,Charlie,Shivakamini Somakandarkram,7,3-4,0.429,737,628,109
+Eric,Gary,The Fantasy Football Team ,2,2-0,1,273,241,32
+Eric,Hunter,Most Valuable Potheads,9,4-5,0.444,831,734,97
+Eric,Jake,Cincinnati Harambes ,7,4-3,0.571,744,686,58
+Eric,Miller,Team Miller,2,1-1,0.5,207,210,-3
+Eric,Miner,Jakes Brothers and Sisters,8,5-3,0.625,886,771,115
+Eric,Muffin,Committed Not Addicted,9,3-6,0.333,811,892,-81
+Eric,Sabella,Team Sabella,10,5-5,0.5,920,971,-51
+
+Gary,Bard,The Commish,22,7-15,0.318,2740,3033,-293
+Gary,Eric,A.A. Ron Rodgers,2,0-2,0,241,273,-32
+Gary,Hunter,Most Valuable Potheads,20,11-9,0.55,2429,2385,44
+Gary,Jake,Cincinnati Harambes ,22,10-12,0.455,2719,2777,-58
+Gary,Kyle,Life Sucks then You Die,19,13-6,0.684,2488,2246,242
+Gary,Miner,Jakes Brothers and Sisters,20,7-13,0.35,2361,2628,-267
+Gary,Muffin,Committed Not Addicted,21,6-15,0.286,2549,2785,-236
+Gary,Sabella,Team Sabella,3,1-2,0.333,350,371,-21
+Gary,Sco,Trin Coll Pest Control,16,6-10,0.375,2016,2103,-87
+
+Hunter,Bard,The Commish,26,5-21,0.192,2925,3398,-473
+Hunter,Charlie,Shivakamini Somakandarkram,8,6-2,0.75,810,614,196
+Hunter,Eric,A.A. Ron Rodgers,9,5-4,0.556,734,831,-97
+Hunter,Gary,The Fantasy Football Team ,20,9-11,0.45,2385,2429,-44
+Hunter,Jake,Cincinnati Harambes ,25,13-12,0.52,2857,3033,-176
+Hunter,Kyle,Life Sucks then You Die,22,11-11,0.5,2726,2732,-6
+Hunter,Miller,Team Miller,3,1-2,0.333,237,321,-84
+Hunter,Miner,Jakes Brothers and Sisters,26,12-14,0.462,3193,3017,176
+Hunter,Muffin,Committed Not Addicted,28,12-15-1,0.429,3361,3380,-19
+Hunter,Sabella,Team Sabella,9,3-6,0.333,881,871,10
+Hunter,Sco,Trin Coll Pest Control,18,8-10,0.444,2305,2259,46
+
+Jake,Bard,The Commish,24,10-14,0.417,2897,3134,-237
+Jake,Charlie,Shivakamini Somakandarkram,4,3-0-1,0.75,390,308,82
+Jake,Eric,A.A. Ron Rodgers,7,3-4,0.429,686,744,-58
+Jake,Gary,The Fantasy Football Team ,22,12-10,0.545,2777,2719,58
+Jake,Hunter,Most Valuable Potheads,25,12-13,0.48,3033,2857,176
+Jake,Kyle,Life Sucks then You Die,17,11-6,0.647,2296,2092,204
+Jake,Miner,Jakes Brothers and Sisters,26,15-11,0.577,3250,3158,92
+Jake,Muffin,Committed Not Addicted,28,16-12,0.571,3597,3380,217
+Jake,Sabella,Team Sabella,6,5-1,0.833,754,666,88
+Jake,Sco,Trin Coll Pest Control,17,5-12,0.294,1896,2194,-298
+
+Kyle,Bard,The Commish,18,7-11,0.389,2256,2444,-188
+Kyle,Gary,The Fantasy Football Team ,19,6-13,0.316,2246,2488,-242
+Kyle,Hunter,Most Valuable Potheads,22,11-11,0.5,2732,2726,6
+Kyle,Jake,Cincinnati Harambes ,17,6-11,0.353,2092,2296,-204
+Kyle,Miner,Jakes Brothers and Sisters,18,9-9,0.5,2160,2297,-137
+Kyle,Muffin,Committed Not Addicted,16,7-9,0.438,1860,2020,-160
+Kyle,Sco,Trin Coll Pest Control,18,8-10,0.444,2163,2257,-94
+
+Miller,Bard,The Commish,2,1-1,0.5,182,196,-14
+Miller,Charlie,Shivakamini Somakandarkram,2,1-1,0.5,191,210,-19
+Miller,Eric,A.A. Ron Rodgers,2,1-1,0.5,210,207,3
+Miller,Hunter,Most Valuable Potheads,3,2-1,0.667,321,237,84
+Miller,Miner,Jakes Brothers and Sisters,3,2-1,0.667,344,272,72
+Miller,Muffin,Committed Not Addicted,2,0-2,0,156,191,-35
+Miller,Sabella,Team Sabella,2,1-1,0.5,181,206,-25
+
+Miner,Bard,The Commish,27,7-20,0.259,3185,3458,-273
+Miner,Charlie,Shivakamini Somakandarkram,8,4-4,0.5,749,698,51
+Miner,Eric,A.A. Ron Rodgers,8,3-5,0.375,771,886,-115
+Miner,Gary,The Fantasy Football Team ,20,13-7,0.65,2628,2361,267
+Miner,Hunter,Most Valuable Potheads,26,14-12,0.538,3017,3193,-176
+Miner,Jake,Cincinnati Harambes ,26,11-15,0.423,3158,3250,-92
+Miner,Kyle,Life Sucks then You Die,18,9-9,0.5,2297,2160,137
+Miner,Miller,Team Miller,3,1-2,0.333,272,344,-72
+Miner,Muffin,Committed Not Addicted,24,11-13,0.458,2931,2926,5
+Miner,Sabella,Team Sabella,10,2-8,0.2,978,1199,-221
+Miner,Sco,Trin Coll Pest Control,23,10-13,0.435,2756,2853,-97
+
+Muffin,Bard,The Commish,30,13-17,0.433,3736,3828,-92
+Muffin,Charlie,Shivakamini Somakandarkram,7,5-2,0.714,626,647,-21
+Muffin,Eric,A.A. Ron Rodgers,9,6-3,0.667,892,811,81
+Muffin,Gary,The Fantasy Football Team ,21,15-6,0.714,2785,2549,236
+Muffin,Hunter,Most Valuable Potheads,28,15-12-1,0.536,3380,3361,19
+Muffin,Jake,Cincinnati Harambes ,28,12-16,0.429,3380,3597,-217
+Muffin,Kyle,Life Sucks then You Die,16,9-7,0.563,2020,1860,160
+Muffin,Miller,Team Miller,2,2-0,1,191,156,35
+Muffin,Miner,Jakes Brothers and Sisters,24,13-11,0.542,2926,2931,-5
+Muffin,Sabella,Team Sabella,9,4-5,0.444,971,874,97
+Muffin,Sco,Trin Coll Pest Control,19,8-11,0.421,2457,2472,-15
+
+Sabella,Bard,The Commish,9,4-5,0.444,948,1060,-112
+Sabella,Charlie,Shivakamini Somakandarkram,6,6-0,1,573,387,186
+Sabella,Eric,A.A. Ron Rodgers,10,5-5,0.5,971,920,51
+Sabella,Gary,The Fantasy Football Team ,3,2-1,0.667,371,350,21
+Sabella,Hunter,Most Valuable Potheads,9,6-3,0.667,871,881,-10
+Sabella,Jake,Cincinnati Harambes ,6,1-5,0.167,666,754,-88
+Sabella,Miller,Team Miller,2,1-1,0.5,206,181,25
+Sabella,Miner,Jakes Brothers and Sisters,10,8-2,0.8,1199,978,221
+Sabella,Muffin,Committed Not Addicted,9,5-4,0.556,874,971,-97
+
+Sco,Bard,The Commish,19,10-9,0.526,2406,2473,-67
+Sco,Gary,The Fantasy Football Team,16,10-6,0.625,2103,2016,87
+Sco,Hunter,Most Valuable Potheads,18,10-8,0.556,2259,2305,-46
+Sco,Jake,Cincinnati Harambes ,17,12-5,0.706,2194,1896,298
+Sco,Kyle,Life Sucks then You Die,18,10-8,0.556,2257,2163,94
+Sco,Miner,Jakes Brothers and Sisters,23,13-10,0.565,2853,2756,97
+Sco,Muffin,Committed Not Addicted,19,11-8,0.579,2472,2457,15
