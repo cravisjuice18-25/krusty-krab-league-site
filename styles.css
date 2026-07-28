@@ -4170,3 +4170,65 @@ function buildBasementRecords(scoHistory) {
     min-height: auto;
   }
 }
+/* =========================================================
+   TEAM DIRECTORY BIGGER TEXT CLEANUP
+   ========================================================= */
+
+.team-directory-card {
+  padding: 18px;
+  min-height: 220px;
+}
+
+.team-directory-header {
+  grid-template-columns: 54px minmax(0, 1fr);
+  gap: 12px;
+}
+
+.team-directory-logo {
+  width: 54px;
+  height: 54px;
+  flex-basis: 54px;
+}
+
+.team-directory-title .section-label,
+.team-directory-card .section-label {
+  font-size: 10px;
+  letter-spacing: 1.8px;
+}
+
+.team-directory-title h3 {
+  font-size: 18px;
+  line-height: 1.08;
+  margin-bottom: 4px;
+}
+
+.team-directory-title p {
+  font-size: 13px;
+  line-height: 1.2;
+}
+
+.team-directory-stats span {
+  font-size: 8px;
+}
+
+.team-directory-stats strong {
+  font-size: 12px;
+}
+
+.team-directory-button {
+  font-size: 10px;
+  padding: 9px 13px;
+}
+
+/* Defunct cards: keep readable, no button needed */
+#inactive-teams-grid .team-directory-card {
+  min-height: 190px;
+}
+
+#inactive-teams-grid .team-directory-title h3 {
+  font-size: 18px;
+}
+
+#inactive-teams-grid .team-directory-title p {
+  font-size: 13px;
+}
