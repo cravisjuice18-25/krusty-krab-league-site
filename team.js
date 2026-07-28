@@ -272,41 +272,95 @@ function buildTopPlayerSeasons(ownerPlayers) {
   });
 }
 
-function buildHeadToHead(ownerH2H) {
-  const h2hBody = document.getElementById("team-h2h-body");
+function renderHeadToHead(rows) {
+  const tableBody = getElement([
+    "team-h2h-body",
+    "h2h-body",
+    "franchise-h2h-body"
+  ]);
 
-  if (!h2hBody) return;
+  const container = getElement([
+    "team-h2h",
+    "team-h2h-list",
+    "franchise-h2h"
+  ]);
 
-  if (!ownerH2H || ownerH2H.length === 0) {
-    h2hBody.innerHTML = `
-      <tr>
-        <td colspan="7">No head-to-head records found for this franchise yet.</td>
-      </tr>
-    `;
+  if (rows.length === 0) {
+    if (tableBody) {
+      tableBody.innerHTML = `
+        <tr>
+          <td colspan="7">Head-to-head archive data has not been added yet.</td>
+        </tr>
+      `;
+    }
+
+    if (container && !tableBody) {
+      container.innerHTML = `
+        <div class="record-item">
+          <strong>Head-to-head archive</strong>
+          <span>Data has not been added yet.</span>
+        </div>
+      `;
+    }
+
     return;
   }
 
-  const sortedH2H = [...ownerH2H].sort((a, b) => {
-    return cleanText(a.opponent_name).localeCompare(cleanText(b.opponent_name));
-  });
+  if (tableBody) {
+    tableBody.innerHTML = "";
 
-  h2hBody.innerHTML = "";
+    rows.forEach(row => {
+      const opponent =
+        cleanText(row.opponent_name) ||
+        cleanText(row.opponent) ||
+        cleanText(row.opponent_owner) ||
+        cleanText(row.opponent_team) ||
+        "TBD";
 
-  sortedH2H.forEach(row => {
-    const tableRow = document.createElement("tr");
+      const tr = document.createElement("tr");
 
-    tableRow.innerHTML = `
-      <td><strong>${cleanText(row.opponent_name) || "TBD"}</strong></td>
-      <td>${cleanText(row.record) || "TBD"}</td>
-      <td>${formatWinPct(row.win_pct)}</td>
-      <td>${formatNumber(row.points_for)}</td>
-      <td>${formatNumber(row.points_against)}</td>
-      <td>${cleanText(row.best_win) || "TBD"}</td>
-      <td>${cleanText(row.worst_loss) || "TBD"}</td>
-    `;
+      tr.innerHTML = `
+        <td><strong>${opponent}</strong></td>
+        <td>${cleanText(row.total_games) || "TBD"}</td>
+        <td>${cleanText(row.record) || "TBD"}</td>
+        <td>${cleanText(row.win_pct) || "TBD"}</td>
+        <td>${cleanText(row.points_for) || "TBD"}</td>
+        <td>${cleanText(row.points_against) || "TBD"}</td>
+        <td>${cleanText(row.margin) || "TBD"}</td>
+      `;
 
-    h2hBody.appendChild(tableRow);
-  });
+      tableBody.appendChild(tr);
+    });
+
+    return;
+  }
+
+  if (container) {
+    container.innerHTML = "";
+
+    rows.forEach(row => {
+      const opponent =
+        cleanText(row.opponent_name) ||
+        cleanText(row.opponent) ||
+        cleanText(row.opponent_owner) ||
+        cleanText(row.opponent_team) ||
+        "TBD";
+
+      const item = document.createElement("div");
+      item.className = "record-item";
+
+      item.innerHTML = `
+        <strong>${opponent}</strong>
+        <span>
+          ${cleanText(row.record) || "TBD"} · 
+          ${cleanText(row.win_pct) || "TBD"} · 
+          ${cleanText(row.margin) || "TBD"} margin
+        </span>
+      `;
+
+      container.appendChild(item);
+    });
+  }
 }
 
 function buildTeamRecords(ownerRecords) {
