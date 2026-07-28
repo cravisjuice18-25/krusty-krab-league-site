@@ -15,14 +15,14 @@ async function buildTeamsPage() {
       "teams-grid",
       "current-teams-grid",
       "active-franchises-grid"
-    ]);
+    ], true);
 
     renderTeamsGrid(inactiveTeams, [
       "inactive-teams-grid",
       "former-teams-grid",
       "retired-teams-grid",
       "inactive-franchises-grid"
-    ]);
+    ], false);
 
   } catch (error) {
     console.error("Teams page error:", error);
@@ -46,7 +46,7 @@ async function buildTeamsPage() {
   }
 }
 
-function renderTeamsGrid(teams, possibleIds) {
+function renderTeamsGrid(teams, possibleIds, showButton) {
   const grid = getElement(possibleIds);
 
   if (!grid) return;
@@ -66,16 +66,20 @@ function renderTeamsGrid(teams, possibleIds) {
     const teamName = cleanText(team.team_name) || "Team Name";
     const owner = cleanText(team.owner) || formatOwnerName(ownerId);
     const location = cleanText(team.location);
-    const record = cleanText(team.record) || "—";
+    const record = cleanText(team.record) || "TBD";
     const titles = cleanText(team.titles) || "0";
-    const playoffApps = cleanText(team.playoff_appearances) || "—";
+    const playoffApps = cleanText(team.playoff_appearances) || "TBD";
     const tagline = cleanText(team.tagline);
     const logo = cleanText(team.primary_logo);
     const teamPage = cleanText(team.team_page) || `team.html?owner=${ownerId}`;
 
-    const primaryColor = cleanText(team.primary_color) || "#0f172a";
-    const secondaryColor = cleanText(team.secondary_color) || "#1e293b";
-    const decalColor = cleanText(team.decal_color) || "#facc15";
+    const primaryColor = cleanColor(team.primary_color, "#061629");
+    const rawSecondaryColor = cleanColor(team.secondary_color, "#1e293b");
+    const decalColor = cleanColor(team.decal_color, "#facc15");
+
+    const secondaryColor = isLightColor(rawSecondaryColor)
+      ? primaryColor
+      : rawSecondaryColor;
 
     card.style.setProperty("--team-primary", primaryColor);
     card.style.setProperty("--team-secondary", secondaryColor);
@@ -116,7 +120,7 @@ function renderTeamsGrid(teams, possibleIds) {
         </div>
       </div>
 
-      <a class="team-directory-button" href="${teamPage}">View Franchise</a>
+      ${showButton ? `<a class="team-directory-button" href="${teamPage}">View Franchise</a>` : ""}
     `;
 
     grid.appendChild(card);
@@ -164,6 +168,46 @@ function initials(value) {
   }
 
   return `${words[0][0]}${words[1][0]}`.toUpperCase();
+}
+
+function cleanColor(value, fallback) {
+  let color = cleanText(value);
+
+  if (!color || color.toLowerCase() === "tbd" || color.toLowerCase() === "na" || color.toLowerCase() === "n/a") {
+    return fallback;
+  }
+
+  color = color.replace(/\s/g, "");
+
+  if (!color.startsWith("#")) {
+    color = `#${color}`;
+  }
+
+  const isValidHex = /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(color);
+
+  return isValidHex ? color : fallback;
+}
+
+function isLightColor(hexColor) {
+  const hex = cleanColor(hexColor, "#000000").replace("#", "");
+
+  let r;
+  let g;
+  let b;
+
+  if (hex.length === 3) {
+    r = parseInt(hex[0] + hex[0], 16);
+    g = parseInt(hex[1] + hex[1], 16);
+    b = parseInt(hex[2] + hex[2], 16);
+  } else {
+    r = parseInt(hex.slice(0, 2), 16);
+    g = parseInt(hex.slice(2, 4), 16);
+    b = parseInt(hex.slice(4, 6), 16);
+  }
+
+  const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+
+  return brightness > 215;
 }
 
 function formatOwnerName(ownerId) {
