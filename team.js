@@ -307,19 +307,35 @@ function buildTopPlayerSeasons(ownerPlayers) {
    owner_id,opponent_id,opponent_name,total_games,record,win_pct,points_for,points_against,margin
    ========================================================= */
 
-function buildHeadToHead(rows) {
-  const tableBody = document.getElementById("team-h2h-body");
+<thead>
+  <tr>
+    <th>Opponent</th>
+    <th>
+      <button class="table-sort-button" type="button" data-h2h-sort="total_games">
+        Games <span class="sort-caret">↕</span>
+      </button>
+    </th>
+    <th>Record</th>
+    <th>
+      <button class="table-sort-button" type="button" data-h2h-sort="win_pct">
+        Win % <span class="sort-caret">↕</span>
+      </button>
+    </th>
+    <th>PF</th>
+    <th>PA</th>
+    <th>
+      <button class="table-sort-button" type="button" data-h2h-sort="margin">
+        Margin <span class="sort-caret">↕</span>
+      </button>
+    </th>
+  </tr>
+</thead>
 
-  if (!tableBody) return;
-
-  if (!rows || rows.length === 0) {
-    tableBody.innerHTML = `
-      <tr>
-        <td colspan="7">TBD</td>
-      </tr>
-    `;
-    return;
-  }
+<tbody id="team-h2h-body">
+  <tr>
+    <td colspan="7">Head-to-head archive will load here.</td>
+  </tr>
+</tbody>
 
   const sortedRows = [...rows].sort((a, b) => {
     return cleanText(a.opponent_name).localeCompare(cleanText(b.opponent_name));
