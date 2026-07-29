@@ -273,8 +273,11 @@ function buildTopPlayerSeasons(ownerPlayers) {
   const positionOrder = ["QB", "RB", "WR", "TE", "K", "D/ST", "DEF"];
 
   const sortedPlayers = [...ownerPlayers].sort((a, b) => {
-    const aIndex = positionOrder.indexOf(cleanText(a.position));
-    const bIndex = positionOrder.indexOf(cleanText(b.position));
+    const aPosition = cleanText(a.position).toUpperCase();
+    const bPosition = cleanText(b.position).toUpperCase();
+
+    const aIndex = positionOrder.indexOf(aPosition);
+    const bIndex = positionOrder.indexOf(bPosition);
 
     return (aIndex === -1 ? 999 : aIndex) - (bIndex === -1 ? 999 : bIndex);
   });
@@ -302,48 +305,45 @@ function buildTopPlayerSeasons(ownerPlayers) {
 }
 
 /* =========================================================
-   HEAD TO HEAD
+   SORTABLE HEAD TO HEAD
    CSV:
    owner_id,opponent_id,opponent_name,total_games,record,win_pct,points_for,points_against,margin
    ========================================================= */
 
-<thead>
-  <tr>
-    <th>Opponent</th>
-    <th>
-      <button class="table-sort-button" type="button" data-h2h-sort="total_games">
-        Games <span class="sort-caret">↕</span>
-      </button>
-    </th>
-    <th>Record</th>
-    <th>
-      <button class="table-sort-button" type="button" data-h2h-sort="win_pct">
-        Win % <span class="sort-caret">↕</span>
-      </button>
-    </th>
-    <th>PF</th>
-    <th>PA</th>
-    <th>
-      <button class="table-sort-button" type="button" data-h2h-sort="margin">
-        Margin <span class="sort-caret">↕</span>
-      </button>
-    </th>
-  </tr>
-</thead>
+function buildHeadToHead(rows) {
+  const tableBody = document.getElementById("team-h2h-body");
 
-<tbody id="team-h2h-body">
-  <tr>
-    <td colspan="7">Head-to-head archive will load here.</td>
-  </tr>
-</tbody>
+  if (!tableBody) return;
 
-  const sortedRows = [...rows].sort((a, b) => {
+  const cleanRows = rows || [];
+
+  if (cleanRows.length === 0) {
+    tableBody.innerHTML = `
+      <tr>
+        <td colspan="7">TBD</td>
+      </tr>
+    `;
+
+    setupHeadToHeadSorting([]);
+    return;
+  }
+
+  const defaultSortedRows = [...cleanRows].sort((a, b) => {
     return cleanText(a.opponent_name).localeCompare(cleanText(b.opponent_name));
   });
 
+  renderHeadToHeadRows(defaultSortedRows);
+  setupHeadToHeadSorting(cleanRows);
+}
+
+function renderHeadToHeadRows(rows) {
+  const tableBody = document.getElementById("team-h2h-body");
+
+  if (!tableBody) return;
+
   tableBody.innerHTML = "";
 
-  sortedRows.forEach(row => {
+  rows.forEach(row => {
     const opponent =
       cleanText(row.opponent_name) ||
       cleanText(row.opponent) ||
@@ -365,6 +365,83 @@ function buildTopPlayerSeasons(ownerPlayers) {
 
     tableBody.appendChild(tr);
   });
+}
+
+function setupHeadToHeadSorting(rows) {
+  const buttons = document.querySelectorAll("[data-h2h-sort]");
+
+  if (!buttons.length) return;
+
+  buttons.forEach(button => {
+    button.addEventListener("click", () => {
+      const sortKey = button.getAttribute("data-h2h-sort");
+      const currentDirection = button.getAttribute("data-sort-direction") || "desc";
+      const nextDirection = currentDirection === "desc" ? "asc" : "desc";
+
+      buttons.forEach(otherButton => {
+        otherButton.setAttribute("data-sort-direction", "");
+
+        const caret = otherButton.querySelector(".sort-caret");
+
+        if (caret) {
+          caret.textContent = "↕";
+        }
+      });
+
+      button.setAttribute("data-sort-direction", nextDirection);
+
+      const caret = button.querySelector(".sort-caret");
+
+      if (caret) {
+        caret.textContent = nextDirection === "desc" ? "↓" : "↑";
+      }
+
+      const sortedRows = [...rows].sort((a, b) => {
+        const aValue = getHeadToHeadSortValue(a, sortKey);
+        const bValue = getHeadToHeadSortValue(b, sortKey);
+
+        if (nextDirection === "desc") {
+          return bValue - aValue;
+        }
+
+        return aValue - bValue;
+      });
+
+      renderHeadToHeadRows(sortedRows);
+    });
+  });
+}
+
+function getHeadToHeadSortValue(row, key) {
+  if (key === "total_games") {
+    return Number(cleanText(row.total_games) || cleanText(row.totalGames)) || 0;
+  }
+
+  if (key === "win_pct") {
+    return parsePercentOrDecimal(cleanText(row.win_pct));
+  }
+
+  if (key === "margin") {
+    return Number(cleanText(row.margin).replace("+", "")) || 0;
+  }
+
+  return 0;
+}
+
+function parsePercentOrDecimal(value) {
+  const cleaned = cleanText(value).replace("%", "");
+
+  if (!cleaned) return 0;
+
+  const number = Number(cleaned);
+
+  if (Number.isNaN(number)) return 0;
+
+  if (cleanText(value).includes("%")) {
+    return number / 100;
+  }
+
+  return number;
 }
 
 /* =========================================================
