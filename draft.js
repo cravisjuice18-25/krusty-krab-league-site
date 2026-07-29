@@ -36,6 +36,10 @@ async function buildDraftPage() {
   }
 }
 
+/* =========================================================
+   FEATURE CARDS
+   ========================================================= */
+
 function buildDraftFeatureCards(drafts) {
   const latestDraft = drafts[0];
 
@@ -49,14 +53,34 @@ function buildDraftFeatureCards(drafts) {
   const firstPickPlayer = document.getElementById("draft-feature-first-pick-player");
   const firstPickTeam = document.getElementById("draft-feature-first-pick-team");
 
-  if (recentYear) recentYear.textContent = `${cleanText(latestDraft.year)} Draft`;
-  if (recentLocation) recentLocation.textContent = cleanText(latestDraft.location) || "TBD";
-  if (recentDetails) recentDetails.textContent = `${cleanText(latestDraft.format) || "TBD"} · ${cleanText(latestDraft.date) || "TBD"}`;
+  if (recentYear) {
+    recentYear.textContent = `${cleanText(latestDraft.year)} Draft`;
+  }
 
-  if (firstPickYear) firstPickYear.textContent = `${cleanText(latestDraft.year)} 1.01`;
-  if (firstPickPlayer) firstPickPlayer.textContent = cleanText(latestDraft.first_pick) || "TBD";
-  if (firstPickTeam) firstPickTeam.textContent = cleanText(latestDraft.first_pick_team) || "TBD";
+  if (recentLocation) {
+    recentLocation.textContent = cleanText(latestDraft.location) || "TBD";
+  }
+
+  if (recentDetails) {
+    recentDetails.textContent = `${cleanText(latestDraft.format) || "TBD"} · ${cleanText(latestDraft.date) || "TBD"}`;
+  }
+
+  if (firstPickYear) {
+    firstPickYear.textContent = `${cleanText(latestDraft.year)} 1.01`;
+  }
+
+  if (firstPickPlayer) {
+    firstPickPlayer.textContent = cleanText(latestDraft.first_pick) || "TBD";
+  }
+
+  if (firstPickTeam) {
+    firstPickTeam.textContent = cleanText(latestDraft.first_pick_team) || "TBD";
+  }
 }
+
+/* =========================================================
+   DRAFT ARCHIVE CARDS
+   ========================================================= */
 
 function buildDraftSeasonCards(drafts, draftPicks) {
   const draftGrid = document.getElementById("draft-season-grid");
@@ -67,6 +91,7 @@ function buildDraftSeasonCards(drafts, draftPicks) {
 
   drafts.forEach(draft => {
     const year = cleanText(draft.year);
+
     const picksForYear = draftPicks
       .filter(pick => cleanText(pick.year) === year)
       .sort((a, b) => {
@@ -80,7 +105,7 @@ function buildDraftSeasonCards(drafts, draftPicks) {
     card.innerHTML = `
       <button class="draft-card-toggle" type="button" aria-expanded="false">
         <div class="draft-card-summary">
-          <span>${year}</span>
+          <span>${year || "TBD"}</span>
           <h3>${cleanText(draft.location) || "TBD"}</h3>
           <p>${cleanText(draft.format) || "TBD"} · ${cleanText(draft.date) || "TBD"}</p>
           <strong>1.01 ${cleanText(draft.first_pick) || "TBD"}</strong>
@@ -100,20 +125,36 @@ function buildDraftSeasonCards(drafts, draftPicks) {
 
     const toggle = card.querySelector(".draft-card-toggle");
 
-    toggle.addEventListener("click", () => {
-      const isOpen = card.classList.toggle("is-open");
-      toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
-    });
+    if (toggle) {
+      toggle.addEventListener("click", () => {
+        const isOpen = card.classList.toggle("is-open");
+
+        toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+
+        if (isOpen) {
+          setTimeout(() => {
+            card.scrollIntoView({
+              behavior: "smooth",
+              block: "start"
+            });
+          }, 100);
+        }
+      });
+    }
 
     draftGrid.appendChild(card);
   });
 }
 
+/* =========================================================
+   FULL DRAFT BOARD TABLE
+   ========================================================= */
+
 function buildDraftBoardTable(year, picks) {
   if (!picks || picks.length === 0) {
     return `
       <div class="draft-board-empty">
-        <strong>${year} Draft Board</strong>
+        <strong>${year || "TBD"} Draft Board</strong>
         <p>Draft picks are not entered yet for this year.</p>
       </div>
     `;
@@ -127,10 +168,10 @@ function buildDraftBoardTable(year, picks) {
             <th>Round</th>
             <th>Pick</th>
             <th>Overall</th>
-            <th>Team</th>
+            <th>Drafting Team</th>
             <th>Player</th>
-            <th>Pos</th>
-            <th>NFL</th>
+            <th>Position</th>
+            <th>NFL Team</th>
             <th>Notes</th>
           </tr>
         </thead>
@@ -155,6 +196,10 @@ function buildDraftBoardTable(year, picks) {
     </div>
   `;
 }
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
 
 function cleanText(value) {
   return String(value || "").trim();
