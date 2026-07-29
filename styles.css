@@ -4269,3 +4269,150 @@ function buildBasementRecords(scoHistory) {
     grid-template-columns: 1fr;
   }
 }
+/* =========================================================
+   DRAFT ARCHIVE - FULL WIDTH EXPAND
+   ========================================================= */
+
+.draft-season-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+
+.draft-accordion-card {
+  padding: 0;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.draft-accordion-card.is-open {
+  grid-column: 1 / -1;
+}
+
+.draft-card-toggle {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  padding: 20px;
+  font: inherit;
+}
+
+.draft-card-summary {
+  display: grid;
+  grid-template-rows: auto minmax(48px, auto) minmax(42px, auto) auto auto;
+  gap: 9px;
+}
+
+.draft-card-summary span {
+  width: fit-content;
+}
+
+.draft-card-summary h3,
+.draft-card-summary p,
+.draft-card-summary strong,
+.draft-card-summary em {
+  margin: 0;
+}
+
+.draft-card-summary em {
+  font-style: normal;
+  opacity: 0.75;
+  font-size: 13px;
+}
+
+.draft-expand-label {
+  margin-top: 14px;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  opacity: 0.75;
+}
+
+.draft-expand-label .open-label {
+  display: none;
+}
+
+.draft-accordion-card.is-open .draft-expand-label .closed-label {
+  display: none;
+}
+
+.draft-accordion-card.is-open .draft-expand-label .open-label {
+  display: inline;
+}
+
+.draft-year-details {
+  display: none;
+  padding: 0 20px 22px;
+}
+
+.draft-accordion-card.is-open .draft-year-details {
+  display: block;
+}
+
+.draft-accordion-card.is-open .draft-board-wrap {
+  overflow-x: visible;
+}
+
+.draft-accordion-card.is-open .draft-board-table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.draft-board-table th,
+.draft-board-table td {
+  font-size: 12px;
+  padding: 9px 8px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.draft-board-empty {
+  padding: 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.draft-board-empty strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.draft-board-empty p {
+  margin: 0;
+}
+
+@media (max-width: 1050px) {
+  .draft-season-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 800px) {
+  .draft-season-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .draft-season-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .draft-accordion-card.is-open {
+    grid-column: auto;
+  }
+
+  .draft-accordion-card.is-open .draft-board-wrap {
+    overflow-x: auto;
+  }
+
+  .draft-accordion-card.is-open .draft-board-table {
+    min-width: 720px;
+  }
+}
