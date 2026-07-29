@@ -1,4 +1,4 @@
-owner_id,opponent_id,opponent_name,total Games,,win_pct,points_for,points_against,margin
+owner_id,opponent_id,opponent_name,total_games,record,win_pct,points_for,points_against,margin
 Bard,Charlie,Shivakamini Somakandarkram,6,5-1,0.833,542,461,81
 Bard,Eric,A.A. Ron Rodgers,10,5-4-1,0.5,1142,999,143
 Bard,Gary,The Fantasy Football Team ,22,15-7,0.682,3033,2740,293
