@@ -4416,3 +4416,32 @@ function buildBasementRecords(scoHistory) {
     min-width: 720px;
   }
 }
+/* =========================================================
+   SORTABLE HEAD-TO-HEAD TABLE
+   ========================================================= */
+
+.table-sort-button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 900;
+  text-transform: inherit;
+  letter-spacing: inherit;
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.table-sort-button:hover {
+  color: #facc15;
+}
+
+.sort-caret {
+  font-size: 11px;
+  opacity: 0.75;
+  line-height: 1;
+}
