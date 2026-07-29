@@ -1,7 +1,7 @@
 year,rank,owner_id,team,team_rating,record,win_pct,points_for,avg_for,points_against,avg_against,point_margin,avg_point_margin,moves
 2025,1,kyle,Life Sucks then You Die,1.56,10-4,0.71,1788,127.71,1637,116.92,151,10.78,10
 2025,2,bard,The Commish,1.54,9-5,0.64,1822,130.14,1883,134.5,-61,-4.35,29
-2025,3,gary,The Fantasy Football Team,1,8-6,0.57,1793,128.07,1639,117.07,151,10.78,18
+2025,3,gary,The Fantasy Football Team,1.52,8-6,0.57,1793,128.07,1639,117.07,151,10.78,18
 2025,4,hunter,Most Valuable Potheads,1.48,7-7,0.5,1868,133.42,1672,119.42,196,14,18
 2025,5,muffin,Committed Not Addicted,1.53,7-7,0.5,1801,128.64,1729,123.5,72,5.14,29
 2025,6,sco,Bard Top Hunter Bottom,1.36,5-9,0.36,1680,120,1833,130.92,-153,-10.92,17
