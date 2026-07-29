@@ -503,9 +503,11 @@ function getSeasonResult(rank) {
 
   if (Number.isNaN(numericRank)) return "TBD";
 
-  if (numericRank === 1) return "Regular Season Winner";
-  if (numericRank <= 4) return "Playoff Team";
-  if (numericRank >= 5) return "Missed Playoffs";
+  if (numericRank === 1) return "Won Championship";
+  if (numericRank === 2) return "Lost Championship";
+  if (numericRank === 3 || numericRank === 4) return "Lost in Semi-Finals";
+  if (numericRank === 5 || numericRank === 6 || numericRank === 7) return "Missed Playoffs";
+  if (numericRank === 8) return "Won The Sco";
 
   return "TBD";
 }
