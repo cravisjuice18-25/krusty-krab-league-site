@@ -188,14 +188,32 @@
          <thead>
   <tr>
     <th>Opponent</th>
-    <th>Games</th>
+    <th>
+      <button class="table-sort-button" type="button" data-h2h-sort="total_games">
+        Games <span class="sort-caret">↕</span>
+      </button>
+    </th>
     <th>Record</th>
-    <th>Win %</th>
+    <th>
+      <button class="table-sort-button" type="button" data-h2h-sort="win_pct">
+        Win % <span class="sort-caret">↕</span>
+      </button>
+    </th>
     <th>PF</th>
     <th>PA</th>
-    <th>Margin</th>
+    <th>
+      <button class="table-sort-button" type="button" data-h2h-sort="margin">
+        Margin <span class="sort-caret">↕</span>
+      </button>
+    </th>
   </tr>
 </thead>
+
+<tbody id="team-h2h-body">
+  <tr>
+    <td colspan="7">Head-to-head archive will load here.</td>
+  </tr>
+</tbody>
 
 <tbody id="team-h2h-body">
   <tr>
