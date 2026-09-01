@@ -4445,3 +4445,27 @@ function buildBasementRecords(scoHistory) {
   opacity: 0.75;
   line-height: 1;
 }
+/* =========================================================
+   UNIFORM PAGE IMAGE FULL BLEED
+   ========================================================= */
+
+.uniform-locker-card {
+  overflow: hidden;
+  padding-bottom: 0;
+}
+
+.uniform-locker-card .uniform-image-wrap {
+  margin-left: -18px;
+  margin-right: -18px;
+  margin-bottom: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.uniform-locker-card .uniform-image-wrap img {
+  display: block;
+  width: 100%;
+  max-width: none;
+  height: auto;
+  margin: 0;
+}
