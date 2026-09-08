@@ -155,8 +155,18 @@ function buildAllTimePlayerCards(allTimePlayers) {
     const fantasyTeam = row ? cleanText(row.fantasy_team) : "TBD";
     const recordType = row ? cleanText(row.record_type) : `Best ${position} Season`;
 
+    const imagePath = getAllTimePlayerCardImage(position);
+    const cardColors = getAllTimePlayerCardColors(position);
+
     const card = document.createElement("article");
     card.className = `player-card player-card-${position.toLowerCase()}`;
+
+    card.style.setProperty("--player-card-bg", cardColors.background);
+    card.style.setProperty("--player-card-accent", cardColors.accent);
+    card.style.setProperty("--player-card-footer", cardColors.footer);
+    card.style.setProperty("--player-card-footer-text", cardColors.footerText);
+    card.style.setProperty("--player-card-header-bg", cardColors.headerBg);
+    card.style.setProperty("--player-card-header-text", cardColors.headerText);
 
     card.innerHTML = `
       <div class="player-card-header">
@@ -164,8 +174,8 @@ function buildAllTimePlayerCards(allTimePlayers) {
       </div>
 
       <div class="player-card-image-wrap">
-        <div class="player-card-image-placeholder">
-          ${position}
+        <div class="player-card-image-placeholder player-card-image-filled">
+          <img src="${imagePath}" alt="${position} all-time player card image" onerror="this.parentElement.innerHTML='${position}'">
         </div>
       </div>
 
@@ -198,6 +208,59 @@ function findPlayerRowByPosition(allTimePlayers, position) {
   }) || null;
 }
 
+function getAllTimePlayerCardImage(position) {
+  const imageMap = {
+    QB: "images/all-time-player-cards-qb.png",
+    RB: "images/all-time-player-cards-rb.png",
+    WR: "images/all-time-player-cards-wr.png",
+    TE: "images/all-time-player-cards-te.png"
+  };
+
+  return imageMap[position] || "";
+}
+
+function getAllTimePlayerCardColors(position) {
+  const colorMap = {
+    QB: {
+      background: "rgb(227, 24, 55)",
+      accent: "rgb(255, 255, 255)",
+      footer: "rgb(255, 240, 243)",
+      footerText: "rgb(17, 24, 39)",
+      headerBg: "rgb(180, 16, 43)",
+      headerText: "rgb(255, 255, 255)"
+    },
+    RB: {
+      background: "rgb(0, 133, 202)",
+      accent: "rgb(255, 255, 255)",
+      footer: "rgb(235, 248, 255)",
+      footerText: "rgb(17, 24, 39)",
+      headerBg: "rgb(0, 103, 158)",
+      headerText: "rgb(255, 255, 255)"
+    },
+    WR: {
+      background: "rgb(0, 53, 148)",
+      accent: "rgb(255, 255, 255)",
+      footer: "rgb(235, 241, 255)",
+      footerText: "rgb(17, 24, 39)",
+      headerBg: "rgb(0, 39, 110)",
+      headerText: "rgb(255, 255, 255)"
+    },
+    TE: {
+      background: "rgb(227, 24, 55)",
+      accent: "rgb(255, 255, 255)",
+      footer: "rgb(255, 240, 243)",
+      footerText: "rgb(17, 24, 39)",
+      headerBg: "rgb(180, 16, 43)",
+      headerText: "rgb(255, 255, 255)"
+    }
+  };
+
+  return colorMap[position] || colorMap.QB;
+}
+
+  return colorMap[position] || colorMap.QB;
+}
+
 function getPositionLabel(position) {
   const labels = {
     QB: "Quarterback",
@@ -209,7 +272,7 @@ function getPositionLabel(position) {
   };
 
   return labels[position] || position;
-}
+}}
 
 function buildDraftCountdown() {
   setText("home-next-draft-title", UPCOMING_EVENT_LABEL);
