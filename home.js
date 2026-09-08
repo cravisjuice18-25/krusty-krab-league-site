@@ -28,7 +28,7 @@ const homepageSettings = {
   featuredEvent: {
     label: "Opening Night",
     title: "Opening Night",
-    date: "2026-09-10T20:20:00",
+    date: "2026-09-9T20:20:00",
     description: "The Krusty Krab League season begins."
   }
 };
