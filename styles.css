@@ -4497,3 +4497,51 @@ function buildBasementRecords(scoHistory) {
   object-position: center;
   margin: 0;
 }
+/* =========================================================
+   ALL-TIME PLAYER CARDS - IMAGE + COLOR SUPPORT
+   ========================================================= */
+
+.player-card {
+  background: var(--player-card-bg, #ffffff);
+  border: 1px solid #d1d5db;
+}
+
+.player-card-header {
+  background: var(--player-card-header-bg, #0f172a);
+  color: var(--player-card-header-text, #ffffff);
+}
+
+.player-card-body h3,
+.player-card-body p {
+  color: var(--player-card-accent, #111827);
+}
+
+.player-card-footer {
+  background: var(--player-card-footer, #f3f4f6);
+}
+
+.player-card-footer strong {
+  color: var(--player-card-footer-text, #111827);
+}
+
+.player-card-image-placeholder {
+  width: 116px;
+  height: 116px;
+  border-radius: 999px;
+  border: 5px solid var(--player-card-accent, #111827);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #ffffff;
+  font-weight: 900;
+  font-size: 20px;
+}
+
+.player-card-image-filled img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
