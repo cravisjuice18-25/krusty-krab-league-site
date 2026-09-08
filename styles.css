@@ -4545,3 +4545,31 @@ function buildBasementRecords(scoHistory) {
   object-position: center;
   display: block;
 }
+/* =========================================================
+   FRANCHISE PAGE HERO - TEAM COLOR BACKGROUND
+   ========================================================= */
+
+.team-hero {
+  background:
+    radial-gradient(circle at top left, var(--secondary-color, #0f172a), transparent 38%),
+    linear-gradient(135deg, var(--primary-color, #001f3f), var(--secondary-color, #0f172a));
+  border-bottom: 6px solid var(--decal-color, #facc15);
+}
+
+.team-hero-overlay {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.55),
+      rgba(0, 0, 0, 0.28)
+    );
+}
+
+.team-hero .eyebrow {
+  color: var(--decal-color, #facc15);
+}
+
+.team-meta span {
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.10);
+}
