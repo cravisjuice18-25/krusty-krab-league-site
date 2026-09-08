@@ -1,232 +1,278 @@
-const UPCOMING_DRAFT_DATE = "2026-09-05T12:00:00";
-const UPCOMING_DRAFT_LOCATION = "Sparrow Bush, NY";
-
 async function buildHomePage() {
-  let champions = [];
-  let scoHistory = [];
-  let teams = [];
-  let standings = [];
-  let allTimePlayers = [];
-
   try {
-    champions = await loadCSV("data/champions.csv");
+    const champions = await loadOptionalCSV("data/champions.csv");
+    const scoHistory = await loadOptionalCSV("data/the-sco.csv");
+    const teams = await loadOptionalCSV("data/teams.csv");
+    const standings = await loadOptionalCSV("data/standings.csv");
+    const allTimePlayers = await loadOptionalCSV("data/all-time-players.csv");
+
+    buildHomepageIntro();
+    buildFeaturedEvent();
+    buildChampionSnapshot(champions);
+    buildScoSnapshot(scoHistory);
+    buildLeagueSnapshot(teams, standings);
+    buildBestPlayers(allTimePlayers);
+
   } catch (error) {
-    console.warn("champions.csv did not load:", error);
-  }
-
-  try {
-    scoHistory = await loadCSV("data/the-sco.csv");
-  } catch (error) {
-    console.warn("the-sco.csv did not load:", error);
-  }
-
-  try {
-    teams = await loadCSV("data/teams.csv");
-  } catch (error) {
-    console.warn("teams.csv did not load:", error);
-  }
-
-  try {
-    standings = await loadCSV("data/standings.csv");
-  } catch (error) {
-    console.warn("standings.csv did not load:", error);
-  }
-
-  try {
-    allTimePlayers = await loadCSV("data/all-time-players.csv");
-  } catch (error) {
-    console.warn("all-time-players.csv did not load:", error);
-  }
-
-  buildLatestChampion(champions);
-  buildLatestSco(scoHistory);
-  buildTeamsCount(teams);
-  buildLatestSeasonSnapshot(standings);
-  buildAllTimePlayerCards(allTimePlayers);
-  buildDraftCountdown();
-}
-
-function buildLatestChampion(champions) {
-  if (!champions || champions.length === 0) return;
-
-  const sorted = [...champions].sort((a, b) => Number(b.year) - Number(a.year));
-  const latest = sorted[0];
-
-  if (!latest) return;
-
-  setText("home-latest-champion-year", `${cleanText(latest.year)} Champion`);
-  setText("home-latest-champion-team", cleanText(latest.champion) || "TBD");
-  setText("home-latest-champion-link", "View championship history");
-}
-
-function buildLatestSco(scoHistory) {
-  if (!scoHistory || scoHistory.length === 0) return;
-
-  const sorted = [...scoHistory].sort((a, b) => Number(b.year) - Number(a.year));
-  const latest = sorted[0];
-
-  if (!latest) return;
-
-  setText("home-latest-sco-title", "The Sco");
-  setText("home-latest-sco-team", `${cleanText(latest.year)}: ${cleanText(latest.team) || "TBD"}`);
-  setText("home-latest-sco-link", "View last-place history");
-}
-
-function buildTeamsCount(teams) {
-  if (!teams || teams.length === 0) return;
-
-  const activeTeams = teams.filter(team => {
-    return cleanText(team.status).toLowerCase() === "active";
-  });
-
-  setText(
-    "home-active-team-count",
-    `${activeTeams.length} active franchises, owners, defunct teams, and future franchise pages.`
-  );
-}
-
-function buildLatestSeasonSnapshot(standings) {
-  if (!standings || standings.length === 0) return;
-
-  const years = [...new Set(standings.map(row => cleanText(row.year)))]
-    .filter(Boolean)
-    .sort((a, b) => Number(b) - Number(a));
-
-  const latestYear = years[0];
-
-  if (!latestYear) return;
-
-  const latestStandings = standings
-    .filter(row => cleanText(row.year) === latestYear)
-    .sort((a, b) => Number(a.rank) - Number(b.rank));
-
-  const firstPlace = latestStandings[0];
-
-  const topScoringTeam = [...latestStandings].sort((a, b) => {
-    return Number(b.points_for) - Number(a.points_for);
-  })[0];
-
-  if (firstPlace) {
-    setText("home-season-title", `${latestYear} Season Snapshot`);
-    setText("home-season-details", `Latest season: ${cleanText(firstPlace.team) || "TBD"} finished 1st`);
-    setText(
-      "home-season-details-expanded",
-      `${cleanText(firstPlace.team) || "TBD"} · ${cleanText(firstPlace.record) || "TBD"} · 1st Place`
-    );
-  }
-
-  if (topScoringTeam) {
-    setText("home-record-book-summary", `Latest points leader: ${cleanText(topScoringTeam.team) || "TBD"}`);
-    setText(
-      "home-season-points-leader",
-      `${cleanText(topScoringTeam.team) || "TBD"} · ${formatNumber(topScoringTeam.points_for)} points`
-    );
+    console.error("Home page error:", error);
   }
 }
 
-function buildAllTimePlayerCards(allTimePlayers) {
-  const grid = document.getElementById("all-time-player-grid");
+/* =========================================================
+   EASY EDIT HOMEPAGE CONTENT
+   ========================================================= */
 
-  if (!grid) return;
+const homepageSettings = {
+  introText: "The official home for the Krusty Krab League.",
 
-  const positionOrder = ["QB", "RB", "WR", "TE"];
+  featuredEvent: {
+    label: "Opening Night",
+    title: "Opening Night",
+    date: "2026-09-10T20:20:00",
+    description: "The Krusty Krab League season begins."
+  }
+};
 
-  grid.innerHTML = "";
+/* =========================================================
+   HOMEPAGE INTRO
+   ========================================================= */
 
-  positionOrder.forEach(position => {
-    const row = findPlayerRowByPosition(allTimePlayers, position);
-
-    const player = row ? cleanText(row.player) : "TBD";
-    const nflTeam = row ? cleanText(row.nfl_team) : "TBD";
-    const points = row ? cleanText(row.points) : "TBD";
-    const year = row ? cleanText(row.year) : "TBD";
-    const fantasyTeam = row ? cleanText(row.fantasy_team) : "TBD";
-    const recordType = row ? cleanText(row.record_type) : `Best ${position} Season`;
-
-    const card = document.createElement("article");
-    card.className = `player-card player-card-${position.toLowerCase()}`;
-
-    card.innerHTML = `
-      <div class="player-card-header">
-        ${recordType && recordType.toLowerCase() !== "tbd" ? recordType : `Best ${position} Season`}
-      </div>
-
-      <div class="player-card-image-wrap">
-        <div class="player-card-image-placeholder">
-          ${position}
-        </div>
-      </div>
-
-      <div class="player-card-body">
-        <h3>${player && player.toLowerCase() !== "tbd" ? player : "Coming Soon"}</h3>
-        <p>
-          ${nflTeam && nflTeam.toLowerCase() !== "tbd" ? nflTeam : "NFL Team TBD"}
-          · ${formatNumber(points)} points
-          · ${year && year.toLowerCase() !== "tbd" ? year : "Year TBD"}
-        </p>
-      </div>
-
-      <div class="player-card-footer">
-        <strong>${fantasyTeam && fantasyTeam.toLowerCase() !== "tbd" ? fantasyTeam : "League Member Team TBD"}</strong>
-      </div>
-    `;
-
-    grid.appendChild(card);
-  });
+function buildHomepageIntro() {
+  setTextIfExists("homepage-intro", homepageSettings.introText);
+  setTextIfExists("home-intro", homepageSettings.introText);
+  setTextIfExists("league-intro", homepageSettings.introText);
+  setTextIfExists("hero-description", homepageSettings.introText);
+  setTextIfExists("hero-subtitle", homepageSettings.introText);
 }
 
-function findPlayerRowByPosition(allTimePlayers, position) {
-  if (!allTimePlayers || allTimePlayers.length === 0) return null;
+/* =========================================================
+   FEATURED EVENT / COUNTDOWN
+   ========================================================= */
 
-  return allTimePlayers.find(row => {
-    const rowPosition = cleanText(row.position).toUpperCase();
-    const recordType = cleanText(row.record_type).toLowerCase();
+function buildFeaturedEvent() {
+  const event = homepageSettings.featuredEvent;
 
-    return rowPosition === position && recordType.includes("season");
-  }) || null;
+  setTextIfExists("next-draft-label", event.label);
+  setTextIfExists("next-draft-title", event.title);
+  setTextIfExists("next-draft-description", event.description);
+
+  setTextIfExists("featured-event-label", event.label);
+  setTextIfExists("featured-event-title", event.title);
+  setTextIfExists("featured-event-description", event.description);
+
+  setTextIfExists("countdown-label", event.label);
+  setTextIfExists("countdown-title", event.title);
+  setTextIfExists("countdown-description", event.description);
+
+  updateFeaturedEventCountdown(event.date);
+
+  setInterval(() => {
+    updateFeaturedEventCountdown(event.date);
+  }, 1000);
 }
 
-function getPositionLabel(position) {
-  const labels = {
-    QB: "Quarterback",
-    RB: "Running Back",
-    WR: "Wide Receiver",
-    TE: "Tight End",
-    DST: "Defense",
-    K: "Kicker"
-  };
-
-  return labels[position] || position;
-}
-
-function buildDraftCountdown() {
-  updateDraftCountdown();
-  setInterval(updateDraftCountdown, 60000);
-}
-
-function updateDraftCountdown() {
-  const draftDate = new Date(UPCOMING_DRAFT_DATE);
+function updateFeaturedEventCountdown(dateString) {
+  const eventDate = new Date(dateString);
   const now = new Date();
-  const difference = draftDate - now;
 
-  if (difference <= 0) {
-    setText("countdown-days", "0");
-    setText("countdown-hours", "0");
-    setText("countdown-minutes", "0");
+  if (Number.isNaN(eventDate.getTime())) {
+    setTextIfExists("next-draft-countdown", "TBD");
+    setTextIfExists("featured-event-countdown", "TBD");
+    setTextIfExists("countdown-timer", "TBD");
     return;
   }
 
-  const totalMinutes = Math.floor(difference / 1000 / 60);
-  const days = Math.floor(totalMinutes / 60 / 24);
-  const hours = Math.floor((totalMinutes / 60) % 24);
-  const minutes = Math.floor(totalMinutes % 60);
+  const difference = eventDate - now;
 
-  setText("countdown-days", days);
-  setText("countdown-hours", hours);
-  setText("countdown-minutes", minutes);
+  if (difference <= 0) {
+    setTextIfExists("next-draft-countdown", "It’s time.");
+    setTextIfExists("featured-event-countdown", "It’s time.");
+    setTextIfExists("countdown-timer", "It’s time.");
+    return;
+  }
+
+  const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((difference / (1000 * 60)) % 60);
+  const seconds = Math.floor((difference / 1000) % 60);
+
+  const countdownText = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+  setTextIfExists("next-draft-countdown", countdownText);
+  setTextIfExists("featured-event-countdown", countdownText);
+  setTextIfExists("countdown-timer", countdownText);
+
+  setTextIfExists("next-draft-date", formatEventDate(eventDate));
+  setTextIfExists("featured-event-date", formatEventDate(eventDate));
+  setTextIfExists("countdown-date", formatEventDate(eventDate));
 }
 
-function setText(id, value) {
+function formatEventDate(date) {
+  return date.toLocaleString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit"
+  });
+}
+
+/* =========================================================
+   CHAMPION SNAPSHOT
+   ========================================================= */
+
+function buildChampionSnapshot(champions) {
+  if (!champions || champions.length === 0) return;
+
+  const validChampions = champions
+    .filter(row => cleanText(row.champion).toLowerCase() !== "no winner")
+    .filter(row => cleanText(row.champion).toLowerCase() !== "na")
+    .sort((a, b) => Number(b.year) - Number(a.year));
+
+  const latestChampion = validChampions[0];
+
+  if (!latestChampion) return;
+
+  setTextIfExists("latest-champion-year", cleanText(latestChampion.year) || "TBD");
+  setTextIfExists("latest-champion-name", cleanText(latestChampion.champion) || "TBD");
+  setTextIfExists("latest-champion-runner-up", cleanText(latestChampion.runner_up) || "TBD");
+  setTextIfExists("latest-champion-score", cleanText(latestChampion.final_score) || "TBD");
+  setTextIfExists("latest-champion-record", cleanText(latestChampion.champion_record) || "TBD");
+
+  setTextIfExists("home-champion-year", cleanText(latestChampion.year) || "TBD");
+  setTextIfExists("home-champion-name", cleanText(latestChampion.champion) || "TBD");
+  setTextIfExists("home-champion-score", cleanText(latestChampion.final_score) || "TBD");
+}
+
+/* =========================================================
+   THE SCO SNAPSHOT
+   ========================================================= */
+
+function buildScoSnapshot(scoHistory) {
+  if (!scoHistory || scoHistory.length === 0) return;
+
+  const sortedSco = [...scoHistory].sort((a, b) => Number(b.year) - Number(a.year));
+  const latestSco = sortedSco[0];
+
+  if (!latestSco) return;
+
+  const scoWinner =
+    cleanText(latestSco.team) ||
+    cleanText(latestSco.owner_id) ||
+    cleanText(latestSco.sco_loser) ||
+    "TBD";
+
+  setTextIfExists("latest-sco-year", cleanText(latestSco.year) || "TBD");
+  setTextIfExists("latest-sco-name", scoWinner);
+  setTextIfExists("latest-sco-record", cleanText(latestSco.regular_season_record) || "TBD");
+  setTextIfExists("latest-sco-notes", cleanText(latestSco.notes) || "TBD");
+
+  setTextIfExists("home-sco-year", cleanText(latestSco.year) || "TBD");
+  setTextIfExists("home-sco-name", scoWinner);
+}
+
+/* =========================================================
+   LEAGUE SNAPSHOT
+   ========================================================= */
+
+function buildLeagueSnapshot(teams, standings) {
+  const activeTeams = teams
+    ? teams.filter(row => cleanText(row.status).toLowerCase() === "active")
+    : [];
+
+  const totalTeams = activeTeams.length || teams.length || "TBD";
+
+  const seasons = standings
+    ? [...new Set(standings.map(row => cleanText(row.year)).filter(Boolean))]
+    : [];
+
+  const totalSeasons = seasons.length || "TBD";
+
+  setTextIfExists("league-total-teams", totalTeams);
+  setTextIfExists("league-total-seasons", totalSeasons);
+  setTextIfExists("league-active-teams", totalTeams);
+
+  const totalChampionships = getChampionshipCountFromTeams(teams);
+
+  setTextIfExists("league-total-championships", totalChampionships);
+}
+
+function getChampionshipCountFromTeams(teams) {
+  if (!teams || teams.length === 0) return "TBD";
+
+  let count = 0;
+
+  teams.forEach(team => {
+    const titles = Number(cleanText(team.titles));
+
+    if (!Number.isNaN(titles)) {
+      count += titles;
+    }
+  });
+
+  return count || "TBD";
+}
+
+/* =========================================================
+   BEST PLAYER CARDS
+   ========================================================= */
+
+function buildBestPlayers(allTimePlayers) {
+  if (!allTimePlayers || allTimePlayers.length === 0) return;
+
+  buildBestPlayerByPosition(allTimePlayers, "QB", "best-qb");
+  buildBestPlayerByPosition(allTimePlayers, "RB", "best-rb");
+  buildBestPlayerByPosition(allTimePlayers, "WR", "best-wr");
+  buildBestPlayerByPosition(allTimePlayers, "TE", "best-te");
+}
+
+function buildBestPlayerByPosition(players, position, idPrefix) {
+  const positionPlayers = players.filter(row => {
+    return cleanText(row.position).toUpperCase() === position;
+  });
+
+  if (positionPlayers.length === 0) return;
+
+  const bestPlayer = [...positionPlayers].sort((a, b) => {
+    return Number(b.points || b.fantasy_points || 0) - Number(a.points || a.fantasy_points || 0);
+  })[0];
+
+  if (!bestPlayer) return;
+
+  const playerName =
+    cleanText(bestPlayer.player) ||
+    cleanText(bestPlayer.player_name) ||
+    "TBD";
+
+  const points =
+    cleanText(bestPlayer.points) ||
+    cleanText(bestPlayer.fantasy_points) ||
+    "TBD";
+
+  const year = cleanText(bestPlayer.year) || "TBD";
+  const team = cleanText(bestPlayer.owner) || cleanText(bestPlayer.team) || "TBD";
+
+  setTextIfExists(`${idPrefix}-name`, playerName);
+  setTextIfExists(`${idPrefix}-points`, points === "TBD" ? "TBD" : `${formatNumber(points)} points`);
+  setTextIfExists(`${idPrefix}-year`, year);
+  setTextIfExists(`${idPrefix}-team`, team);
+}
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+
+async function loadOptionalCSV(path) {
+  try {
+    return await loadCSV(path);
+  } catch (error) {
+    console.warn(`${path} did not load:`, error);
+    return [];
+  }
+}
+
+function setTextIfExists(id, value) {
   const element = document.getElementById(id);
 
   if (element) {
@@ -239,16 +285,10 @@ function cleanText(value) {
 }
 
 function formatNumber(value) {
-  const text = cleanText(value);
-
-  if (!text || text.toLowerCase() === "tbd") {
-    return "TBD";
-  }
-
-  const number = Number(text);
+  const number = Number(value);
 
   if (Number.isNaN(number)) {
-    return text;
+    return cleanText(value) || "TBD";
   }
 
   return number.toLocaleString(undefined, {
