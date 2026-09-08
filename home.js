@@ -1,4 +1,4 @@
-const UPCOMING_DRAFT_DATE = "2026-09-10T20:20:00";
+const UPCOMING_DRAFT_DATE = "2026-09-9T20:20:00";
 const UPCOMING_DRAFT_LOCATION = "Opening Night";
 
 const HOME_INTRO_TEXT = "The official home for the Krusty Krab League.";
