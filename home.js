@@ -1,4 +1,4 @@
-const UPCOMING_DRAFT_DATE = "2026-09-9T20:20:00";
+const UPCOMING_DRAFT_DATE = "2026-09-09T20:20:00";
 const UPCOMING_DRAFT_LOCATION = "Opening Night";
 
 const HOME_INTRO_TEXT = "The official home for the Krusty Krab League.";
@@ -175,7 +175,7 @@ function buildAllTimePlayerCards(allTimePlayers) {
 
       <div class="player-card-image-wrap">
         <div class="player-card-image-placeholder player-card-image-filled">
-          <img src="${imagePath}" alt="${position} all-time player card image" onerror="this.parentElement.innerHTML='${position}'">
+          <img src="${imagePath}" alt="${position} all-time player card image" onerror="this.parentElement.textContent='${position}'">
         </div>
       </div>
 
@@ -258,9 +258,6 @@ function getAllTimePlayerCardColors(position) {
   return colorMap[position] || colorMap.QB;
 }
 
-  return colorMap[position] || colorMap.QB;
-}
-
 function getPositionLabel(position) {
   const labels = {
     QB: "Quarterback",
@@ -272,7 +269,7 @@ function getPositionLabel(position) {
   };
 
   return labels[position] || position;
-}}
+}
 
 function buildDraftCountdown() {
   setText("home-next-draft-title", UPCOMING_EVENT_LABEL);
@@ -294,6 +291,13 @@ function updateDraftCountdown() {
   const draftDate = new Date(UPCOMING_DRAFT_DATE);
   const now = new Date();
   const difference = draftDate - now;
+
+  if (Number.isNaN(draftDate.getTime())) {
+    setText("countdown-days", "TBD");
+    setText("countdown-hours", "TBD");
+    setText("countdown-minutes", "TBD");
+    return;
+  }
 
   if (difference <= 0) {
     setText("countdown-days", "0");
