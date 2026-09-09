@@ -4786,3 +4786,325 @@ function buildBasementRecords(scoHistory) {
     grid-template-columns: 1fr;
   }
 }
+/* =========================================================
+   TEAM PROFILE - UPDATED STRUCTURE SUPPORT
+   ========================================================= */
+
+/* 12-card At-a-Glance layout */
+.cleaned-team-stat-grid {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.cleaned-team-stat-grid .team-stat-card {
+  min-height: 118px;
+  border-top-color: var(--primary-color, var(--team-color, var(--navy)));
+}
+
+.cleaned-team-stat-grid .danger-stat {
+  border-top-color: var(--danger);
+}
+
+/* Franchise header team color polish */
+.team-hero {
+  background:
+    linear-gradient(
+      135deg,
+      var(--primary-color, #001f3f) 0%,
+      var(--secondary-color, #111827) 100%
+    );
+  border-bottom: 8px solid var(--decal-color, var(--gold));
+}
+
+.team-hero-overlay {
+  background: transparent;
+  box-shadow: none;
+}
+
+.team-hero .eyebrow {
+  color: var(--decal-color, var(--gold));
+}
+
+.team-meta span {
+  background: rgba(255, 255, 255, 0.13);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+/* About the Franchise image layout */
+.team-about-layout {
+  display: grid;
+  grid-template-columns: 1.35fr 0.85fr;
+  gap: 24px;
+  align-items: stretch;
+}
+
+.team-about-layout > div {
+  min-width: 0;
+}
+
+.team-about-image-wrap {
+  min-height: 260px;
+  border-radius: 20px;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, var(--primary-color, var(--navy)), var(--secondary-color, var(--ink)));
+  border: 1px solid var(--line);
+}
+
+.team-about-image-wrap img {
+  width: 100%;
+  height: 100%;
+  min-height: 260px;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* Franchise Highs and Lows */
+.franchise-extremes-list {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.franchise-extremes-list .record-item {
+  border-top: 5px solid var(--primary-color, var(--navy));
+}
+
+/* Postseason Resume */
+.team-postseason-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  align-items: stretch;
+}
+
+.team-postseason-grid .record-item {
+  height: 100%;
+  border-top: 5px solid var(--primary-color, var(--navy));
+}
+
+.team-postseason-grid .record-item strong {
+  color: var(--ink);
+}
+
+.team-postseason-grid .record-item span {
+  display: block;
+  margin-top: 5px;
+}
+
+/* Championship year badges */
+.championship-year-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.championship-year-badges > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 7px 13px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--gold);
+  font-size: 13px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.championship-year-badge {
+  background:
+    linear-gradient(135deg, var(--primary-color, var(--navy)), var(--ink)) !important;
+  color: var(--gold) !important;
+  border: 1px solid var(--decal-color, var(--gold));
+}
+
+/* H2H callouts */
+.h2h-callout-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.h2h-callout-card {
+  border-radius: 20px;
+  padding: 20px;
+  color: white;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  position: relative;
+}
+
+.h2h-callout-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at top right, rgba(255, 255, 255, 0.18), transparent 36%);
+  pointer-events: none;
+}
+
+.h2h-callout-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.h2h-callout-card .section-label {
+  color: var(--gold);
+}
+
+.h2h-callout-card h3 {
+  margin: 0 0 8px;
+  font-size: 30px;
+  line-height: 1.05;
+}
+
+.h2h-callout-card span {
+  color: #e5e7eb;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.nemesis-card {
+  background:
+    linear-gradient(135deg, var(--danger), var(--ink));
+}
+
+.victim-card {
+  background:
+    linear-gradient(135deg, var(--primary-color, var(--navy)), var(--secondary-color, var(--ink)));
+  border-bottom: 5px solid var(--decal-color, var(--gold));
+}
+
+/* Bottom link spacing inside two-column cards */
+.team-card-bottom-link {
+  display: inline-flex;
+  width: fit-content;
+  margin-top: 18px;
+}
+
+/* Table sort button cleanup */
+.table-sort-button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 900;
+  text-transform: inherit;
+  letter-spacing: inherit;
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.table-sort-button:hover {
+  color: var(--gold);
+}
+
+.sort-caret {
+  font-size: 11px;
+  opacity: 0.75;
+  line-height: 1;
+}
+
+/* =========================================================
+   TEAM PROFILE - RESPONSIVE CLEANUP
+   ========================================================= */
+
+@media (max-width: 1100px) {
+  .cleaned-team-stat-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .team-postseason-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .franchise-extremes-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .team-about-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .team-about-image-wrap,
+  .team-about-image-wrap img {
+    min-height: 300px;
+  }
+
+  .h2h-callout-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .team-hero {
+    min-height: auto;
+    padding: 34px 18px;
+  }
+
+  .team-hero-overlay {
+    grid-template-columns: 1fr;
+    text-align: center;
+    justify-items: center;
+    gap: 18px;
+  }
+
+  .team-hero-logo {
+    width: 132px;
+    height: 132px;
+    border-radius: 24px;
+  }
+
+  .team-meta {
+    justify-content: center;
+  }
+
+  .cleaned-team-stat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .team-postseason-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .h2h-callout-card h3 {
+    font-size: 25px;
+  }
+}
+
+@media (max-width: 520px) {
+  .cleaned-team-stat-grid,
+  .team-postseason-grid,
+  .franchise-extremes-list {
+    grid-template-columns: 1fr;
+  }
+
+  .team-about-image-wrap,
+  .team-about-image-wrap img {
+    min-height: 230px;
+  }
+
+  .championship-year-badges {
+    gap: 8px;
+  }
+
+  .championship-year-badges > span {
+    font-size: 12px;
+    padding: 7px 11px;
+  }
+}
