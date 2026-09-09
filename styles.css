@@ -5108,3 +5108,279 @@ function buildBasementRecords(scoHistory) {
     padding: 7px 11px;
   }
 }
+/* =========================================================
+   TEAM PROFILE - BATCH 2A SECTIONS
+   Franchise Legends, Draft History, Identity, Related Links
+   ========================================================= */
+
+/* Franchise Legends */
+.franchise-legends-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.franchise-legend-card {
+  background:
+    linear-gradient(135deg, var(--primary-color, var(--navy)), var(--secondary-color, var(--ink)));
+  border-radius: 22px;
+  overflow: hidden;
+  color: white;
+  box-shadow: var(--card-shadow);
+  border-bottom: 6px solid var(--decal-color, var(--gold));
+  min-width: 0;
+}
+
+.franchise-legend-image {
+  aspect-ratio: 16 / 10;
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+}
+
+.franchise-legend-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.franchise-legend-body {
+  padding: 18px;
+}
+
+.franchise-legend-body span {
+  display: block;
+  color: var(--gold);
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.franchise-legend-body h3 {
+  margin: 0 0 8px;
+  font-size: 24px;
+  line-height: 1.05;
+}
+
+.franchise-legend-body p {
+  margin: 0;
+  color: #e5e7eb;
+  line-height: 1.45;
+  font-size: 14px;
+}
+
+/* Draft History */
+.team-draft-layout {
+  display: grid;
+  grid-template-columns: 1.3fr 0.7fr;
+  gap: 18px;
+  align-items: stretch;
+}
+
+.team-first-round-list {
+  display: grid;
+  gap: 10px;
+}
+
+.first-round-pick-item {
+  display: grid;
+  grid-template-columns: 58px 1fr;
+  gap: 13px;
+  align-items: center;
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-left: 6px solid var(--primary-color, var(--navy));
+  border-radius: 16px;
+  padding: 12px;
+  min-width: 0;
+}
+
+.first-round-pick-image {
+  width: 58px;
+  height: 58px;
+  border-radius: 14px;
+  background: white;
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+
+.first-round-pick-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.first-round-pick-details {
+  min-width: 0;
+}
+
+.first-round-pick-details span {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 4px;
+}
+
+.first-round-pick-details strong {
+  display: block;
+  font-size: 18px;
+  line-height: 1.15;
+}
+
+.first-round-pick-details small {
+  display: block;
+  margin-top: 4px;
+  color: #4b5563;
+  font-weight: 800;
+}
+
+.team-draft-callout-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.draft-callout-card {
+  background: var(--ink);
+  color: white;
+  border-radius: 16px;
+  padding: 16px;
+  border-top: 5px solid var(--decal-color, var(--gold));
+}
+
+.draft-callout-card span {
+  display: block;
+  color: var(--gold);
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  margin-bottom: 7px;
+}
+
+.draft-callout-card strong {
+  display: block;
+  font-size: 21px;
+  line-height: 1.15;
+  margin-bottom: 6px;
+}
+
+.draft-callout-card p {
+  margin: 0;
+  color: #d1d5db;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+/* Franchise Identity Upgrade */
+.franchise-identity-layout {
+  display: grid;
+  grid-template-columns: 1.3fr 0.7fr;
+  gap: 18px;
+  align-items: stretch;
+}
+
+.team-color-panel {
+  background:
+    linear-gradient(135deg, var(--primary-color, var(--navy)), var(--secondary-color, var(--ink)));
+  color: white;
+  border-radius: 20px;
+  padding: 20px;
+  border-bottom: 6px solid var(--decal-color, var(--gold));
+}
+
+.team-color-row {
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.team-color-row:last-child {
+  border-bottom: none;
+}
+
+.team-color-chip {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 3px solid white;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.24);
+}
+
+.team-color-row strong {
+  display: block;
+  font-size: 15px;
+}
+
+.team-color-row small {
+  display: block;
+  margin-top: 3px;
+  color: #d1d5db;
+  font-weight: 800;
+}
+
+/* Related Links */
+.related-franchise-links {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+
+.related-franchise-links a {
+  background: var(--ink);
+  color: white;
+  text-decoration: none;
+  border-radius: 999px;
+  padding: 12px 14px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.related-franchise-links a:hover {
+  background: var(--primary-color, var(--navy));
+  color: white;
+}
+
+/* Responsive */
+@media (max-width: 980px) {
+  .franchise-legends-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .team-draft-layout,
+  .franchise-identity-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .related-franchise-links {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .related-franchise-links {
+    grid-template-columns: 1fr;
+  }
+
+  .first-round-pick-item {
+    grid-template-columns: 48px 1fr;
+  }
+
+  .first-round-pick-image {
+    width: 48px;
+    height: 48px;
+  }
+}
