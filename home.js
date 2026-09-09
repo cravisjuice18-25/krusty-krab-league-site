@@ -63,7 +63,7 @@ async function buildHomePage() {
   buildLatestSeasonSnapshot(standings);
   buildFeaturedEvent(featuredEvent);
   buildFeaturedRecords(featuredRecords);
-  buildHomeTeams(teams);
+  buildHomeFranchiseCards(teams);
   buildArchiveFeature(archiveFeature);
   buildAllTimePlayerCards(allTimePlayers);
 }
@@ -95,6 +95,7 @@ function buildLatestChampion(champions, teams) {
   const sorted = [...champions]
     .filter(row => cleanText(row.champion).toLowerCase() !== "no winner")
     .filter(row => cleanText(row.champion).toLowerCase() !== "na")
+    .filter(row => cleanText(row.champion).toLowerCase() !== "n/a")
     .sort((a, b) => Number(b.year) - Number(a.year));
 
   const latest = sorted[0];
@@ -103,9 +104,20 @@ function buildLatestChampion(champions, teams) {
 
   const championOwnerId = cleanText(latest.champion_owner_id);
   const championTeam = findTeamByOwnerId(teams, championOwnerId);
-  const championName = cleanText(latest.champion) || cleanText(championTeam.team_name) || "TBD";
-  const ownerName = cleanText(championTeam.owner) || championName || "TBD";
-  const titleCount = cleanText(championTeam.titles) || getChampionCount(champions, championOwnerId);
+
+  const championName =
+    cleanText(championTeam.team_name) ||
+    cleanText(latest.champion) ||
+    "TBD";
+
+  const ownerName =
+    cleanText(championTeam.owner) ||
+    cleanText(latest.champion) ||
+    "TBD";
+
+  const titleCount =
+    cleanText(championTeam.titles) ||
+    getChampionCount(champions, championOwnerId);
 
   setText("home-latest-champion-year", `${cleanText(latest.year)} Champion`);
   setText("home-latest-champion-team", championName);
@@ -145,20 +157,18 @@ function buildLatestSco(scoHistory, teams) {
 }
 
 /* =========================================================
-   TEAMS COUNT
+   TEAM COUNT
    teams.csv
    ========================================================= */
 
 function buildTeamsCount(teams) {
   if (!teams || teams.length === 0) return;
 
-  const activeTeams = teams.filter(team => {
-    return cleanText(team.status).toLowerCase() === "active";
-  });
+  const activeTeams = getActiveTeams(teams);
 
   setText(
     "home-active-team-count",
-    `${activeTeams.length} active franchises, owners, defunct teams, and future franchise pages.`
+    `${activeTeams.length} active franchises, owners, alumni teams, and franchise profiles.`
   );
 }
 
@@ -182,7 +192,9 @@ function buildLatestSeasonSnapshot(standings) {
     .filter(row => cleanText(row.year) === latestYear)
     .sort((a, b) => Number(a.rank) - Number(b.rank));
 
-  const standingsLeader = latestStandings.find(row => Number(row.rank) === 1) || latestStandings[0];
+  const standingsLeader =
+    latestStandings.find(row => Number(row.rank) === 1) ||
+    latestStandings[0];
 
   const topScoringTeam = [...latestStandings].sort((a, b) => {
     return Number(b.points_for) - Number(a.points_for);
@@ -192,11 +204,16 @@ function buildLatestSeasonSnapshot(standings) {
     return Number(b.team_rating) - Number(a.team_rating);
   })[0];
 
-  const currentSco = latestStandings.find(row => Number(row.rank) === 8) || latestStandings[latestStandings.length - 1];
+  const currentSco =
+    latestStandings.find(row => Number(row.rank) === 8) ||
+    latestStandings[latestStandings.length - 1];
 
   if (standingsLeader) {
     setText("home-season-title", `${latestYear} Season Snapshot`);
-    setText("home-season-details", `Latest season: ${cleanText(standingsLeader.team) || "TBD"} finished 1st`);
+    setText(
+      "home-season-details",
+      `Latest season: ${cleanText(standingsLeader.team) || "TBD"} finished 1st`
+    );
     setText(
       "home-season-details-expanded",
       `${cleanText(standingsLeader.team) || "TBD"} · ${cleanText(standingsLeader.record) || "TBD"} · 1st Place`
@@ -204,7 +221,6 @@ function buildLatestSeasonSnapshot(standings) {
   }
 
   if (topScoringTeam) {
-    setText("home-record-book-summary", `Latest points leader: ${cleanText(topScoringTeam.team) || "TBD"}`);
     setText(
       "home-season-points-leader",
       `${cleanText(topScoringTeam.team) || "TBD"} · ${formatNumber(topScoringTeam.points_for)} points`
@@ -245,17 +261,6 @@ function buildFeaturedEvent(featuredEvent) {
   setText("home-featured-event-title", eventTitle);
   setText("home-featured-event-subtitle", eventSubtitle);
   setText("home-featured-event-button", buttonText);
-
-  setText("home-next-draft-title", eventTitle);
-  setText("home-next-draft-location", eventSubtitle);
-
-  setText("next-draft-label", eventLabel);
-  setText("next-draft-title", eventTitle);
-  setText("next-draft-location", eventSubtitle);
-
-  setText("featured-event-label", eventLabel);
-  setText("featured-event-title", eventTitle);
-  setText("featured-event-location", eventSubtitle);
 
   const eventAnchor = document.getElementById("home-featured-event-link");
 
@@ -336,7 +341,10 @@ function buildFeaturedRecords(featuredRecords) {
     card.innerHTML = `
       <span>${cleanText(record.record_title) || "Record"}</span>
       <strong>${cleanText(record.record_value) || "TBD"}</strong>
-      <p>${cleanText(record.record_holder) || "TBD"}${cleanText(record.record_year) ? ` · ${cleanText(record.record_year)}` : ""}</p>
+      <p>
+        ${cleanText(record.record_holder) || "TBD"}
+        ${cleanText(record.record_year) ? `· ${cleanText(record.record_year)}` : ""}
+      </p>
       <small>${cleanText(record.record_note) || "View record"}</small>
     `;
 
@@ -354,41 +362,53 @@ function buildFeaturedRecords(featuredRecords) {
 }
 
 /* =========================================================
-   KKL TEAMS
+   HOMEPAGE VISUAL FRANCHISE CARDS
    teams.csv
    ========================================================= */
 
-function buildHomeTeams(teams) {
-  const grid = document.getElementById("home-kkl-team-grid");
+function buildHomeFranchiseCards(teams) {
+  const grid =
+    document.getElementById("home-franchise-card-grid") ||
+    document.getElementById("home-kkl-team-grid");
 
   if (!grid) return;
 
   if (!teams || teams.length === 0) {
     grid.innerHTML = `
-      <div class="record-item">
-        <strong>KKL Teams</strong>
-        <span>TBD</span>
-      </div>
+      <a class="home-franchise-visual-card" href="teams.html">
+        <div class="home-franchise-banner">
+          <img src="images/team-primary-logo-placeholder.png" alt="Team logo">
+        </div>
+        <div class="home-franchise-card-body">
+          <strong>Teams Coming Soon</strong>
+          <span>Franchise artwork will load here.</span>
+        </div>
+      </a>
     `;
     return;
   }
 
-  const activeTeams = teams
-    .filter(team => cleanText(team.status).toLowerCase() === "active")
-    .sort((a, b) => cleanText(a.team_name).localeCompare(cleanText(b.team_name)));
+  const activeTeams = getActiveTeams(teams);
 
   grid.innerHTML = "";
 
   activeTeams.forEach(team => {
     const ownerId = cleanText(team.owner_id);
+    const teamName = cleanText(team.team_name) || "TBD";
+    const owner = cleanText(team.owner) || "TBD";
+    const teamPage = cleanText(team.team_page) || `team.html?owner=${ownerId}`;
+
     const primaryColor = cleanColor(team.primary_color, "#001f3f");
     const secondaryColor = cleanColor(team.secondary_color, "#111827");
     const decalColor = cleanColor(team.decal_color, "#facc15");
-    const teamPage = cleanText(team.team_page) || `team.html?owner=${ownerId}`;
-    const primaryLogo = getImagePath(team.primary_logo, "images/team-primary-logo-placeholder.png");
+
+    const bannerImage =
+      getImagePath(team.home_banner_image, "") ||
+      getImagePath(team.banner_image, "") ||
+      getImagePath(team.primary_logo, "images/team-primary-logo-placeholder.png");
 
     const card = document.createElement("a");
-    card.className = "home-kkl-team-card";
+    card.className = "home-franchise-visual-card";
     card.href = teamPage;
 
     card.style.setProperty("--primary-color", primaryColor);
@@ -396,13 +416,13 @@ function buildHomeTeams(teams) {
     card.style.setProperty("--decal-color", decalColor);
 
     card.innerHTML = `
-      <div class="home-kkl-team-logo">
-        <img src="${primaryLogo}" alt="${cleanText(team.team_name) || "Team"} logo" onerror="this.src='images/team-primary-logo-placeholder.png'">
+      <div class="home-franchise-banner">
+        <img src="${bannerImage}" alt="${teamName} banner" onerror="this.src='images/team-primary-logo-placeholder.png'">
       </div>
 
-      <div>
-        <strong>${cleanText(team.team_name) || "TBD"}</strong>
-        <span>${cleanText(team.owner) || "TBD"}</span>
+      <div class="home-franchise-card-body">
+        <strong>${teamName}</strong>
+        <span>${owner}</span>
       </div>
     `;
 
@@ -581,6 +601,14 @@ function getAllTimePlayerCardColors(position) {
    HELPERS
    ========================================================= */
 
+function getActiveTeams(teams) {
+  if (!teams || teams.length === 0) return [];
+
+  return teams
+    .filter(team => cleanText(team.status).toLowerCase() === "active")
+    .sort((a, b) => cleanText(a.team_name).localeCompare(cleanText(b.team_name)));
+}
+
 function findTeamByOwnerId(teams, ownerId) {
   if (!teams || teams.length === 0 || !ownerId) return {};
 
@@ -612,7 +640,12 @@ function countScoFinishes(scoHistory, ownerId) {
 function getImagePath(value, fallback) {
   const text = cleanText(value);
 
-  if (!text || text.toLowerCase() === "tbd" || text.toLowerCase() === "na" || text.toLowerCase() === "n/a") {
+  if (
+    !text ||
+    text.toLowerCase() === "tbd" ||
+    text.toLowerCase() === "na" ||
+    text.toLowerCase() === "n/a"
+  ) {
     return fallback;
   }
 
@@ -634,7 +667,12 @@ function cleanText(value) {
 function cleanColor(value, fallback) {
   let color = cleanText(value);
 
-  if (!color || color.toLowerCase() === "tbd" || color.toLowerCase() === "na" || color.toLowerCase() === "n/a") {
+  if (
+    !color ||
+    color.toLowerCase() === "tbd" ||
+    color.toLowerCase() === "na" ||
+    color.toLowerCase() === "n/a"
+  ) {
     return fallback;
   }
 
