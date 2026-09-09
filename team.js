@@ -59,9 +59,9 @@ async function buildTeamPage() {
       .filter(row => cleanText(row.owner_id).toLowerCase() === ownerId.toLowerCase());
 
     buildTeamIdentity(team);
-    buildTeamSnapshot(team, ownerStandings, ownerScoRows);
+    buildTeamSnapshot(team, ownerStandings);
     buildSeasonHistory(ownerStandings);
-    buildBestWorstSeasons(team, ownerStandings);
+    buildBestWorstSeasons(team, ownerStandings, ownerScoRows);
     buildPostseasonResume(team, ownerChampionships);
     buildTopPlayerSeasons(ownerPlayers);
     buildHeadToHead(ownerH2H);
@@ -166,32 +166,22 @@ function buildTeamIdentity(team) {
 
 /* =========================================================
    FRANCHISE AT-A-GLANCE
-   teams.csv + standings.csv + the-sco.csv
+   Keep only non-repetitive top stats
    ========================================================= */
 
-function buildTeamSnapshot(team, ownerStandings, ownerScoRows) {
+function buildTeamSnapshot(team, ownerStandings) {
   const lifetimeRecordFromCsv = cleanText(team.record);
   const lifetimeRecord = lifetimeRecordFromCsv || calculateLifetimeRecord(ownerStandings);
 
   const titles = cleanText(team.titles) || "TBD";
   const playoffAppearances = cleanText(team.playoff_appearances) || calculatePlayoffAppearances(ownerStandings);
-  const championshipAppearances = cleanText(team.championship_appearances) || "TBD";
-  const bestFinish = cleanText(team.best_finish) || calculateBestFinish(ownerStandings);
-  const bestRegularSeason = cleanText(team.best_regular_season) || calculateBestRegularSeason(ownerStandings);
   const averageFinish = cleanText(team.average_finish) || calculateAverageFinish(ownerStandings);
-  const location = cleanText(team.location) || "TBD";
-  const scoFinishes = cleanText(team.sco_finishes) || calculateScoFinishes(ownerScoRows, ownerStandings);
 
   setText("team-lifetime-record", lifetimeRecord);
   setText("team-win-pct", calculateWinPct(lifetimeRecord));
   setText("team-titles", titles);
   setText("team-playoffs", playoffAppearances);
-  setText("team-championship-appearances", championshipAppearances);
-  setText("team-best-finish", bestFinish);
-  setText("team-best-regular-season", bestRegularSeason);
   setText("team-average-finish", averageFinish);
-  setText("team-location-stat", location);
-  setText("team-sco-finishes", scoFinishes);
   setText("team-all-play-record", cleanText(team.all_play_record) || "TBD");
   setText("team-top-week-count", cleanText(team.top_week_count) || "TBD");
 }
@@ -245,7 +235,18 @@ function buildSeasonHistory(ownerStandings) {
    standings.csv + teams.csv fallbacks
    ========================================================= */
 
-function buildBestWorstSeasons(team, ownerStandings) {
+function buildBestWorstSeasons(team, ownerStandings, ownerScoRows) {
+  const bestRegularSeasonFromCsv =
+    cleanText(team.best_regular_season) ||
+    calculateBestRegularSeason(ownerStandings);
+
+  const scoFinishesFromCsv =
+    cleanText(team.sco_finishes) ||
+    calculateScoFinishes(ownerScoRows, ownerStandings);
+
+  setText("team-best-regular-season-extreme", bestRegularSeasonFromCsv);
+  setText("team-sco-finishes-extreme", scoFinishesFromCsv);
+
   if (!ownerStandings || ownerStandings.length === 0) {
     setText("team-best-season", cleanText(team.best_regular_season) || "TBD");
     setText("team-best-scoring-season", "TBD");
