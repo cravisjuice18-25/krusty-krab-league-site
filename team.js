@@ -10,6 +10,7 @@ async function buildTeamPage() {
     const teams = await loadCSV("data/teams.csv");
     const standings = await loadCSV("data/standings.csv");
 
+    const champions = await loadOptionalCSV("data/champions.csv");
     const teamPlayers = await loadOptionalCSV("data/team-players.csv");
     const teamH2H = await loadOptionalCSV("data/team-h2h.csv");
     const teamRecords = await loadOptionalCSV("data/team-records.csv");
@@ -40,10 +41,15 @@ async function buildTeamPage() {
     const ownerScoRows = scoHistory
       .filter(row => cleanText(row.owner_id).toLowerCase() === ownerId.toLowerCase());
 
+    const ownerChampionships = champions
+      .filter(row => cleanText(row.champion_owner_id).toLowerCase() === ownerId.toLowerCase())
+      .sort((a, b) => Number(b.year) - Number(a.year));
+
     buildTeamIdentity(team);
     buildTeamSnapshot(team, ownerStandings, ownerScoRows);
     buildSeasonHistory(ownerStandings);
-    buildBestWorstSeasons(ownerStandings);
+    buildBestWorstSeasons(team, ownerStandings);
+    buildPostseasonResume(team, ownerChampionships);
     buildTopPlayerSeasons(ownerPlayers);
     buildHeadToHead(ownerH2H);
     buildTeamRecords(ownerRecords);
@@ -76,24 +82,29 @@ function getOwnerIdFromUrl() {
 }
 
 /* =========================================================
-   TEAM IDENTITY
+   TEAM IDENTITY / HEADER
+   teams.csv
    ========================================================= */
 
 function buildTeamIdentity(team) {
   const primaryColor = cleanColor(team.primary_color, "#001f3f");
-  const secondaryColor = cleanColor(team.secondary_color, "#ffffff");
+  const secondaryColor = cleanColor(team.secondary_color, "#111827");
   const decalColor = cleanColor(team.decal_color, "#facc15");
 
   const teamName = cleanText(team.team_name) || "Franchise Profile";
   const owner = cleanText(team.owner) || "TBD";
   const location = cleanText(team.location) || "TBD";
   const status = cleanText(team.status) || "Active";
+  const abbreviation = cleanText(team.team_abbreviation) || "TBD";
+  const establishedYear = cleanText(team.established_year) || "TBD";
+  const titles = cleanText(team.titles) || "TBD";
   const tagline = cleanText(team.tagline) || "TBD";
   const franchiseStory = cleanText(team.franchise_story) || "TBD";
 
   const primaryLogo = getImagePath(team.primary_logo, "images/team-primary-logo-placeholder.png");
   const secondaryLogo = getImagePath(team.secondary_logo, "images/team-secondary-logo-placeholder.png");
   const uniformImage = getImagePath(team.uniform_image, "images/team-uniform-placeholder.png");
+  const aboutImage = getImagePath(team.about_image, "images/franchise-about/franchise-about-placeholder.png");
 
   document.title = `${teamName} | Krusty Krab League`;
 
@@ -110,6 +121,9 @@ function buildTeamIdentity(team) {
   setText("team-tagline", tagline);
   setText("team-owner", `Owner: ${owner}`);
   setText("team-location", `Location: ${location}`);
+  setText("team-abbreviation", `Abbreviation: ${abbreviation}`);
+  setText("team-established", `Established: ${establishedYear}`);
+  setText("team-header-titles", `Championships: ${titles}`);
   setText("team-status", `${status} Franchise`);
 
   setText("team-story-title", `About ${teamName}`);
@@ -119,35 +133,47 @@ function buildTeamIdentity(team) {
   setImage("team-brand-primary-logo", primaryLogo, `${teamName} primary logo`);
   setImage("team-brand-secondary-logo", secondaryLogo, `${teamName} secondary logo`);
   setImage("team-uniform-image", uniformImage, `${teamName} uniform`);
+  setImage("team-about-image", aboutImage, `${teamName} franchise image`);
 
   setText("team-uniform-title", `${teamName} Uniform`);
   setText("team-footer", `Krusty Krab League · ${teamName}`);
 }
 
 /* =========================================================
-   SNAPSHOT STATS
+   FRANCHISE AT-A-GLANCE
+   teams.csv + standings.csv + the-sco.csv
    ========================================================= */
 
 function buildTeamSnapshot(team, ownerStandings, ownerScoRows) {
-  const lifetimeRecord = calculateLifetimeRecord(ownerStandings);
+  const lifetimeRecordFromCsv = cleanText(team.record);
+  const lifetimeRecord = lifetimeRecordFromCsv || calculateLifetimeRecord(ownerStandings);
 
   const titles = cleanText(team.titles) || "TBD";
   const playoffAppearances = cleanText(team.playoff_appearances) || calculatePlayoffAppearances(ownerStandings);
-  const scoFinishes = cleanText(team.sco_finishes) || calculateScoFinishes(ownerScoRows, ownerStandings);
+  const championshipAppearances = cleanText(team.championship_appearances) || "TBD";
+  const bestFinish = cleanText(team.best_finish) || calculateBestFinish(ownerStandings);
+  const bestRegularSeason = cleanText(team.best_regular_season) || calculateBestRegularSeason(ownerStandings);
   const averageFinish = cleanText(team.average_finish) || calculateAverageFinish(ownerStandings);
+  const location = cleanText(team.location) || "TBD";
+  const scoFinishes = cleanText(team.sco_finishes) || calculateScoFinishes(ownerScoRows, ownerStandings);
 
   setText("team-lifetime-record", lifetimeRecord);
   setText("team-win-pct", calculateWinPct(lifetimeRecord));
   setText("team-titles", titles);
   setText("team-playoffs", playoffAppearances);
-  setText("team-sco-finishes", scoFinishes);
+  setText("team-championship-appearances", championshipAppearances);
+  setText("team-best-finish", bestFinish);
+  setText("team-best-regular-season", bestRegularSeason);
   setText("team-average-finish", averageFinish);
+  setText("team-location-stat", location);
+  setText("team-sco-finishes", scoFinishes);
   setText("team-all-play-record", cleanText(team.all_play_record) || "TBD");
   setText("team-top-week-count", cleanText(team.top_week_count) || "TBD");
 }
 
 /* =========================================================
    SEASON HISTORY
+   standings.csv
    ========================================================= */
 
 function buildSeasonHistory(ownerStandings) {
@@ -190,21 +216,32 @@ function buildSeasonHistory(ownerStandings) {
 }
 
 /* =========================================================
-   BEST / WORST SEASONS
+   FRANCHISE HIGHS AND LOWS
+   standings.csv + teams.csv fallbacks
    ========================================================= */
 
-function buildBestWorstSeasons(ownerStandings) {
+function buildBestWorstSeasons(team, ownerStandings) {
   if (!ownerStandings || ownerStandings.length === 0) {
-    setText("team-best-season", "TBD");
+    setText("team-best-season", cleanText(team.best_regular_season) || "TBD");
     setText("team-best-scoring-season", "TBD");
-    setText("team-most-painful-finish", "TBD");
+    setText("team-best-finish-extreme", cleanText(team.best_finish) || "TBD");
     setText("team-worst-season", "TBD");
+    setText("team-worst-scoring-season", "TBD");
+    setText("team-worst-finish", "TBD");
     return;
   }
 
+  const recordRows = ownerStandings.filter(row => parseRecord(cleanText(row.record)));
   const rankedRows = ownerStandings.filter(row => !Number.isNaN(Number(row.rank)));
   const scoringRows = ownerStandings.filter(row => !Number.isNaN(Number(row.points_for)));
-  const ratingRows = ownerStandings.filter(row => !Number.isNaN(Number(row.team_rating)));
+
+  const bestRecord = recordRows.length
+    ? [...recordRows].sort((a, b) => compareRecords(b, a))[0]
+    : null;
+
+  const worstRecord = recordRows.length
+    ? [...recordRows].sort((a, b) => compareRecords(a, b))[0]
+    : null;
 
   const bestFinish = rankedRows.length
     ? [...rankedRows].sort((a, b) => Number(a.rank) - Number(b.rank))[0]
@@ -218,15 +255,15 @@ function buildBestWorstSeasons(ownerStandings) {
     ? [...scoringRows].sort((a, b) => Number(b.points_for) - Number(a.points_for))[0]
     : null;
 
-  const bestRating = ratingRows.length
-    ? [...ratingRows].sort((a, b) => Number(b.team_rating) - Number(a.team_rating))[0]
+  const worstScoring = scoringRows.length
+    ? [...scoringRows].sort((a, b) => Number(a.points_for) - Number(b.points_for))[0]
     : null;
 
   setText(
     "team-best-season",
-    bestFinish
-      ? `${cleanText(bestFinish.year)} · ${cleanText(bestFinish.team) || "TBD"} · ${ordinal(bestFinish.rank)} place · ${cleanText(bestFinish.record) || "TBD"}`
-      : "TBD"
+    bestRecord
+      ? `${cleanText(bestRecord.year)} · ${cleanText(bestRecord.team) || "TBD"} · ${cleanText(bestRecord.record) || "TBD"} · Finished ${ordinal(bestRecord.rank)}`
+      : cleanText(team.best_regular_season) || "TBD"
   );
 
   setText(
@@ -237,22 +274,93 @@ function buildBestWorstSeasons(ownerStandings) {
   );
 
   setText(
-    "team-most-painful-finish",
-    bestRating
-      ? `${cleanText(bestRating.year)} · ${cleanText(bestRating.team) || "TBD"} · Rating ${formatNumber(bestRating.team_rating)} · Finished ${ordinal(bestRating.rank)}`
-      : "TBD"
+    "team-best-finish-extreme",
+    bestFinish
+      ? `${cleanText(bestFinish.year)} · ${cleanText(bestFinish.team) || "TBD"} · ${ordinal(bestFinish.rank)} place · ${cleanText(bestFinish.record) || "TBD"}`
+      : cleanText(team.best_finish) || "TBD"
   );
 
   setText(
     "team-worst-season",
+    worstRecord
+      ? `${cleanText(worstRecord.year)} · ${cleanText(worstRecord.team) || "TBD"} · ${cleanText(worstRecord.record) || "TBD"} · Finished ${ordinal(worstRecord.rank)}`
+      : "TBD"
+  );
+
+  setText(
+    "team-worst-scoring-season",
+    worstScoring
+      ? `${cleanText(worstScoring.year)} · ${formatNumber(worstScoring.points_for)} points · ${formatNumber(worstScoring.avg_for)} average`
+      : "TBD"
+  );
+
+  setText(
+    "team-worst-finish",
     worstFinish
       ? `${cleanText(worstFinish.year)} · ${cleanText(worstFinish.team) || "TBD"} · ${ordinal(worstFinish.rank)} place · ${cleanText(worstFinish.record) || "TBD"}`
+      : "TBD"
+  );
+
+  setText(
+    "team-most-painful-finish",
+    bestFinish
+      ? `${cleanText(bestFinish.year)} · ${cleanText(bestFinish.team) || "TBD"} · ${ordinal(bestFinish.rank)} place`
       : "TBD"
   );
 }
 
 /* =========================================================
+   POSTSEASON RESUME
+   teams.csv + champions.csv
+   ========================================================= */
+
+function buildPostseasonResume(team, ownerChampionships) {
+  const titles = cleanText(team.titles) || "TBD";
+  const championshipAppearances = cleanText(team.championship_appearances) || "TBD";
+  const championshipRecord = cleanText(team.championship_record) || "TBD";
+  const playoffAppearances = cleanText(team.playoff_appearances) || "TBD";
+  const playoffRecord = cleanText(team.playoff_record) || "TBD";
+  const numberOneSeeds = cleanText(team.number_one_seeds) || "TBD";
+  const bestPlayoffRun = cleanText(team.best_playoff_run) || "TBD";
+  const mostRecentPlayoffAppearance = cleanText(team.most_recent_playoff_appearance) || "TBD";
+
+  setText("team-postseason-titles", titles);
+  setText("team-postseason-appearances", championshipAppearances);
+  setText("team-championship-record", championshipRecord);
+  setText("team-postseason-playoffs", playoffAppearances);
+  setText("team-playoff-record", playoffRecord);
+  setText("team-number-one-seeds", numberOneSeeds);
+  setText("team-best-playoff-run", bestPlayoffRun);
+  setText("team-most-recent-playoff-appearance", mostRecentPlayoffAppearance);
+
+  buildChampionshipYearBadges(ownerChampionships);
+}
+
+function buildChampionshipYearBadges(ownerChampionships) {
+  const badgeWrap = document.getElementById("team-championship-year-badges");
+
+  if (!badgeWrap) return;
+
+  if (!ownerChampionships || ownerChampionships.length === 0) {
+    badgeWrap.innerHTML = `<span>No championship banners yet.</span>`;
+    return;
+  }
+
+  badgeWrap.innerHTML = "";
+
+  ownerChampionships
+    .sort((a, b) => Number(a.year) - Number(b.year))
+    .forEach(row => {
+      const badge = document.createElement("span");
+      badge.className = "championship-year-badge";
+      badge.textContent = cleanText(row.year) || "TBD";
+      badgeWrap.appendChild(badge);
+    });
+}
+
+/* =========================================================
    TOP PLAYER SEASONS
+   team-players.csv
    ========================================================= */
 
 function buildTopPlayerSeasons(ownerPlayers) {
@@ -305,8 +413,8 @@ function buildTopPlayerSeasons(ownerPlayers) {
 }
 
 /* =========================================================
-   SORTABLE HEAD TO HEAD
-   CSV:
+   HEAD TO HEAD
+   team-h2h.csv
    owner_id,opponent_id,opponent_name,total_games,record,win_pct,points_for,points_against,margin
    ========================================================= */
 
@@ -316,6 +424,8 @@ function buildHeadToHead(rows) {
   if (!tableBody) return;
 
   const cleanRows = rows || [];
+
+  buildHeadToHeadCallouts(cleanRows);
 
   if (cleanRows.length === 0) {
     tableBody.innerHTML = `
@@ -329,11 +439,52 @@ function buildHeadToHead(rows) {
   }
 
   const defaultSortedRows = [...cleanRows].sort((a, b) => {
-    return cleanText(a.opponent_name).localeCompare(cleanText(b.opponent_name));
+    return getOpponentName(a).localeCompare(getOpponentName(b));
   });
 
   renderHeadToHeadRows(defaultSortedRows);
   setupHeadToHeadSorting(cleanRows);
+}
+
+function buildHeadToHeadCallouts(rows) {
+  const minimumGames = 3;
+
+  const qualifiedRows = (rows || []).filter(row => {
+    const games = Number(cleanText(row.total_games) || cleanText(row.totalGames)) || 0;
+    return games >= minimumGames;
+  });
+
+  if (qualifiedRows.length === 0) {
+    setText("team-h2h-nemesis", "TBD");
+    setText("team-h2h-nemesis-detail", "Needs at least 3 games against an opponent.");
+    setText("team-h2h-victim", "TBD");
+    setText("team-h2h-victim-detail", "Needs at least 3 games against an opponent.");
+    return;
+  }
+
+  const nemesis = [...qualifiedRows].sort((a, b) => {
+    return parsePercentOrDecimal(cleanText(a.win_pct)) - parsePercentOrDecimal(cleanText(b.win_pct));
+  })[0];
+
+  const favoriteVictim = [...qualifiedRows].sort((a, b) => {
+    return parsePercentOrDecimal(cleanText(b.win_pct)) - parsePercentOrDecimal(cleanText(a.win_pct));
+  })[0];
+
+  if (nemesis) {
+    setText("team-h2h-nemesis", getOpponentName(nemesis));
+    setText(
+      "team-h2h-nemesis-detail",
+      `${cleanText(nemesis.record) || "TBD"} · ${cleanText(nemesis.win_pct) || "TBD"} win rate · ${cleanText(nemesis.total_games) || "TBD"} games`
+    );
+  }
+
+  if (favoriteVictim) {
+    setText("team-h2h-victim", getOpponentName(favoriteVictim));
+    setText(
+      "team-h2h-victim-detail",
+      `${cleanText(favoriteVictim.record) || "TBD"} · ${cleanText(favoriteVictim.win_pct) || "TBD"} win rate · ${cleanText(favoriteVictim.total_games) || "TBD"} games`
+    );
+  }
 }
 
 function renderHeadToHeadRows(rows) {
@@ -344,13 +495,7 @@ function renderHeadToHeadRows(rows) {
   tableBody.innerHTML = "";
 
   rows.forEach(row => {
-    const opponent =
-      cleanText(row.opponent_name) ||
-      cleanText(row.opponent) ||
-      cleanText(row.opponent_owner) ||
-      cleanText(row.opponent_team) ||
-      "TBD";
-
+    const opponent = getOpponentName(row);
     const tr = document.createElement("tr");
 
     tr.innerHTML = `
@@ -428,6 +573,16 @@ function getHeadToHeadSortValue(row, key) {
   return 0;
 }
 
+function getOpponentName(row) {
+  return (
+    cleanText(row.opponent_name) ||
+    cleanText(row.opponent) ||
+    cleanText(row.opponent_owner) ||
+    cleanText(row.opponent_team) ||
+    "TBD"
+  );
+}
+
 function parsePercentOrDecimal(value) {
   const cleaned = cleanText(value).replace("%", "");
 
@@ -446,6 +601,7 @@ function parsePercentOrDecimal(value) {
 
 /* =========================================================
    RECORDS HELD
+   team-records.csv
    ========================================================= */
 
 function buildTeamRecords(ownerRecords) {
@@ -583,6 +739,68 @@ function calculateAverageFinish(ownerStandings) {
   return average.toFixed(2);
 }
 
+function calculateBestFinish(ownerStandings) {
+  const rows = ownerStandings.filter(row => !Number.isNaN(Number(row.rank)));
+
+  if (rows.length === 0) return "TBD";
+
+  const best = [...rows].sort((a, b) => Number(a.rank) - Number(b.rank))[0];
+
+  return `${ordinal(best.rank)} Place · ${cleanText(best.year) || "TBD"}`;
+}
+
+function calculateBestRegularSeason(ownerStandings) {
+  const rows = ownerStandings.filter(row => parseRecord(cleanText(row.record)));
+
+  if (rows.length === 0) return "TBD";
+
+  const best = [...rows].sort((a, b) => compareRecords(b, a))[0];
+
+  return `${cleanText(best.record) || "TBD"} · ${cleanText(best.year) || "TBD"}`;
+}
+
+function compareRecords(a, b) {
+  const recordA = parseRecord(cleanText(a.record));
+  const recordB = parseRecord(cleanText(b.record));
+
+  if (!recordA && !recordB) return 0;
+  if (!recordA) return -1;
+  if (!recordB) return 1;
+
+  if (recordA.winPct !== recordB.winPct) {
+    return recordA.winPct - recordB.winPct;
+  }
+
+  if (recordA.wins !== recordB.wins) {
+    return recordA.wins - recordB.wins;
+  }
+
+  return recordB.losses - recordA.losses;
+}
+
+function parseRecord(record) {
+  const cleaned = cleanText(record);
+
+  if (!cleaned || !cleaned.includes("-")) return null;
+
+  const parts = cleaned.split("-").map(value => Number(value));
+
+  const wins = Number(parts[0]) || 0;
+  const losses = Number(parts[1]) || 0;
+  const ties = Number(parts[2]) || 0;
+  const total = wins + losses + ties;
+
+  if (!total) return null;
+
+  return {
+    wins,
+    losses,
+    ties,
+    total,
+    winPct: (wins + ties * 0.5) / total
+  };
+}
+
 function getPlayoffText(rank) {
   const numericRank = Number(rank);
 
@@ -634,6 +852,11 @@ function showTeamError(title, message) {
       </tr>
     `;
   }
+
+  setText("team-h2h-nemesis", "TBD");
+  setText("team-h2h-nemesis-detail", message);
+  setText("team-h2h-victim", "TBD");
+  setText("team-h2h-victim-detail", message);
 }
 
 /* =========================================================
@@ -662,6 +885,10 @@ function setImage(id, src, altText) {
 }
 
 function getPlaceholderForImage(id) {
+  if (id.includes("about")) {
+    return "images/franchise-about/franchise-about-placeholder.png";
+  }
+
   if (id.includes("uniform")) {
     return "images/team-uniform-placeholder.png";
   }
@@ -676,7 +903,12 @@ function getPlaceholderForImage(id) {
 function getImagePath(value, fallback) {
   const text = cleanText(value);
 
-  if (!text || text.toLowerCase() === "tbd" || text.toLowerCase() === "na" || text.toLowerCase() === "n/a") {
+  if (
+    !text ||
+    text.toLowerCase() === "tbd" ||
+    text.toLowerCase() === "na" ||
+    text.toLowerCase() === "n/a"
+  ) {
     return fallback;
   }
 
@@ -690,7 +922,12 @@ function cleanText(value) {
 function cleanColor(value, fallback) {
   let color = cleanText(value);
 
-  if (!color || color.toLowerCase() === "tbd" || color.toLowerCase() === "na" || color.toLowerCase() === "n/a") {
+  if (
+    !color ||
+    color.toLowerCase() === "tbd" ||
+    color.toLowerCase() === "na" ||
+    color.toLowerCase() === "n/a"
+  ) {
     return fallback;
   }
 
