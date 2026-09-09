@@ -16,6 +16,10 @@ async function buildTeamPage() {
     const teamRecords = await loadOptionalCSV("data/team-records.csv");
     const scoHistory = await loadOptionalCSV("data/the-sco.csv");
 
+    const teamLegends = await loadOptionalCSV("data/team-legends.csv");
+    const teamDraftHistory = await loadOptionalCSV("data/team-draft-history.csv");
+    const teamDraftCallouts = await loadOptionalCSV("data/team-draft-callouts.csv");
+
     const team = teams.find(row => {
       return cleanText(row.owner_id).toLowerCase() === ownerId.toLowerCase();
     });
@@ -45,6 +49,15 @@ async function buildTeamPage() {
       .filter(row => cleanText(row.champion_owner_id).toLowerCase() === ownerId.toLowerCase())
       .sort((a, b) => Number(b.year) - Number(a.year));
 
+    const ownerLegends = teamLegends
+      .filter(row => cleanText(row.owner_id).toLowerCase() === ownerId.toLowerCase());
+
+    const ownerDraftHistory = teamDraftHistory
+      .filter(row => cleanText(row.owner_id).toLowerCase() === ownerId.toLowerCase());
+
+    const ownerDraftCallouts = teamDraftCallouts
+      .filter(row => cleanText(row.owner_id).toLowerCase() === ownerId.toLowerCase());
+
     buildTeamIdentity(team);
     buildTeamSnapshot(team, ownerStandings, ownerScoRows);
     buildSeasonHistory(ownerStandings);
@@ -52,7 +65,10 @@ async function buildTeamPage() {
     buildPostseasonResume(team, ownerChampionships);
     buildTopPlayerSeasons(ownerPlayers);
     buildHeadToHead(ownerH2H);
+    buildFranchiseLegends(ownerLegends);
+    buildDraftHistory(ownerDraftHistory, ownerDraftCallouts, ownerId);
     buildTeamRecords(ownerRecords);
+    buildRelatedFranchiseLinks(ownerId);
 
   } catch (error) {
     console.error("Team page error:", error);
@@ -117,6 +133,11 @@ function buildTeamIdentity(team) {
     hero.style.setProperty("--decal-color", decalColor);
   }
 
+  document.documentElement.style.setProperty("--team-color", primaryColor);
+  document.documentElement.style.setProperty("--primary-color", primaryColor);
+  document.documentElement.style.setProperty("--secondary-color", secondaryColor);
+  document.documentElement.style.setProperty("--decal-color", decalColor);
+
   setText("team-name", teamName);
   setText("team-tagline", tagline);
   setText("team-owner", `Owner: ${owner}`);
@@ -128,6 +149,10 @@ function buildTeamIdentity(team) {
 
   setText("team-story-title", `About ${teamName}`);
   setText("team-story", franchiseStory);
+
+  setText("team-primary-color-label", primaryColor);
+  setText("team-secondary-color-label", secondaryColor);
+  setText("team-decal-color-label", decalColor);
 
   setImage("team-primary-logo", primaryLogo, `${teamName} logo`);
   setImage("team-brand-primary-logo", primaryLogo, `${teamName} primary logo`);
@@ -300,13 +325,6 @@ function buildBestWorstSeasons(team, ownerStandings) {
       ? `${cleanText(worstFinish.year)} · ${cleanText(worstFinish.team) || "TBD"} · ${ordinal(worstFinish.rank)} place · ${cleanText(worstFinish.record) || "TBD"}`
       : "TBD"
   );
-
-  setText(
-    "team-most-painful-finish",
-    bestFinish
-      ? `${cleanText(bestFinish.year)} · ${cleanText(bestFinish.team) || "TBD"} · ${ordinal(bestFinish.rank)} place`
-      : "TBD"
-  );
 }
 
 /* =========================================================
@@ -415,7 +433,6 @@ function buildTopPlayerSeasons(ownerPlayers) {
 /* =========================================================
    HEAD TO HEAD
    team-h2h.csv
-   owner_id,opponent_id,opponent_name,total_games,record,win_pct,points_for,points_against,margin
    ========================================================= */
 
 function buildHeadToHead(rows) {
@@ -600,6 +617,173 @@ function parsePercentOrDecimal(value) {
 }
 
 /* =========================================================
+   FRANCHISE LEGENDS
+   team-legends.csv
+   ========================================================= */
+
+function buildFranchiseLegends(ownerLegends) {
+  const grid = document.getElementById("franchise-legends-grid");
+
+  if (!grid) return;
+
+  if (!ownerLegends || ownerLegends.length === 0) {
+    grid.innerHTML = `
+      <article class="franchise-legend-card">
+        <div class="franchise-legend-image">
+          <img src="images/franchise-legends/player-placeholder.png" alt="Player">
+        </div>
+        <div class="franchise-legend-body">
+          <span>Franchise Legend</span>
+          <h3>TBD</h3>
+          <p>Legend data will load here.</p>
+        </div>
+      </article>
+    `;
+    return;
+  }
+
+  const sortedLegends = [...ownerLegends]
+    .sort((a, b) => Number(a.sort_order) - Number(b.sort_order))
+    .slice(0, 3);
+
+  grid.innerHTML = "";
+
+  sortedLegends.forEach(row => {
+    const player = cleanText(row.player) || "TBD";
+    const position = cleanText(row.position) || "TBD";
+    const distinction = cleanText(row.distinction) || "Franchise Legend";
+    const description = cleanText(row.description) || "TBD";
+    const imagePath = getImagePath(row.image_path, "images/franchise-legends/player-placeholder.png");
+
+    const card = document.createElement("article");
+    card.className = "franchise-legend-card";
+
+    card.innerHTML = `
+      <div class="franchise-legend-image">
+        <img src="${imagePath}" alt="${player}" onerror="this.src='images/franchise-legends/player-placeholder.png'">
+      </div>
+
+      <div class="franchise-legend-body">
+        <span>${distinction}</span>
+        <h3>${player}</h3>
+        <p>${position} · ${description}</p>
+      </div>
+    `;
+
+    grid.appendChild(card);
+  });
+}
+
+/* =========================================================
+   DRAFT HISTORY SUMMARY
+   team-draft-history.csv + team-draft-callouts.csv
+   ========================================================= */
+
+function buildDraftHistory(ownerDraftHistory, ownerDraftCallouts, ownerId) {
+  buildFirstRoundPicks(ownerDraftHistory);
+  buildDraftCallouts(ownerDraftCallouts);
+  buildDraftHistoryLink(ownerId);
+}
+
+function buildFirstRoundPicks(ownerDraftHistory) {
+  const list = document.getElementById("team-first-round-list");
+
+  if (!list) return;
+
+  const firstRoundPicks = (ownerDraftHistory || [])
+    .filter(row => cleanText(row.round) === "1" || cleanText(row.pick_number).startsWith("1."))
+    .sort((a, b) => Number(b.year) - Number(a.year))
+    .slice(0, 5);
+
+  if (firstRoundPicks.length === 0) {
+    list.innerHTML = `
+      <div class="record-item">
+        <strong>Last 5 First-Round Picks</strong>
+        <span>TBD</span>
+      </div>
+    `;
+    return;
+  }
+
+  list.innerHTML = "";
+
+  firstRoundPicks.forEach(row => {
+    const player = cleanText(row.player) || "TBD";
+    const year = cleanText(row.year) || "TBD";
+    const pickNumber = cleanText(row.pick_number) || "TBD";
+    const position = cleanText(row.position) || "TBD";
+    const nflTeam = cleanText(row.nfl_team);
+    const imagePath = getImagePath(row.image_path, "images/draft-headshots/player-placeholder.png");
+
+    const item = document.createElement("div");
+    item.className = "first-round-pick-item";
+
+    item.innerHTML = `
+      <div class="first-round-pick-image">
+        <img src="${imagePath}" alt="${player}" onerror="this.src='images/draft-headshots/player-placeholder.png'">
+      </div>
+
+      <div class="first-round-pick-details">
+        <span>${year} · Pick ${pickNumber}</span>
+        <strong>${player}</strong>
+        <small>${position}${nflTeam ? ` · ${nflTeam}` : ""}</small>
+      </div>
+    `;
+
+    list.appendChild(item);
+  });
+}
+
+function buildDraftCallouts(ownerDraftCallouts) {
+  const grid = document.getElementById("team-draft-callout-grid");
+
+  if (!grid) return;
+
+  if (!ownerDraftCallouts || ownerDraftCallouts.length === 0) {
+    grid.innerHTML = `
+      <div class="draft-callout-card">
+        <span>Best Draft Pick</span>
+        <strong>TBD</strong>
+        <p>Draft callouts will load here.</p>
+      </div>
+    `;
+    return;
+  }
+
+  const order = ["best_pick", "worst_pick", "most_position"];
+
+  const sortedCallouts = [...ownerDraftCallouts].sort((a, b) => {
+    const aIndex = order.indexOf(cleanText(a.callout_type));
+    const bIndex = order.indexOf(cleanText(b.callout_type));
+
+    return (aIndex === -1 ? 999 : aIndex) - (bIndex === -1 ? 999 : bIndex);
+  });
+
+  grid.innerHTML = "";
+
+  sortedCallouts.slice(0, 3).forEach(row => {
+    const card = document.createElement("div");
+    card.className = "draft-callout-card";
+
+    card.innerHTML = `
+      <span>${cleanText(row.title) || "Draft Callout"}</span>
+      <strong>${cleanText(row.value) || "TBD"}</strong>
+      <p>${cleanText(row.description) || "TBD"}</p>
+    `;
+
+    grid.appendChild(card);
+  });
+}
+
+function buildDraftHistoryLink(ownerId) {
+  const link = document.getElementById("team-draft-history-link");
+
+  if (!link) return;
+
+  link.href = `draft.html?owner=${ownerId}`;
+}
+
+/* =========================================================
    RECORDS HELD
    team-records.csv
    ========================================================= */
@@ -655,6 +839,25 @@ function buildTeamRecords(ownerRecords) {
 
     list.appendChild(item);
   });
+}
+
+/* =========================================================
+   RELATED FRANCHISE LINKS
+   ========================================================= */
+
+function buildRelatedFranchiseLinks(ownerId) {
+  const links = document.getElementById("related-franchise-links");
+
+  if (!links) return;
+
+  links.innerHTML = `
+    <a href="draft.html?owner=${ownerId}">Full Draft History</a>
+    <a href="champions.html">Championship History</a>
+    <a href="records.html">Records</a>
+    <a href="seasons.html?owner=${ownerId}">Seasons</a>
+    <a href="uniforms.html">Uniform Gallery</a>
+    <a href="head-to-head.html?owner=${ownerId}">Head-to-Head</a>
+  `;
 }
 
 /* =========================================================
