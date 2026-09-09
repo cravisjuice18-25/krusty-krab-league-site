@@ -150,10 +150,6 @@ function buildTeamIdentity(team) {
   setText("team-story-title", `About ${teamName}`);
   setText("team-story", franchiseStory);
 
-  setText("team-primary-color-label", primaryColor);
-  setText("team-secondary-color-label", secondaryColor);
-  setText("team-decal-color-label", decalColor);
-
   setImage("team-primary-logo", primaryLogo, `${teamName} logo`);
   setImage("team-brand-primary-logo", primaryLogo, `${teamName} primary logo`);
   setImage("team-brand-secondary-logo", secondaryLogo, `${teamName} secondary logo`);
@@ -231,7 +227,7 @@ function buildSeasonHistory(ownerStandings) {
 }
 
 /* =========================================================
-   FRANCHISE HIGHS AND LOWS
+   REGULAR SEASON HIGHS AND LOWS
    standings.csv + teams.csv fallbacks
    ========================================================= */
 
@@ -329,28 +325,24 @@ function buildBestWorstSeasons(team, ownerStandings, ownerScoRows) {
 }
 
 /* =========================================================
-   POSTSEASON RESUME
+   PLAYOFF PROFILE
    teams.csv + champions.csv
    ========================================================= */
 
 function buildPostseasonResume(team, ownerChampionships) {
   const titles = cleanText(team.titles) || "TBD";
   const championshipAppearances = cleanText(team.championship_appearances) || "TBD";
-  const championshipRecord = cleanText(team.championship_record) || "TBD";
   const playoffAppearances = cleanText(team.playoff_appearances) || "TBD";
   const playoffRecord = cleanText(team.playoff_record) || "TBD";
+  const playoffWinPct = calculateWinPct(playoffRecord);
   const numberOneSeeds = cleanText(team.number_one_seeds) || "TBD";
-  const bestPlayoffRun = cleanText(team.best_playoff_run) || "TBD";
-  const mostRecentPlayoffAppearance = cleanText(team.most_recent_playoff_appearance) || "TBD";
 
-  setText("team-postseason-titles", titles);
-  setText("team-postseason-appearances", championshipAppearances);
-  setText("team-championship-record", championshipRecord);
   setText("team-postseason-playoffs", playoffAppearances);
   setText("team-playoff-record", playoffRecord);
+  setText("team-playoff-win-pct", playoffWinPct);
+  setText("team-postseason-appearances", championshipAppearances);
+  setText("team-postseason-titles", titles);
   setText("team-number-one-seeds", numberOneSeeds);
-  setText("team-best-playoff-run", bestPlayoffRun);
-  setText("team-most-recent-playoff-appearance", mostRecentPlayoffAppearance);
 
   buildChampionshipYearBadges(ownerChampionships);
 }
@@ -620,6 +612,8 @@ function parsePercentOrDecimal(value) {
 /* =========================================================
    FRANCHISE LEGENDS
    team-legends.csv
+   Fixed display categories:
+   Franchise GOAT, Best Draft Pick, Fan Favorite
    ========================================================= */
 
 function buildFranchiseLegends(ownerLegends) {
@@ -627,33 +621,24 @@ function buildFranchiseLegends(ownerLegends) {
 
   if (!grid) return;
 
-  if (!ownerLegends || ownerLegends.length === 0) {
-    grid.innerHTML = `
-      <article class="franchise-legend-card">
-        <div class="franchise-legend-image">
-          <img src="images/franchise-legends/player-placeholder.png" alt="Player">
-        </div>
-        <div class="franchise-legend-body">
-          <span>Franchise Legend</span>
-          <h3>TBD</h3>
-          <p>Legend data will load here.</p>
-        </div>
-      </article>
-    `;
-    return;
-  }
-
-  const sortedLegends = [...ownerLegends]
-    .sort((a, b) => Number(a.sort_order) - Number(b.sort_order))
-    .slice(0, 3);
+  const categories = [
+    "Franchise GOAT",
+    "Best Draft Pick",
+    "Fan Favorite"
+  ];
 
   grid.innerHTML = "";
 
-  sortedLegends.forEach(row => {
+  categories.forEach((category, index) => {
+    const row = (ownerLegends || []).find(legend => {
+      return cleanText(legend.distinction).toLowerCase() === category.toLowerCase();
+    }) || (ownerLegends || []).find(legend => {
+      return Number(legend.sort_order) === index + 1;
+    }) || {};
+
     const player = cleanText(row.player) || "TBD";
     const position = cleanText(row.position) || "TBD";
-    const distinction = cleanText(row.distinction) || "Franchise Legend";
-    const description = cleanText(row.description) || "TBD";
+    const description = cleanText(row.description) || "Legend data will load here.";
     const imagePath = getImagePath(row.image_path, "images/franchise-legends/player-placeholder.png");
 
     const card = document.createElement("article");
@@ -665,7 +650,7 @@ function buildFranchiseLegends(ownerLegends) {
       </div>
 
       <div class="franchise-legend-body">
-        <span>${distinction}</span>
+        <span>${category}</span>
         <h3>${player}</h3>
         <p>${position} · ${description}</p>
       </div>
@@ -698,10 +683,16 @@ function buildFirstRoundPicks(ownerDraftHistory) {
 
   if (firstRoundPicks.length === 0) {
     list.innerHTML = `
-      <div class="record-item">
-        <strong>Last 5 First-Round Picks</strong>
-        <span>TBD</span>
-      </div>
+      <article class="first-round-pick-card">
+        <div class="first-round-pick-image">
+          <img src="images/draft-headshots/player-placeholder.png" alt="Player">
+        </div>
+        <div class="first-round-pick-details">
+          <span>Year · Pick</span>
+          <strong>TBD</strong>
+          <small>Position</small>
+        </div>
+      </article>
     `;
     return;
   }
@@ -716,8 +707,8 @@ function buildFirstRoundPicks(ownerDraftHistory) {
     const nflTeam = cleanText(row.nfl_team);
     const imagePath = getImagePath(row.image_path, "images/draft-headshots/player-placeholder.png");
 
-    const item = document.createElement("div");
-    item.className = "first-round-pick-item";
+    const item = document.createElement("article");
+    item.className = "first-round-pick-card";
 
     item.innerHTML = `
       <div class="first-round-pick-image">
@@ -941,16 +932,6 @@ function calculateAverageFinish(ownerStandings) {
   const average = finishes.reduce((sum, value) => sum + value, 0) / finishes.length;
 
   return average.toFixed(2);
-}
-
-function calculateBestFinish(ownerStandings) {
-  const rows = ownerStandings.filter(row => !Number.isNaN(Number(row.rank)));
-
-  if (rows.length === 0) return "TBD";
-
-  const best = [...rows].sort((a, b) => Number(a.rank) - Number(b.rank))[0];
-
-  return `${ordinal(best.rank)} Place · ${cleanText(best.year) || "TBD"}`;
 }
 
 function calculateBestRegularSeason(ownerStandings) {
