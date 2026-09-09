@@ -1,0 +1,4 @@
+owner_id,sort_order,player,position,distinction,description,image_path
+bard,1,Tom Brady,QB,Greatest Franchise Player,The defining player in franchise history.,images/franchise-legends/bard-brady.png
+bard,2,Ja'Marr Chase,WR,Best Draft Pick,A franchise-changing first-round hit.,images/franchise-legends/bard-chase.png
+bard,3,Derrick Henry,RB,Franchise Favorite,A big-name player tied to memorable seasons.,images/franchise-legends/bard-henry.png
