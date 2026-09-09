@@ -20,13 +20,16 @@
       <div class="team-hero-text">
         <p class="eyebrow">Franchise Profile</p>
         <h1 id="team-name">Loading Team</h1>
+
         <p class="team-tagline" id="team-tagline">
           Franchise details will load here.
         </p>
 
         <div class="team-meta">
           <span id="team-owner">Owner: Loading</span>
-          <span id="team-location">Location: TBD</span>
+          <span id="team-abbreviation">Abbreviation: TBD</span>
+          <span id="team-established">Established: TBD</span>
+          <span id="team-header-titles">Championships: TBD</span>
           <span id="team-status">Active Franchise</span>
         </div>
       </div>
@@ -37,13 +40,29 @@
   <nav class="top-nav">
     <a href="index.html">Home</a>
     <a href="teams.html">Teams</a>
-    <a href="champions.html">Champions</a>
-    <a href="records.html">Records</a>
     <a href="seasons.html">Seasons</a>
-    <a href="draft.html">Draft</a>
-    <a href="trophy-room.html">Trophy Room</a>
-    <a href="the-sco.html">The Sco</a>
-    <a href="uniforms.html">Uniforms</a>
+    <a href="records.html">Records</a>
+
+    <div class="nav-group">
+      <button class="nav-group-button" type="button">History</button>
+      <div class="nav-dropdown">
+        <a href="champions.html">Champions</a>
+        <a href="draft.html">Draft Archive</a>
+        <a href="trophy-room.html">Trophy Room</a>
+        <a href="the-sco.html">The Sco</a>
+        <a href="recaps.html">Recaps</a>
+      </div>
+    </div>
+
+    <div class="nav-group">
+      <button class="nav-group-button" type="button">More</button>
+      <div class="nav-dropdown">
+        <a href="head-to-head.html">Head-to-Head</a>
+        <a href="rules.html">Rules</a>
+        <a href="uniforms.html">Uniform Gallery</a>
+        <a href="league-alumni.html">League Alumni</a>
+      </div>
+    </div>
   </nav>
 
   <main class="page">
@@ -51,12 +70,12 @@
     <section class="team-stat-grid cleaned-team-stat-grid">
 
       <div class="team-stat-card">
-        <span>Lifetime Record</span>
+        <span>Career Record</span>
         <strong id="team-lifetime-record">TBD</strong>
       </div>
 
       <div class="team-stat-card">
-        <span>Win %</span>
+        <span>Career Win %</span>
         <strong id="team-win-pct">TBD</strong>
       </div>
 
@@ -70,9 +89,19 @@
         <strong id="team-playoffs">TBD</strong>
       </div>
 
-      <div class="team-stat-card danger-stat">
-        <span>The Sco Finishes</span>
-        <strong id="team-sco-finishes">TBD</strong>
+      <div class="team-stat-card">
+        <span>Championship Appearances</span>
+        <strong id="team-championship-appearances">TBD</strong>
+      </div>
+
+      <div class="team-stat-card">
+        <span>Best Finish</span>
+        <strong id="team-best-finish">TBD</strong>
+      </div>
+
+      <div class="team-stat-card">
+        <span>Best Regular Season</span>
+        <strong id="team-best-regular-season">TBD</strong>
       </div>
 
       <div class="team-stat-card">
@@ -80,24 +109,22 @@
         <strong id="team-average-finish">TBD</strong>
       </div>
 
-      <div class="team-stat-card">
-        <span>All-Play Record</span>
-        <strong id="team-all-play-record">TBD</strong>
-      </div>
-
-      <div class="team-stat-card">
-        <span>Top Team of the Week</span>
-        <strong id="team-top-week-count">TBD</strong>
-      </div>
-
     </section>
 
     <section class="content-card team-story-card">
-      <p class="section-label">Franchise Story</p>
-      <h2 id="team-story-title">About This Franchise</h2>
-      <p id="team-story">
-        Franchise story will load here.
-      </p>
+      <div class="team-about-layout">
+        <div>
+          <p class="section-label">About the Franchise</p>
+          <h2 id="team-story-title">About This Franchise</h2>
+          <p id="team-story">
+            Franchise story will load here.
+          </p>
+        </div>
+
+        <div class="team-about-image-wrap">
+          <img id="team-about-image" src="images/franchise-about/franchise-about-placeholder.png" alt="Franchise image">
+        </div>
+      </div>
     </section>
 
     <section class="content-card">
@@ -117,7 +144,7 @@
               <th>Finish</th>
               <th>Record</th>
               <th>Points For</th>
-              <th>Team Rating</th>
+              <th>Power Rating</th>
               <th>Playoffs</th>
               <th>Result</th>
             </tr>
@@ -132,34 +159,100 @@
       </div>
     </section>
 
-    <section class="content-row">
+    <section class="content-card">
+      <p class="section-label">Best & Worst Seasons</p>
+      <h2>Franchise Highs and Lows</h2>
 
-      <div class="content-card">
-        <p class="section-label">Best & Worst Seasons</p>
-        <h2>Franchise Highs and Lows</h2>
+      <div class="records-list franchise-extremes-list">
+        <div class="record-item">
+          <strong>Best Record</strong>
+          <span id="team-best-season">TBD</span>
+        </div>
 
-        <div class="records-list">
-          <div class="record-item">
-            <strong>Best Season</strong>
-            <span id="team-best-season">TBD</span>
-          </div>
+        <div class="record-item">
+          <strong>Best Scoring Season</strong>
+          <span id="team-best-scoring-season">TBD</span>
+        </div>
 
-          <div class="record-item">
-            <strong>Best Scoring Season</strong>
-            <span id="team-best-scoring-season">TBD</span>
-          </div>
+        <div class="record-item">
+          <strong>Best Finish</strong>
+          <span id="team-best-finish-extreme">TBD</span>
+        </div>
 
-          <div class="record-item">
-            <strong>Best Rated Season</strong>
-            <span id="team-most-painful-finish">TBD</span>
-          </div>
+        <div class="record-item">
+          <strong>Worst Record</strong>
+          <span id="team-worst-season">TBD</span>
+        </div>
 
-          <div class="record-item">
-            <strong>Worst Season</strong>
-            <span id="team-worst-season">TBD</span>
-          </div>
+        <div class="record-item">
+          <strong>Worst Scoring Season</strong>
+          <span id="team-worst-scoring-season">TBD</span>
+        </div>
+
+        <div class="record-item">
+          <strong>Worst Finish</strong>
+          <span id="team-worst-finish">TBD</span>
         </div>
       </div>
+    </section>
+
+    <section class="content-card">
+      <div class="card-header">
+        <div>
+          <p class="section-label">Postseason Resume</p>
+          <h2>Playoff Profile</h2>
+        </div>
+        <a class="text-link" href="champions.html">View Champions</a>
+      </div>
+
+      <div class="team-postseason-grid">
+        <div class="record-item">
+          <strong>Championships</strong>
+          <span id="team-postseason-titles">TBD</span>
+        </div>
+
+        <div class="record-item">
+          <strong>Championship Appearances</strong>
+          <span id="team-postseason-appearances">TBD</span>
+        </div>
+
+        <div class="record-item">
+          <strong>Championship Record</strong>
+          <span id="team-championship-record">TBD</span>
+        </div>
+
+        <div class="record-item">
+          <strong>Playoff Appearances</strong>
+          <span id="team-postseason-playoffs">TBD</span>
+        </div>
+
+        <div class="record-item">
+          <strong>Playoff Record</strong>
+          <span id="team-playoff-record">TBD</span>
+        </div>
+
+        <div class="record-item">
+          <strong>#1 Seeds</strong>
+          <span id="team-number-one-seeds">TBD</span>
+        </div>
+
+        <div class="record-item">
+          <strong>Best Playoff Run</strong>
+          <span id="team-best-playoff-run">TBD</span>
+        </div>
+
+        <div class="record-item">
+          <strong>Most Recent Playoff Appearance</strong>
+          <span id="team-most-recent-playoff-appearance">TBD</span>
+        </div>
+      </div>
+
+      <div class="championship-year-badges" id="team-championship-year-badges">
+        <span>No championship banners yet.</span>
+      </div>
+    </section>
+
+    <section class="content-row">
 
       <div class="content-card">
         <p class="section-label">Top Player Seasons</p>
@@ -173,6 +266,20 @@
         </div>
       </div>
 
+      <div class="content-card">
+        <p class="section-label">Records Held</p>
+        <h2>League Records Owned</h2>
+
+        <div class="records-list" id="team-records-held-list">
+          <div class="record-item">
+            <strong>Records Held</strong>
+            <span>Team records will load here.</span>
+          </div>
+        </div>
+
+        <a class="text-link team-card-bottom-link" href="records.html">View Records</a>
+      </div>
+
     </section>
 
     <section class="content-card">
@@ -183,61 +290,52 @@
         </div>
       </div>
 
+      <div class="h2h-callout-grid">
+        <div class="h2h-callout-card nemesis-card">
+          <p class="section-label">Nemesis</p>
+          <h3 id="team-h2h-nemesis">TBD</h3>
+          <span id="team-h2h-nemesis-detail">Worst matchup by win percentage.</span>
+        </div>
+
+        <div class="h2h-callout-card victim-card">
+          <p class="section-label">Favorite Victim</p>
+          <h3 id="team-h2h-victim">TBD</h3>
+          <span id="team-h2h-victim-detail">Best matchup by win percentage.</span>
+        </div>
+      </div>
+
       <div class="table-wrap">
         <table>
-         <thead>
-  <tr>
-    <th>Opponent</th>
-    <th>
-      <button class="table-sort-button" type="button" data-h2h-sort="total_games">
-        Games <span class="sort-caret">↕</span>
-      </button>
-    </th>
-    <th>Record</th>
-    <th>
-      <button class="table-sort-button" type="button" data-h2h-sort="win_pct">
-        Win % <span class="sort-caret">↕</span>
-      </button>
-    </th>
-    <th>PF</th>
-    <th>PA</th>
-    <th>
-      <button class="table-sort-button" type="button" data-h2h-sort="margin">
-        Margin <span class="sort-caret">↕</span>
-      </button>
-    </th>
-  </tr>
-</thead>
+          <thead>
+            <tr>
+              <th>Opponent</th>
+              <th>
+                <button class="table-sort-button" type="button" data-h2h-sort="total_games">
+                  Games <span class="sort-caret">↕</span>
+                </button>
+              </th>
+              <th>Record</th>
+              <th>
+                <button class="table-sort-button" type="button" data-h2h-sort="win_pct">
+                  Win % <span class="sort-caret">↕</span>
+                </button>
+              </th>
+              <th>PF</th>
+              <th>PA</th>
+              <th>
+                <button class="table-sort-button" type="button" data-h2h-sort="margin">
+                  Margin <span class="sort-caret">↕</span>
+                </button>
+              </th>
+            </tr>
+          </thead>
 
-<tbody id="team-h2h-body">
-  <tr>
-    <td colspan="7">Head-to-head archive will load here.</td>
-  </tr>
-</tbody>
-
-<tbody id="team-h2h-body">
-  <tr>
-    <td colspan="7">Head-to-head archive will load here.</td>
-  </tr>
-</tbody>
+          <tbody id="team-h2h-body">
+            <tr>
+              <td colspan="7">Head-to-head archive will load here.</td>
+            </tr>
+          </tbody>
         </table>
-      </div>
-    </section>
-
-    <section class="content-card">
-      <div class="card-header">
-        <div>
-          <p class="section-label">Records Held</p>
-          <h2>League Records Owned</h2>
-        </div>
-        <a class="text-link" href="records.html">View Records</a>
-      </div>
-
-      <div class="records-list" id="team-records-held-list">
-        <div class="record-item">
-          <strong>Records Held</strong>
-          <span>Team records will load here.</span>
-        </div>
       </div>
     </section>
 
@@ -247,7 +345,7 @@
           <p class="section-label">Brand & Uniforms</p>
           <h2>Franchise Identity</h2>
         </div>
-        <a class="text-link" href="uniforms.html">View Uniforms</a>
+        <a class="text-link" href="uniforms.html">View Uniform Gallery</a>
       </div>
 
       <div class="brand-logo-row">
@@ -269,7 +367,7 @@
           <p class="section-label">Uniform</p>
           <h2 id="team-uniform-title">Franchise Uniform</h2>
         </div>
-        <a class="text-link" href="uniforms.html">View Uniforms</a>
+        <a class="text-link" href="uniforms.html">View Uniform Gallery</a>
       </div>
 
       <div class="uniform-image-wrap">
