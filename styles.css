@@ -5398,3 +5398,146 @@ function buildBasementRecords(scoHistory) {
   text-transform: uppercase;
   letter-spacing: 0.7px;
 }
+/* =========================================================
+   TEAM PROFILE - FINAL ORGANIZATIONAL POLISH
+   ========================================================= */
+
+.subsection-header {
+  margin: 4px 0 14px;
+}
+
+.subsection-header h3 {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.1;
+}
+
+/* Franchise Legends - locked 3-card player style */
+.franchise-legends-grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.franchise-legend-card {
+  min-height: 100%;
+}
+
+.franchise-legend-image {
+  aspect-ratio: 1 / 1;
+  border-bottom: 5px solid var(--decal-color, var(--gold));
+}
+
+.franchise-legend-body h3 {
+  font-size: 24px;
+}
+
+/* First-round picks visual cards */
+.team-first-round-visual-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.first-round-pick-card {
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-top: 5px solid var(--primary-color, var(--navy));
+  border-radius: 18px;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.first-round-pick-card .first-round-pick-image {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  border-radius: 0;
+  border: 0;
+  background: white;
+}
+
+.first-round-pick-card .first-round-pick-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.first-round-pick-card .first-round-pick-details {
+  padding: 12px;
+}
+
+.first-round-pick-card .first-round-pick-details span {
+  display: block;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 5px;
+}
+
+.first-round-pick-card .first-round-pick-details strong {
+  display: block;
+  font-size: 15px;
+  line-height: 1.1;
+}
+
+.first-round-pick-card .first-round-pick-details small {
+  display: block;
+  margin-top: 5px;
+  color: #4b5563;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+/* Draft callouts stay underneath the visual picks */
+.team-draft-callout-grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* Team color swatches without visible HEX codes */
+.team-color-row small {
+  display: none;
+}
+
+.primary-chip {
+  background: var(--primary-color, var(--navy));
+}
+
+.secondary-chip {
+  background: var(--secondary-color, var(--ink));
+}
+
+.decal-chip {
+  background: var(--decal-color, var(--gold));
+}
+
+/* Playoff profile polish */
+.playoff-profile-grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.playoff-profile-grid .record-item {
+  border-top-color: var(--primary-color, var(--navy));
+}
+
+/* Responsive cleanup */
+@media (max-width: 1050px) {
+  .team-first-round-visual-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .playoff-profile-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .franchise-legends-grid,
+  .team-first-round-visual-grid,
+  .team-draft-callout-grid,
+  .playoff-profile-grid {
+    grid-template-columns: 1fr;
+  }
+}
