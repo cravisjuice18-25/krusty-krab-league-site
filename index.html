@@ -12,71 +12,80 @@
 
   <header class="site-hero home-hero">
     <div class="hero-overlay">
+      <img class="home-kkl-logo" id="home-kkl-logo" src="images/league/kkl-logo.png" alt="KKL logo">
+
       <p class="eyebrow">Fantasy Football League Archive</p>
-      <h1>Krusty Krab League</h1>
-      <p class="hero-subtitle">
+      <h1 id="home-league-name">Krusty Krab League</h1>
+      <p class="hero-subtitle" id="home-league-tagline">
         The official home for the Krusty Krab League.
+      </p>
+
+      <p class="home-established-line" id="home-established-line">
+        Established TBD
       </p>
     </div>
   </header>
 
   <nav class="top-nav">
-  <a href="index.html">Home</a>
-  <a href="teams.html">Teams</a>
-  <a href="seasons.html">Seasons</a>
-  <a href="records.html">Records</a>
+    <a href="index.html">Home</a>
+    <a href="teams.html">Teams</a>
+    <a href="seasons.html">Seasons</a>
+    <a href="records.html">Records</a>
 
-  <div class="nav-group">
-    <button class="nav-group-button" type="button">History</button>
-    <div class="nav-dropdown">
-      <a href="champions.html">Champions</a>
-      <a href="draft.html">Draft Archive</a>
-      <a href="trophy-room.html">Trophy Room</a>
-      <a href="the-sco.html">The Sco</a>
-      <a href="recaps.html">Recaps</a>
+    <div class="nav-group">
+      <button class="nav-group-button" type="button">History</button>
+      <div class="nav-dropdown">
+        <a href="champions.html">Champions</a>
+        <a href="draft.html">Draft Archive</a>
+        <a href="trophy-room.html">Trophy Room</a>
+        <a href="the-sco.html">The Sco</a>
+        <a href="recaps.html">Recaps</a>
+      </div>
     </div>
-  </div>
 
-  <div class="nav-group">
-    <button class="nav-group-button" type="button">More</button>
-    <div class="nav-dropdown">
-      <a href="head-to-head.html">Head-to-Head</a>
-      <a href="rules.html">Rules</a>
-      <a href="uniforms.html">Uniform Gallery</a>
-      <a href="league-alumni.html">League Alumni</a>
+    <div class="nav-group">
+      <button class="nav-group-button" type="button">More</button>
+      <div class="nav-dropdown">
+        <a href="head-to-head.html">Head-to-Head</a>
+        <a href="rules.html">Rules</a>
+        <a href="uniforms.html">Uniform Gallery</a>
+        <a href="league-alumni.html">League Alumni</a>
+      </div>
     </div>
-  </div>
-</nav>
+  </nav>
 
   <main class="page">
 
     <section class="home-feature-grid">
 
       <a class="home-feature-card home-feature-dark" href="champions.html">
-        <p class="section-label">Latest Champion</p>
+        <p class="section-label">Current Champion</p>
         <h2 id="home-latest-champion-year">Loading Champion</h2>
         <strong id="home-latest-champion-team">Loading...</strong>
-        <span id="home-latest-champion-link">View championship history</span>
+        <span id="home-latest-champion-owner">Owner: Loading...</span>
+        <span id="home-latest-champion-count">Championships: TBD</span>
+        <span id="home-latest-champion-link">View Champions</span>
       </a>
 
       <a class="home-feature-card" href="records.html">
-        <p class="section-label">Record Book</p>
-        <h2>Hall of Records</h2>
-        <strong id="home-record-book-summary">Career, season, playoff, and player records</strong>
-        <span>View league records</span>
+        <p class="section-label">The Record Book</p>
+        <h2>Featured Records</h2>
+        <strong id="home-record-book-summary">Loading records...</strong>
+        <span>View Records</span>
       </a>
 
       <a class="home-feature-card" href="the-sco.html">
-        <p class="section-label">The Basement</p>
+        <p class="section-label">The Sco</p>
         <h2 id="home-latest-sco-title">The Sco</h2>
         <strong id="home-latest-sco-team">Loading...</strong>
-        <span id="home-latest-sco-link">View last-place history</span>
+        <span id="home-latest-sco-count">Sco Count: TBD</span>
+        <span id="home-latest-sco-link">View The Sco</span>
       </a>
 
-      <a class="home-feature-card draft-countdown-card">
-        <p class="section-label">Featured League Event</p>
-        <h2>Opening Night</h2>
-        <strong>Patriots vs Seahawks</strong>
+      <a class="home-feature-card draft-countdown-card" id="home-featured-event-link" href="seasons.html">
+        <p class="section-label" id="home-featured-event-label">Featured League Event</p>
+        <h2 id="home-featured-event-title">Opening Night</h2>
+        <strong id="home-featured-event-subtitle">Patriots vs Seahawks</strong>
 
         <div class="countdown-grid">
           <div>
@@ -95,14 +104,118 @@
           </div>
         </div>
 
+        <span id="home-featured-event-button">View Event</span>
       </a>
+
+    </section>
+
+    <section class="content-card home-season-card">
+      <div class="card-header">
+        <div>
+          <p class="section-label">Current Season Snapshot</p>
+          <h2 id="home-season-title">Season Archive</h2>
+        </div>
+        <a class="text-link" href="seasons.html">View Seasons</a>
+      </div>
+
+      <div class="home-season-snapshot-grid">
+        <div>
+          <span>Standings Leader</span>
+          <strong id="home-season-details-expanded">Loading...</strong>
+        </div>
+
+        <div>
+          <span>Points Leader</span>
+          <strong id="home-season-points-leader">Loading...</strong>
+        </div>
+
+        <div>
+          <span>Power Rating Leader</span>
+          <strong id="home-power-rating-leader">Loading...</strong>
+        </div>
+
+        <div>
+          <span>Current Sco / Last Place</span>
+          <strong id="home-current-sco">Loading...</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-card home-record-book-card">
+      <div class="card-header">
+        <div>
+          <p class="section-label">The Record Book</p>
+          <h2>Featured League Records</h2>
+        </div>
+        <a class="text-link" href="records.html">View Records</a>
+      </div>
+
+      <div class="home-featured-records-grid" id="home-featured-records-grid">
+        <div class="record-item">
+          <strong>Loading Records</strong>
+          <span>Featured records will load here.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-card home-teams-card">
+      <div class="card-header">
+        <div>
+          <p class="section-label">KKL Teams</p>
+          <h2>Active Franchises</h2>
+        </div>
+        <a class="text-link" href="teams.html">View Teams</a>
+      </div>
+
+      <div class="home-kkl-team-grid" id="home-kkl-team-grid">
+        <div class="record-item">
+          <strong>Loading Teams</strong>
+          <span>Franchise cards will load here.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-row home-clean-row">
+
+      <div class="content-card home-archive-card">
+        <p class="section-label" id="home-archive-label">From the Archives</p>
+        <h2 id="home-archive-title">Featured Memory</h2>
+
+        <div class="home-archive-image-wrap">
+          <img id="home-archive-image" src="images/archive/archive-placeholder.png" alt="Featured archive memory">
+        </div>
+
+        <p id="home-archive-description">
+          Archive feature will load here.
+        </p>
+
+        <a class="text-link" id="home-archive-link" href="recaps.html">View Archive</a>
+      </div>
+
+      <div class="content-card dark-card nfl-feed-card">
+        <p class="section-label">NFL Newsroom</p>
+        <h2>Insider Feed</h2>
+        <p>
+          Live NFL updates from insider accounts, roster news, injury notes, and fantasy-relevant reports.
+        </p>
+
+        <div class="embedded-x-feed">
+          <a class="twitter-timeline"
+             data-height="440"
+             data-theme="dark"
+             data-chrome="noheader nofooter noborders transparent"
+             href="https://x.com/i/lists/23065916">
+             NFL Insider Feed
+          </a>
+        </div>
+      </div>
 
     </section>
 
     <section class="home-hub-section">
 
       <div class="home-section-header">
-        <p class="section-label">League Hub</p>
+        <p class="section-label">Explore the KKL</p>
         <h2>Browse the Archive</h2>
         <p>
           Jump into the main sections of the Krusty Krab League archive.
@@ -116,9 +229,9 @@
           <small id="home-active-team-count">Active franchises, owners, defunct teams, and future franchise pages.</small>
         </a>
 
-        <a class="home-hub-card" href="champions.html">
-          <span>Champions</span>
-          <small>League champions, title counts, banners, and championship history.</small>
+        <a class="home-hub-card" href="seasons.html">
+          <span>Seasons</span>
+          <small id="home-season-details">Year-by-year final standings, points, records, and season archive.</small>
         </a>
 
         <a class="home-hub-card" href="records.html">
@@ -126,13 +239,13 @@
           <small>The official Hall of Records, including career, season, playoff, and player records.</small>
         </a>
 
-        <a class="home-hub-card" href="seasons.html">
-          <span>Seasons</span>
-          <small id="home-season-details">Year-by-year final standings, points, records, and season archive.</small>
+        <a class="home-hub-card" href="champions.html">
+          <span>Champions</span>
+          <small>League champions, title counts, banners, and championship history.</small>
         </a>
 
         <a class="home-hub-card" href="draft.html">
-          <span>Draft</span>
+          <span>Draft Archive</span>
           <small>Draft locations, draft orders, first overall picks, and draft-room history.</small>
         </a>
 
@@ -147,7 +260,7 @@
         </a>
 
         <a class="home-hub-card" href="uniforms.html">
-          <span>Uniforms</span>
+          <span>Uniform Gallery</span>
           <small>Primary logos, secondary logos, team colors, and uniform mockups.</small>
         </a>
 
@@ -155,104 +268,54 @@
 
     </section>
 
-    <section class="content-row home-clean-row">
-
-      <div class="content-card">
-        <p class="section-label">Active Franchises</p>
-        <h2>League Members</h2>
-
-        <div class="home-team-list">
-          <a href="teams.html">The Commish <span>Bard</span></a>
-          <a href="teams.html">Cincinnati Harambes <span>Jake</span></a>
-          <a href="teams.html">Committed Not Addicted <span>Muffin</span></a>
-          <a href="teams.html">Jakes Brothers and Sisters <span>Miner</span></a>
-          <a href="teams.html">Life Sucks then You Die <span>Kyle</span></a>
-          <a href="teams.html">Most Valuable Potheads <span>Hunter</span></a>
-          <a href="teams.html">The Fantasy Football Team <span>Gary</span></a>
-          <a href="teams.html">Trin Coll Pest Control <span>Sco</span></a>
-        </div>
-      </div>
-
-      <div class="content-card dark-card nfl-feed-card">
-  <p class="section-label">NFL Newsroom</p>
-  <h2>Insider Feed</h2>
-  <p>
-    Live NFL updates from insider accounts, roster news, injury notes, and fantasy-relevant reports.
-  </p>
-
-  <div class="embedded-x-feed">
-    <a class="twitter-timeline"
-       data-height="440"
-       data-theme="dark"
-       data-chrome="noheader nofooter noborders transparent"
-       href="https://x.com/i/lists/23065916">
-       NFL Insider Feed
-    </a>
-  </div>
-</div>
-    </section>
-
-    <section class="content-card home-season-card">
+    <section class="content-card all-time-player-section">
       <div class="card-header">
         <div>
-          <p class="section-label">Latest Season Snapshot</p>
-          <h2 id="home-season-title">Season Archive</h2>
+          <p class="section-label">League Legends</p>
+          <h2>All-Time Player Cards</h2>
         </div>
+        <a class="text-link" href="records.html">View Records</a>
       </div>
 
-      <div class="home-season-snapshot-grid">
-        <div>
-          <span>Latest Season</span>
-          <strong id="home-season-details-expanded">Loading...</strong>
-        </div>
+      <div class="all-time-player-grid" id="all-time-player-grid">
+        <article class="player-card player-card-qb">
+          <div class="player-card-top">
+            <span>QB</span>
+          </div>
 
-        <div>
-          <span>Points Leader</span>
-          <strong id="home-season-points-leader">Loading...</strong>
-        </div>
+          <div class="player-card-body">
+            <div class="player-card-position">Quarterback</div>
+            <h3>Loading...</h3>
+            <p>Player cards will load here.</p>
+          </div>
 
-        <div>
-          <span>League Hub</span>
-          <strong><a href="seasons.html">View Seasons</a></strong>
-        </div>
+          <div class="player-card-footer">
+            <strong>TBD</strong>
+          </div>
+        </article>
       </div>
     </section>
 
- 
-<section class="content-card all-time-player-section">
-  <div class="card-header">
-    <div>
-      <p class="section-label">League Legends</p>
-      <h2>All-Time Player Cards</h2>
-    </div>
-    <a class="text-link" href="records.html">View Records</a>
-  </div>
+  </main>
 
-  <div class="all-time-player-grid" id="all-time-player-grid">
-    <article class="player-card player-card-qb">
-      <div class="player-card-top">
-        <span>QB</span>
-      </div>
-
-      <div class="player-card-body">
-        <div class="player-card-position">Quarterback</div>
-        <h3>Loading...</h3>
-        <p>Player cards will load here.</p>
-      </div>
-
-      <div class="player-card-footer">
-        <strong>TBD</strong>
-      </div>
-    </article>
-  </div>
-</section>
-  
   <footer class="footer">
-  <p>Krusty Krab League · Fantasy Football Archive</p>
-</footer>
+    <div class="footer-nav">
+      <a href="index.html">Home</a>
+      <a href="teams.html">Teams</a>
+      <a href="seasons.html">Seasons</a>
+      <a href="records.html">Records</a>
+      <a href="champions.html">Champions</a>
+      <a href="draft.html">Draft Archive</a>
+      <a href="trophy-room.html">Trophy Room</a>
+      <a href="the-sco.html">The Sco</a>
+      <a href="uniforms.html">Uniform Gallery</a>
+    </div>
 
-<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-<script src="data-loader.js"></script>
-<script src="home.js"></script>
+    <p>Krusty Krab League · Fantasy Football Archive</p>
+  </footer>
+
+  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+  <script src="data-loader.js"></script>
+  <script src="home.js"></script>
 </body>
 </html>
