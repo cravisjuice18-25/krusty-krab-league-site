@@ -1,37 +1,52 @@
 async function buildSeasonsPage() {
   try {
     const standings = await loadCSV("data/standings.csv");
+    const teams = await loadOptionalCSV("data/teams.csv");
+    const playInResults = await loadOptionalCSV("data/play-in.csv");
 
     const standingsByYear = groupStandingsByYear(standings);
     const years = Object.keys(standingsByYear).sort((a, b) => Number(b) - Number(a));
 
-    buildSeasonFeatureCards(standingsByYear, years);
-    buildSeasonYearNav(years);
-    buildSeasonBlocks(standingsByYear, years);
+    const teamsByOwner = buildTeamsByOwner(teams);
+    const playInByYear = buildPlayInByYear(playInResults);
+
+    buildSeasonSelector(years, standingsByYear, teamsByOwner, playInByYear);
+
+    if (years.length > 0) {
+      renderSelectedSeason(years[0], standingsByYear, teamsByOwner, playInByYear);
+    }
 
   } catch (error) {
     console.error("Seasons page error:", error);
 
-    const seasonBlocks = document.getElementById("season-blocks");
+    const tableBody = document.getElementById("season-standings-body");
 
-    if (seasonBlocks) {
-      seasonBlocks.innerHTML = `
-        <section class="content-card season-block">
-          <div class="season-block-header">
-            <div>
-              <p class="section-label">Error</p>
-              <h2>Standings Not Loaded</h2>
-            </div>
-          </div>
-
-          <p class="season-placeholder-text">
-            Check data/standings.csv, data-loader.js, and seasons.js.
-          </p>
-        </section>
+    if (tableBody) {
+      tableBody.innerHTML = `
+        <tr>
+          <td colspan="10">Standings could not load. Check data/standings.csv, data-loader.js, and seasons.js.</td>
+        </tr>
       `;
     }
   }
 }
+
+/* =========================================================
+   DATA LOADING
+   ========================================================= */
+
+async function loadOptionalCSV(path) {
+  try {
+    return await loadCSV(path);
+  } catch (error) {
+    console.warn(`${path} did not load:`, error);
+    return [];
+  }
+}
+
+/* =========================================================
+   GROUPING
+   ========================================================= */
 
 function groupStandingsByYear(standings) {
   const grouped = {};
@@ -57,171 +72,280 @@ function groupStandingsByYear(standings) {
   return grouped;
 }
 
-function buildSeasonFeatureCards(standingsByYear, years) {
-  const latestYear = years[0];
+function buildTeamsByOwner(teams) {
+  const lookup = {};
 
-  if (!latestYear) return;
+  (teams || []).forEach(team => {
+    const ownerId = cleanText(team.owner_id).toLowerCase();
 
-  const latestStandings = standingsByYear[latestYear];
-  const firstPlace = latestStandings[0];
-  const lastPlace = latestStandings[latestStandings.length - 1];
+    if (!ownerId) return;
 
-  const topScoringTeam = [...latestStandings].sort((a, b) => {
+    lookup[ownerId] = team;
+  });
+
+  return lookup;
+}
+
+function buildPlayInByYear(playInResults) {
+  const lookup = {};
+
+  (playInResults || []).forEach(row => {
+    const year = cleanText(row.year);
+
+    if (!year) return;
+
+    lookup[year] = row;
+  });
+
+  return lookup;
+}
+
+/* =========================================================
+   SEASON SELECTOR
+   ========================================================= */
+
+function buildSeasonSelector(years, standingsByYear, teamsByOwner, playInByYear) {
+  const selector = document.getElementById("season-selector");
+
+  if (!selector) return;
+
+  selector.innerHTML = "";
+
+  years.forEach(year => {
+    const option = document.createElement("option");
+    option.value = year;
+    option.textContent = `${year} Season`;
+    selector.appendChild(option);
+  });
+
+  selector.addEventListener("change", event => {
+    renderSelectedSeason(event.target.value, standingsByYear, teamsByOwner, playInByYear);
+  });
+}
+
+/* =========================================================
+   SELECTED SEASON RENDER
+   ========================================================= */
+
+function renderSelectedSeason(year, standingsByYear, teamsByOwner, playInByYear) {
+  const standings = standingsByYear[year] || [];
+
+  if (standings.length === 0) {
+    renderEmptySeason(year);
+    return;
+  }
+
+  const regularSeasonChampion = standings.find(row => Number(row.rank) === 1) || standings[0];
+
+  const pointsLeader = [...standings].sort((a, b) => {
     return Number(b.points_for) - Number(a.points_for);
   })[0];
 
-  setText("season-feature-year", `${latestYear} Season`);
-  setText("season-feature-winner", cleanText(firstPlace.team));
-  setText("season-feature-winner-details", `1st Place · ${cleanText(firstPlace.record)} Regular Season Record`);
+  const powerRatingLeader = [...standings].sort((a, b) => {
+    return Number(b.team_rating) - Number(a.team_rating);
+  })[0];
 
-  setText("season-feature-points-team", cleanText(topScoringTeam.team));
-  setText("season-feature-points-details", `${formatNumber(topScoringTeam.points_for)} points · ${formatNumber(topScoringTeam.avg_for)} average`);
+  const playInResult = playInByYear[year];
 
-  setText("season-feature-sco-team", cleanText(lastPlace.team));
-  setText("season-feature-sco-details", `${ordinal(latestStandings.length)} Place · ${cleanText(lastPlace.record)} Regular Season Record`);
+  renderFeatureCards(year, regularSeasonChampion, pointsLeader, powerRatingLeader, playInResult, teamsByOwner);
+  renderStandingsTable(year, standings);
 }
 
-function buildSeasonYearNav(years) {
-  const nav = document.getElementById("season-year-nav");
+function renderEmptySeason(year) {
+  setText("season-feature-year", `${year} Season`);
+  setText("season-feature-winner", "TBD");
+  setText("season-feature-winner-details", "No standings found.");
 
-  if (!nav) return;
+  setText("season-feature-points-team", "TBD");
+  setText("season-feature-points-details", "No scoring data found.");
 
-  nav.innerHTML = "";
+  setText("season-feature-rating-team", "TBD");
+  setText("season-feature-rating-details", "No rating data found.");
 
-  years.forEach(year => {
-    const link = document.createElement("a");
-    link.href = `#season-${year}`;
-    link.textContent = year;
-    nav.appendChild(link);
-  });
-}
+  setText("play-in-card-title", "Play-In");
+  setText("season-feature-play-in-team", "TBD");
+  setText("season-feature-play-in-details", "No play-in data found.");
 
-function buildSeasonBlocks(standingsByYear, years) {
-  const container = document.getElementById("season-blocks");
+  const tableBody = document.getElementById("season-standings-body");
 
-  if (!container) return;
-
-  container.innerHTML = "";
-
-  years.forEach((year, index) => {
-    const standings = standingsByYear[year];
-    const firstPlace = standings[0];
-    const lastPlace = standings[standings.length - 1];
-
-    const topScoringTeam = [...standings].sort((a, b) => {
-      return Number(b.points_for) - Number(a.points_for);
-    })[0];
-
-    const leagueAverage = calculateLeagueAverage(standings);
-
-    const section = document.createElement("section");
-    section.className = "content-card season-block";
-    section.id = `season-${year}`;
-
-    section.innerHTML = `
-      <div class="season-block-header">
-        <div>
-          <p class="section-label">Season Archive</p>
-          <h2>${year} Final Standings</h2>
-        </div>
-        <div class="season-pill">${index === 0 ? "Most Recent Season" : "Season Archive"}</div>
-      </div>
-
-      <div class="season-summary-strip">
-        <div><span>1st Place</span><strong>${cleanText(firstPlace.team)}</strong></div>
-        <div><span>Top Points</span><strong>${cleanText(topScoringTeam.team)}</strong></div>
-        <div><span>The Sco</span><strong>${cleanText(lastPlace.team)}</strong></div>
-        <div><span>League Avg.</span><strong>${leagueAverage} PPG</strong></div>
-      </div>
-
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Rank</th>
-              <th>Team</th>
-              <th>Rating</th>
-              <th>Record</th>
-              <th>Win %</th>
-              <th>PF</th>
-              <th>Avg.</th>
-              <th>PA</th>
-              <th>Avg.</th>
-              <th>Margin</th>
-              <th>Avg. Margin</th>
-              <th>Moves</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            ${standings.map(row => buildStandingRow(row)).join("")}
-          </tbody>
-        </table>
-      </div>
+  if (tableBody) {
+    tableBody.innerHTML = `
+      <tr>
+        <td colspan="10">No standings found for ${year}.</td>
+      </tr>
     `;
+  }
+}
 
-    container.appendChild(section);
-  });
+/* =========================================================
+   FEATURE CARDS
+   ========================================================= */
+
+function renderFeatureCards(year, champion, pointsLeader, ratingLeader, playInResult, teamsByOwner) {
+  setText("season-feature-year", `${year} Season`);
+  setText("season-feature-winner", cleanText(champion.team) || "TBD");
+  setText(
+    "season-feature-winner-details",
+    `Regular Season Champion · ${cleanText(champion.record) || "TBD"} · ${formatWinPct(champion.win_pct)} Win %`
+  );
+
+  setText("season-feature-points-team", cleanText(pointsLeader.team) || "TBD");
+  setText(
+    "season-feature-points-details",
+    `${formatNumber(pointsLeader.points_for)} points · ${formatNumber(pointsLeader.avg_for)} average`
+  );
+
+  setText("season-feature-rating-team", cleanText(ratingLeader.team) || "TBD");
+  setText(
+    "season-feature-rating-details",
+    `${formatNumber(ratingLeader.team_rating)} rating · ${cleanText(ratingLeader.record) || "TBD"} record`
+  );
+
+  renderPlayInCard(year, playInResult);
+
+  applyTeamCardColor("regular-season-champion-card", champion, teamsByOwner, "champion");
+  applyTeamCardColor("points-leader-card", pointsLeader, teamsByOwner, "points");
+  applyTeamCardColor("power-rating-leader-card", ratingLeader, teamsByOwner, "rating");
+}
+
+function renderPlayInCard(year, playInResult) {
+  const numericYear = Number(year);
+
+  if (numericYear < 2021) {
+    setText("play-in-card-title", "Not Established");
+    setText("season-feature-play-in-team", "Play-In Not Yet Established");
+    setText("season-feature-play-in-details", "The play-in format began in 2021.");
+    return;
+  }
+
+  setText("play-in-card-title", "Play-In");
+
+  if (!playInResult) {
+    setText("season-feature-play-in-team", "TBD");
+    setText("season-feature-play-in-details", "Play-in winner will load from data/play-in.csv.");
+    return;
+  }
+
+  const winner =
+    cleanText(playInResult.winner_team) ||
+    cleanText(playInResult.team) ||
+    cleanText(playInResult.play_in_winner) ||
+    "TBD";
+
+  const opponent =
+    cleanText(playInResult.opponent_team) ||
+    cleanText(playInResult.opponent) ||
+    "";
+
+  const score = cleanText(playInResult.score);
+  const notes = cleanText(playInResult.notes);
+
+  setText("season-feature-play-in-team", winner);
+
+  const detailParts = [
+    opponent ? `vs ${opponent}` : "",
+    score,
+    notes
+  ].filter(value => cleanText(value));
+
+  setText("season-feature-play-in-details", detailParts.join(" · ") || "Play-in winner");
+}
+
+function applyTeamCardColor(cardId, row, teamsByOwner, cardType) {
+  const card = document.getElementById(cardId);
+
+  if (!card || !row) return;
+
+  const ownerId = cleanText(row.owner_id).toLowerCase();
+  const team = teamsByOwner[ownerId];
+
+  const primaryColor = cleanColor(team?.primary_color, getFallbackCardColor(cardType));
+  const secondaryColor = cleanColor(team?.secondary_color, "#111827");
+  const decalColor = cleanColor(team?.decal_color, "#facc15");
+
+  card.style.setProperty("--card-primary-color", primaryColor);
+  card.style.setProperty("--card-secondary-color", secondaryColor);
+  card.style.setProperty("--card-decal-color", decalColor);
+
+  card.style.background = `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})`;
+  card.style.borderBottomColor = decalColor;
+}
+
+function getFallbackCardColor(cardType) {
+  if (cardType === "champion") return "#92400e";
+  if (cardType === "points") return "#001f3f";
+  if (cardType === "rating") return "#334155";
+
+  return "#111827";
+}
+
+/* =========================================================
+   STANDINGS TABLE
+   ========================================================= */
+
+function renderStandingsTable(year, standings) {
+  setText("selected-season-label", `${year} Season`);
+  setText("selected-season-title", `${year} Final Standings`);
+
+  const tableBody = document.getElementById("season-standings-body");
+
+  if (!tableBody) return;
+
+  if (!standings || standings.length === 0) {
+    tableBody.innerHTML = `
+      <tr>
+        <td colspan="10">Standings will load here.</td>
+      </tr>
+    `;
+    return;
+  }
+
+  tableBody.innerHTML = standings.map(row => buildStandingRow(row)).join("");
 }
 
 function buildStandingRow(row) {
   return `
     <tr>
-      <td>${cleanText(row.rank)}</td>
-      <td><strong>${cleanText(row.team)}</strong></td>
-      <td>${formatNumber(row.team_rating)}</td>
-      <td>${cleanText(row.record)}</td>
+      <td>${cleanText(row.rank) || "TBD"}</td>
+      <td><strong>${cleanText(row.team) || "TBD"}</strong></td>
+      <td>${cleanText(row.record) || "TBD"}</td>
       <td>${formatWinPct(row.win_pct)}</td>
       <td>${formatNumber(row.points_for)}</td>
       <td>${formatNumber(row.avg_for)}</td>
       <td>${formatNumber(row.points_against)}</td>
       <td>${formatNumber(row.avg_against)}</td>
       <td>${formatNumber(row.point_margin)}</td>
-      <td>${formatNumber(row.avg_point_margin)}</td>
-      <td>${cleanText(row.moves)}</td>
+      <td>${cleanText(row.moves) || "TBD"}</td>
     </tr>
   `;
 }
 
-function calculateLeagueAverage(standings) {
-  const averages = standings
-    .map(row => Number(row.avg_for))
-    .filter(value => !Number.isNaN(value));
-
-  if (averages.length === 0) return "TBD";
-
-  const total = averages.reduce((sum, value) => sum + value, 0);
-  return (total / averages.length).toFixed(2);
-}
-
-function formatOwnerName(ownerId) {
-  const ownerMap = {
-    bard: "Bard",
-    sco: "Sco",
-    jake: "Jake",
-    muffin: "Muffin",
-    miner: "Miner",
-    hunter: "Hunter",
-    kyle: "Kyle",
-    gary: "Gary",
-    eric: "Eric",
-    sabella: "Sabella",
-    charlie: "Charlie",
-    miller: "Miller"
-  };
-
-  const cleaned = cleanText(ownerId).toLowerCase();
-  return ownerMap[cleaned] || cleanText(ownerId) || "TBD";
-}
+/* =========================================================
+   HELPERS
+   ========================================================= */
 
 function formatWinPct(value) {
-  const number = Number(value);
+  const cleaned = cleanText(value);
+
+  if (!cleaned) return "TBD";
+
+  const number = Number(cleaned.replace("%", ""));
 
   if (Number.isNaN(number)) {
-    return cleanText(value) || "TBD";
+    return cleaned;
   }
 
-  return number.toFixed(2);
+  let decimal = number;
+
+  if (cleaned.includes("%")) {
+    decimal = number / 100;
+  }
+
+  if (decimal > 1) {
+    decimal = decimal / 100;
+  }
+
+  return decimal.toFixed(3).replace("0.", ".");
 }
 
 function setText(id, text) {
@@ -234,6 +358,29 @@ function setText(id, text) {
 
 function cleanText(value) {
   return String(value || "").trim();
+}
+
+function cleanColor(value, fallback) {
+  let color = cleanText(value);
+
+  if (
+    !color ||
+    color.toLowerCase() === "tbd" ||
+    color.toLowerCase() === "na" ||
+    color.toLowerCase() === "n/a"
+  ) {
+    return fallback;
+  }
+
+  color = color.replace(/\s/g, "");
+
+  if (!color.startsWith("#")) {
+    color = `#${color}`;
+  }
+
+  const isValidHex = /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(color);
+
+  return isValidHex ? color : fallback;
 }
 
 function formatNumber(value) {
