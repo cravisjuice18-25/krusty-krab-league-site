@@ -13,73 +13,117 @@
   <header class="page-hero small-hero seasons-hero">
     <p class="eyebrow">Year-by-Year Archive</p>
     <h1>Seasons</h1>
-    <p>Every league year, final standings, scoring leaders, The Sco, point margins, moves, and season history.</p>
+    <p>Final standings, regular season champions, scoring leaders, play-in winners, point margins, moves, and season history.</p>
   </header>
 
   <nav class="top-nav">
     <a href="index.html">Home</a>
     <a href="teams.html">Teams</a>
-    <a href="champions.html">Champions</a>
-    <a href="records.html">Records</a>
     <a href="seasons.html">Seasons</a>
-    <a href="draft.html">Draft</a>
-    <a href="trophy-room.html">Trophy Room</a>
-    <a href="the-sco.html">The Sco</a>
-    <a href="uniforms.html">Uniforms</a>
+    <a href="records.html">Records</a>
+
+    <div class="nav-group">
+      <button class="nav-group-button" type="button">History</button>
+      <div class="nav-dropdown">
+        <a href="champions.html">Champions</a>
+        <a href="draft.html">Draft Archive</a>
+        <a href="trophy-room.html">Trophy Room</a>
+        <a href="the-sco.html">The Sco</a>
+        <a href="recaps.html">Recaps</a>
+      </div>
+    </div>
+
+    <div class="nav-group">
+      <button class="nav-group-button" type="button">More</button>
+      <div class="nav-dropdown">
+        <a href="head-to-head.html">Head-to-Head</a>
+        <a href="rules.html">Rules</a>
+        <a href="uniforms.html">Uniform Gallery</a>
+        <a href="league-alumni.html">League Alumni</a>
+      </div>
+    </div>
   </nav>
 
   <main class="page">
 
-    <section class="season-feature-grid">
+    <section class="content-card season-selector-card">
+      <div class="card-header">
+        <div>
+          <p class="section-label">Season Archive</p>
+          <h2>Select a Season</h2>
+        </div>
 
-      <div class="season-feature-card season-feature-dark">
-        <p class="section-label">Most Recent Season</p>
+        <select id="season-selector" class="season-selector">
+          <option value="">Loading seasons...</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="season-feature-grid selected-season-feature-grid">
+
+      <div class="season-feature-card season-feature-dark regular-season-champion-card" id="regular-season-champion-card">
+        <p class="section-label">Regular Season Champion</p>
         <h2 id="season-feature-year">Loading...</h2>
         <strong id="season-feature-winner">Loading...</strong>
-        <span id="season-feature-winner-details">Season winner will load from CSV.</span>
+        <span id="season-feature-winner-details">Regular season champion will load from CSV.</span>
       </div>
 
-      <div class="season-feature-card">
+      <div class="season-feature-card points-leader-card" id="points-leader-card">
         <p class="section-label">Top Scoring Team</p>
         <h2>Points Leader</h2>
         <strong id="season-feature-points-team">Loading...</strong>
         <span id="season-feature-points-details">Points leader will load from CSV.</span>
       </div>
 
-      <div class="season-feature-card">
-        <p class="section-label">The Sco</p>
-        <h2>Last Place</h2>
-        <strong id="season-feature-sco-team">Loading...</strong>
-        <span id="season-feature-sco-details">The Sco will load from CSV.</span>
+      <div class="season-feature-card power-leader-card" id="power-rating-leader-card">
+        <p class="section-label">Power Rating Leader</p>
+        <h2>Best Rating</h2>
+        <strong id="season-feature-rating-team">Loading...</strong>
+        <span id="season-feature-rating-details">Power rating leader will load from CSV.</span>
       </div>
 
-      <div class="season-feature-card">
-        <p class="section-label">Season Archive</p>
-        <h2>Final Standings</h2>
-        <strong>Ratings, Records & Points</strong>
-        <span>Each season shows the full final table.</span>
+      <div class="season-feature-card play-in-winner-card" id="play-in-winner-card">
+        <p class="section-label">Play-In Winner</p>
+        <h2 id="play-in-card-title">Play-In</h2>
+        <strong id="season-feature-play-in-team">Loading...</strong>
+        <span id="season-feature-play-in-details">Play-in result will load from CSV.</span>
       </div>
 
     </section>
 
-    <section class="season-category-nav" id="season-year-nav">
-      <a href="#">Loading years...</a>
-    </section>
-
-    <div id="season-blocks">
-      <section class="content-card season-block">
-        <div class="season-block-header">
-          <div>
-            <p class="section-label">Loading</p>
-            <h2>Season standings are loading...</h2>
-          </div>
+    <section class="content-card season-block selected-season-standings-card">
+      <div class="season-block-header">
+        <div>
+          <p class="section-label" id="selected-season-label">Selected Season</p>
+          <h2 id="selected-season-title">Final Standings</h2>
         </div>
+      </div>
 
-        <p class="season-placeholder-text">
-          If this stays visible, check the season data.
-        </p>
-      </section>
-    </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Team</th>
+              <th>Record</th>
+              <th>Win %</th>
+              <th>PF</th>
+              <th>Avg PF</th>
+              <th>PA</th>
+              <th>Avg PA</th>
+              <th>Margin</th>
+              <th>Moves</th>
+            </tr>
+          </thead>
+
+          <tbody id="season-standings-body">
+            <tr>
+              <td colspan="10">Standings will load here.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
 
   </main>
 
