@@ -206,6 +206,7 @@ function renderFeatureCards(year, champion, pointsLeader, ratingLeader, playInRe
   applyTeamCardColor("regular-season-champion-card", champion, teamsByOwner, "champion");
   applyTeamCardColor("points-leader-card", pointsLeader, teamsByOwner, "points");
   applyTeamCardColor("power-rating-leader-card", ratingLeader, teamsByOwner, "rating");
+  applyPlayInCardColor(playInResult);
 }
 
 function renderPlayInCard(year, playInResult) {
@@ -270,7 +271,14 @@ function applyTeamCardColor(cardId, row, teamsByOwner, cardType) {
   card.style.background = `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})`;
   card.style.borderBottomColor = decalColor;
 }
+function applyPlayInCardColor(playInResult) {
+  const card = document.getElementById("play-in-winner-card");
 
+  if (!card) return;
+
+  card.style.background = "linear-gradient(135deg, #065f46, #0f172a)";
+  card.style.borderBottomColor = "#34d399";
+}
 function getFallbackCardColor(cardType) {
   if (cardType === "champion") return "#92400e";
   if (cardType === "points") return "#001f3f";
