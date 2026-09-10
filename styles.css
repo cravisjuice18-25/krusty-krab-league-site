@@ -5608,3 +5608,35 @@ function buildBasementRecords(scoHistory) {
     grid-template-columns: 1fr;
   }
 }
+/* =========================================================
+   SEASONS PAGE - CARD TEXT + PLAY-IN COLOR FIX
+   ========================================================= */
+
+.selected-season-feature-grid .season-feature-card,
+.selected-season-feature-grid .season-feature-card h2,
+.selected-season-feature-grid .season-feature-card strong,
+.selected-season-feature-grid .season-feature-card span,
+.selected-season-feature-grid .season-feature-card p,
+.selected-season-feature-grid .season-feature-card small {
+  color: #ffffff;
+}
+
+.selected-season-feature-grid .season-feature-card .section-label {
+  color: #facc15;
+}
+
+/* Play-In card gets its own color */
+.play-in-winner-card {
+  background: linear-gradient(135deg, #065f46, #0f172a) !important;
+  border-bottom: 6px solid #34d399 !important;
+}
+
+.play-in-winner-card .section-label {
+  color: #a7f3d0 !important;
+}
+
+.play-in-winner-card strong,
+.play-in-winner-card h2,
+.play-in-winner-card span {
+  color: #ffffff !important;
+}
