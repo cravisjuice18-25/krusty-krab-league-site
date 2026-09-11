@@ -4,133 +4,123 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Draft | Krusty Krab League</title>
+  <title>Draft Archive | Krusty Krab League</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
 
   <header class="page-hero small-hero draft-hero">
-    <p class="eyebrow">Draft War Room</p>
-    <h1>Draft</h1>
-    <p>Draft locations, first overall picks, league trips, and the yearly moment everyone thinks they won the league.</p>
+    <p class="eyebrow">Historical Draft Archive</p>
+    <h1>Past Drafts</h1>
+    <p>Select a season and view the full draft or a specific round.</p>
   </header>
 
   <nav class="top-nav">
     <a href="index.html">Home</a>
     <a href="teams.html">Teams</a>
-    <a href="champions.html">Champions</a>
-    <a href="records.html">Records</a>
     <a href="seasons.html">Seasons</a>
-    <a href="draft.html">Draft</a>
-    <a href="trophy-room.html">Trophy Room</a>
-    <a href="the-sco.html">The Sco</a>
-    <a href="uniforms.html">Uniforms</a>
+    <a href="records.html">Records</a>
+
+    <div class="nav-group">
+      <button class="nav-group-button" type="button">History</button>
+      <div class="nav-dropdown">
+        <a href="champions.html">Champions</a>
+        <a href="draft.html">Draft Archive</a>
+        <a href="trophy-room.html">Trophy Room</a>
+        <a href="the-sco.html">The Sco</a>
+        <a href="recaps.html">Recaps</a>
+      </div>
+    </div>
+
+    <div class="nav-group">
+      <button class="nav-group-button" type="button">More</button>
+      <div class="nav-dropdown">
+        <a href="head-to-head.html">Head-to-Head</a>
+        <a href="rules.html">Rules</a>
+        <a href="uniforms.html">Uniform Gallery</a>
+        <a href="league-alumni.html">League Alumni</a>
+      </div>
+    </div>
   </nav>
 
   <main class="page">
 
-    <section class="draft-feature-grid">
-
-      <div class="draft-feature-card draft-feature-dark">
-        <p class="section-label">Most Recent Draft</p>
-        <h2 id="draft-feature-year">Loading...</h2>
-        <strong id="draft-feature-location">Loading...</strong>
-        <span id="draft-feature-details">Draft details will load from CSV.</span>
-      </div>
-
-      <div class="draft-feature-card">
-        <p class="section-label">First Overall Pick</p>
-        <h2 id="draft-feature-first-pick-year">Loading...</h2>
-        <strong id="draft-feature-first-pick-player">Loading...</strong>
-        <span id="draft-feature-first-pick-team">Team will load from CSV.</span>
-      </div>
-
-      <div class="draft-feature-card">
-        <p class="section-label">Draft Archive</p>
-        <h2>Draft History</h2>
-        <strong>Year-by-Year</strong>
-        <span>Locations, formats, first picks, and draft-room history.</span>
-      </div>
-
-      <div class="draft-feature-card">
-        <p class="section-label">Next Draft</p>
-        <h2>2026 Draft</h2>
-        <strong>Sparrow Bush, NY</strong>
-        <span>Labor Day Weekend</span>
-      </div>
-
-    </section>
-
-    <section class="draft-year-nav">
-      <a href="#draft-2026">2026</a>
-      <a href="#draft-2025">2025</a>
-      <a href="#draft-2024">2024</a>
-      <a href="#draft-2023">2023</a>
-      <a href="#draft-2022">2022</a>
-      <a href="#draft-2021">2021</a>
-      <a href="#draft-2020">2020</a>
-      <a href="#draft-2019">2019</a>
-      <a href="#draft-2018">2018</a>
-      <a href="#draft-2017">2017</a>
-      <a href="#draft-2016">2016</a>
-      <a href="#draft-2015">2015</a>
-      <a href="#draft-2014">2014</a>
-    </section>
-
-    <section class="content-card">
+    <section class="content-card draft-control-card">
       <div class="card-header">
         <div>
-          <p class="section-label">Draft History</p>
-          <h2>Draft Archive by Year</h2>
+          <p class="section-label">Draft Archive</p>
+          <h2>Select Draft</h2>
         </div>
-      </div>
 
-      <div class="draft-season-grid" id="draft-season-grid">
-        <article class="draft-season-card">
-          <span>Loading</span>
-          <h3>Draft Archive</h3>
-          <p>Draft history will load here.</p>
-          <strong>Please wait...</strong>
-        </article>
+        <div class="draft-filter-controls">
+          <label>
+            <span>Year</span>
+            <select id="draft-year-selector" class="season-selector">
+              <option value="">Loading years...</option>
+            </select>
+          </label>
+
+          <label>
+            <span>View</span>
+            <select id="draft-round-selector" class="season-selector">
+              <option value="full">Full Draft</option>
+            </select>
+          </label>
+        </div>
       </div>
     </section>
 
     <section class="content-card">
       <div class="card-header">
         <div>
-          <p class="section-label">Draft Room Receipts</p>
-          <h2>Draft Notes</h2>
+          <p class="section-label" id="draft-selected-label">Selected Draft</p>
+          <h2 id="draft-selected-title">Draft Results</h2>
         </div>
       </div>
 
-      <div class="records-list">
-        <div class="record-item">
-          <strong>Best Draft Pick</strong>
-          <span>League-winning picks, late-round steals, and picks that aged beautifully.</span>
+      <div class="draft-metadata-strip">
+        <div>
+          <span>Year</span>
+          <strong id="draft-meta-year">TBD</strong>
         </div>
 
-        <div class="record-item">
-          <strong>Worst Draft Pick</strong>
-          <span>Panic picks, busts, and selections that became instant group chat evidence.</span>
+        <div>
+          <span>Date</span>
+          <strong id="draft-meta-date">TBD</strong>
         </div>
 
-        <div class="record-item">
-          <strong>Best Draft Class</strong>
-          <span>The strongest full-team draft from top to bottom.</span>
+        <div>
+          <span>Location</span>
+          <strong id="draft-meta-location">TBD</strong>
         </div>
+      </div>
 
-        <div class="record-item">
-          <strong>Most Iconic Draft Moment</strong>
-          <span>Trips, mistakes, arguments, reaches, and moments the league refuses to forget.</span>
-        </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Pick #</th>
+              <th>Round</th>
+              <th>Team / Owner</th>
+              <th>Player</th>
+              <th>Position</th>
+            </tr>
+          </thead>
+
+          <tbody id="draft-picks-body">
+            <tr>
+              <td colspan="5">Draft picks will load here.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </section>
 
   </main>
 
   <footer class="footer">
-    <p>Krusty Krab League · Draft</p>
+    <p>Krusty Krab League · Draft Archive</p>
   </footer>
 
   <script src="data-loader.js"></script>
