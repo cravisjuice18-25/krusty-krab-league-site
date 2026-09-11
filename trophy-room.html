@@ -10,120 +10,160 @@
 
 <body>
 
-  <header class="page-hero small-hero trophy-hero">
-    <p class="eyebrow">Awards Cabinet</p>
+  <header class="page-hero small-hero trophy-room-hero">
+    <p class="eyebrow">Awards, Titles & Competitions</p>
     <h1>Trophy Room</h1>
-    <p>League hardware, season awards, mini game winners, scoring titles, weekly chaos, and the yearly awards that define the league.</p>
+    <p>League titles, season awards, mini-game winners, and fun awards from across KKL history.</p>
   </header>
 
   <nav class="top-nav">
     <a href="index.html">Home</a>
     <a href="teams.html">Teams</a>
-    <a href="champions.html">Champions</a>
-    <a href="records.html">Records</a>
     <a href="seasons.html">Seasons</a>
-    <a href="draft.html">Draft</a>
-    <a href="trophy-room.html">Trophy Room</a>
-    <a href="the-sco.html">The Sco</a>
-    <a href="uniforms.html">Uniforms</a>
+    <a href="records.html">Records</a>
+
+    <div class="nav-group">
+      <button class="nav-group-button" type="button">History</button>
+      <div class="nav-dropdown">
+        <a href="champions.html">Champions</a>
+        <a href="draft.html">Draft Archive</a>
+        <a href="trophy-room.html">Trophy Room</a>
+        <a href="the-sco.html">The Sco</a>
+        <a href="recaps.html">Recaps</a>
+      </div>
+    </div>
+
+    <div class="nav-group">
+      <button class="nav-group-button" type="button">More</button>
+      <div class="nav-dropdown">
+        <a href="head-to-head.html">Head-to-Head</a>
+        <a href="rules.html">Rules</a>
+        <a href="uniforms.html">Uniform Gallery</a>
+        <a href="league-alumni.html">League Alumni</a>
+      </div>
+    </div>
   </nav>
 
   <main class="page">
 
-    <section class="trophy-feature-grid">
+    <section class="season-feature-grid trophy-current-grid">
 
-      <div class="trophy-feature-card trophy-feature-dark">
-        <p class="section-label">Top Honor</p>
-        <span class="trophy-icon">🏆</span>
-        <h2>League Champion</h2>
-        <strong id="trophy-latest-champion"></strong>
+      <div class="season-feature-card season-feature-dark trophy-current-card">
+        <p class="section-label">Current Holder</p>
+        <h2>Regular Season Champion</h2>
+        <strong id="trophy-current-regular-season">Loading...</strong>
+        <span id="trophy-current-regular-season-detail">Loading from standings.</span>
       </div>
 
-      <div class="trophy-feature-card">
-        <p class="section-label">Regular Season</p>
-        <span class="trophy-icon">👑</span>
-        <h2>Regular Season Winner</h2>
-        <strong id="trophy-regular-season-winner"></strong>
+      <div class="season-feature-card trophy-current-card">
+        <p class="section-label">Current Holder</p>
+        <h2>Points Champion</h2>
+        <strong id="trophy-current-points">Loading...</strong>
+        <span id="trophy-current-points-detail">Loading from standings.</span>
       </div>
 
-      <div class="trophy-feature-card">
-        <p class="section-label">Scoring Title</p>
-        <span class="trophy-icon">🔥</span>
-        <h2>Most Points</h2>
-        <strong id="trophy-most-points"></strong>
-      </div>
-
-      <div class="trophy-feature-card">
-        <p class="section-label">The Basement</p>
-        <span class="trophy-icon">📣</span>
-        <h2>The Sco</h2>
-        <strong id="trophy-the-sco"></strong>
+      <div class="season-feature-card trophy-current-card play-in-current-card">
+        <p class="section-label">Current Holder</p>
+        <h2>Play-In Winner</h2>
+        <strong id="trophy-current-play-in">Loading...</strong>
+        <span id="trophy-current-play-in-detail">Loading from play-in history.</span>
       </div>
 
     </section>
 
-    <section class="trophy-category-nav">
-      <a href="#major-awards">Major Awards</a>
-      <a href="#season-awards">Season Awards</a>
-      <a href="#weekly-awards">Weekly Awards</a>
-      <a href="#side-competitions">Side Competitions</a>
-      <a href="#year-by-year-awards">Year-by-Year</a>
-      <a href="#fun-awards">Fun Awards</a>
-    </section>
-
-    <section class="content-card" id="major-awards">
+    <section class="content-card trophy-tabs-card">
       <div class="card-header">
         <div>
-          <p class="section-label">Major Awards</p>
-          <h2>League Hardware</h2>
+          <p class="section-label">Trophy Room</p>
+          <h2>Awards Archive</h2>
         </div>
       </div>
 
-      <div class="award-cabinet-grid" id="major-awards-grid"></div>
+      <div class="trophy-tabs">
+        <button class="trophy-tab-button is-active" type="button" data-trophy-tab="league-titles">League Titles</button>
+        <button class="trophy-tab-button" type="button" data-trophy-tab="season-awards">Season Awards</button>
+        <button class="trophy-tab-button" type="button" data-trophy-tab="mini-games">Mini Games</button>
+        <button class="trophy-tab-button" type="button" data-trophy-tab="fun-awards">Fun Awards</button>
+      </div>
     </section>
 
-    <section class="content-card" id="season-awards">
+    <section class="content-card trophy-tab-panel is-active" id="league-titles-panel">
+      <div class="card-header">
+        <div>
+          <p class="section-label">League Titles</p>
+          <h2>Regular Season, Points & Play-In Winners</h2>
+        </div>
+      </div>
+
+      <div class="trophy-award-grid" id="league-titles-grid">
+        <div class="record-item">
+          <strong>League Titles</strong>
+          <span>Loading...</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-card trophy-tab-panel" id="season-awards-panel">
       <div class="card-header">
         <div>
           <p class="section-label">Season Awards</p>
-          <h2>Performance Awards</h2>
+          <h2>Yearly Performance Awards</h2>
         </div>
       </div>
 
-      <div class="award-cabinet-grid" id="season-awards-grid"></div>
+      <div class="trophy-award-grid" id="season-awards-grid">
+        <div class="record-item">
+          <strong>Season Awards</strong>
+          <span>Loading...</span>
+        </div>
+      </div>
     </section>
 
-    <section class="content-card" id="weekly-awards">
+    <section class="content-card trophy-tab-panel" id="mini-games-panel">
       <div class="card-header">
         <div>
-          <p class="section-label">Weekly Awards</p>
-          <h2>Single-Week Chaos</h2>
+          <p class="section-label">Mini Games</p>
+          <h2>Pick'Em & Survivor Winners</h2>
         </div>
       </div>
 
-      <div class="award-cabinet-grid" id="weekly-awards-grid"></div>
+      <div class="trophy-award-grid" id="mini-games-grid">
+        <div class="record-item">
+          <strong>Mini Games</strong>
+          <span>Loading...</span>
+        </div>
+      </div>
     </section>
 
-    <section class="content-card" id="side-competitions">
+    <section class="content-card trophy-tab-panel" id="fun-awards-panel">
       <div class="card-header">
         <div>
-          <p class="section-label">Side Competitions</p>
-          <h2>Mini Games</h2>
+          <p class="section-label">Fun Awards</p>
+          <h2>League Vibes, Chaos & Bragging Rights</h2>
         </div>
       </div>
 
-      <div class="content-row" id="side-competitions-grid"></div>
+      <div class="trophy-award-grid" id="fun-awards-grid">
+        <div class="record-item">
+          <strong>Fun Awards</strong>
+          <span>Loading...</span>
+        </div>
+      </div>
     </section>
 
-    <section class="content-card" id="fun-awards">
+    <section class="content-card trophy-related-card">
       <div class="card-header">
         <div>
-          <p class="section-label">League Lore</p>
-          <h2>Fun Awards</h2>
+          <p class="section-label">Related History</p>
+          <h2>Explore More</h2>
         </div>
       </div>
 
-      <div class="award-cabinet-grid" id="fun-awards-grid"></div>
+      <div class="related-franchise-links trophy-related-links">
+        <a href="champions.html">Champions</a>
+        <a href="the-sco.html">The Sco</a>
+        <a href="records.html">Records</a>
+      </div>
     </section>
 
   </main>
