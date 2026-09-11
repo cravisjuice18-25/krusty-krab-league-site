@@ -310,13 +310,32 @@ function renderGroupedAwards(grid, rows, fallbackTitle) {
 
 function buildAwardHistoryCard(title, rows) {
   const card = document.createElement("article");
-  card.className = "trophy-award-card";
+  card.className = "trophy-award-card trophy-award-dropdown-card";
 
   const sortedRows = [...(rows || [])].sort((a, b) => {
     return Number(b.year) - Number(a.year);
   });
 
-  const historyHtml = sortedRows.map(row => {
+  const latestRow = sortedRows[0] || {};
+  const olderRows = sortedRows.slice(1);
+
+  const latestWinner =
+    cleanText(latestRow.winner_team) ||
+    cleanText(latestRow.team) ||
+    cleanText(latestRow.winner_name) ||
+    cleanText(latestRow.winner) ||
+    "TBD";
+
+  const latestYear = cleanText(latestRow.year) || "TBD";
+  const latestValue = cleanText(latestRow.value);
+  const latestNotes = cleanText(latestRow.notes);
+
+  const latestDetails = [
+    latestValue,
+    latestNotes
+  ].filter(item => cleanText(item)).join(" · ");
+
+  const olderHistoryHtml = olderRows.map(row => {
     const winner =
       cleanText(row.winner_team) ||
       cleanText(row.team) ||
@@ -343,15 +362,42 @@ function buildAwardHistoryCard(title, rows) {
   }).join("");
 
   card.innerHTML = `
-    <div class="trophy-award-card-header">
-      <p class="section-label">Award History</p>
-      <h3>${title}</h3>
-    </div>
+    <button class="trophy-award-dropdown-toggle" type="button">
+      <div class="trophy-award-card-header">
+        <p class="section-label">Latest Winner</p>
+        <h3>${title}</h3>
+      </div>
 
-    <div class="trophy-history-list">
-      ${historyHtml}
+      <div class="trophy-latest-row">
+        <span>${latestYear}</span>
+        <strong>${latestWinner}</strong>
+        <small>${latestDetails || "Latest winner"}</small>
+      </div>
+
+      <div class="trophy-dropdown-hint">
+        ${olderRows.length ? `View ${olderRows.length} Past Winner${olderRows.length === 1 ? "" : "s"}` : "No Past Winners Yet"}
+        <span class="trophy-dropdown-caret">▾</span>
+      </div>
+    </button>
+
+    <div class="trophy-history-list trophy-dropdown-history">
+      ${olderHistoryHtml || `
+        <div class="trophy-history-row">
+          <span>—</span>
+          <strong>No past winners yet.</strong>
+          <small>This award history will expand as more seasons are added.</small>
+        </div>
+      `}
     </div>
   `;
+
+  const toggle = card.querySelector(".trophy-award-dropdown-toggle");
+
+  if (toggle) {
+    toggle.addEventListener("click", () => {
+      card.classList.toggle("is-open");
+    });
+  }
 
   return card;
 }
