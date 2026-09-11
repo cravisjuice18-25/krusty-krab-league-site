@@ -5778,3 +5778,106 @@ function buildBasementRecords(scoHistory) {
     grid-template-columns: 1fr;
   }
 }
+/* =========================================================
+   TROPHY ROOM - DROPDOWN AWARD ARCHIVE + CARD FIXES
+   ========================================================= */
+
+.trophy-current-grid .season-feature-card,
+.trophy-current-grid .season-feature-card h2,
+.trophy-current-grid .season-feature-card strong,
+.trophy-current-grid .season-feature-card span,
+.trophy-current-grid .season-feature-card p {
+  color: #ffffff !important;
+}
+
+.trophy-current-grid .season-feature-card {
+  background: linear-gradient(135deg, #0f172a, #1e293b) !important;
+  border-bottom: 6px solid #facc15 !important;
+}
+
+.trophy-current-grid .season-feature-card .section-label {
+  color: #facc15 !important;
+}
+
+.trophy-current-grid .play-in-current-card {
+  background: linear-gradient(135deg, #065f46, #0f172a) !important;
+  border-bottom-color: #34d399 !important;
+}
+
+.trophy-current-grid .play-in-current-card .section-label {
+  color: #a7f3d0 !important;
+}
+
+/* Dropdown award cards */
+.trophy-award-dropdown-card {
+  overflow: hidden;
+}
+
+.trophy-award-dropdown-toggle {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+
+.trophy-latest-row {
+  display: grid;
+  grid-template-columns: 58px 1fr;
+  gap: 8px 12px;
+  padding: 15px;
+  border-bottom: 1px solid var(--line);
+  background: white;
+}
+
+.trophy-latest-row span {
+  font-size: 12px;
+  font-weight: 1000;
+  color: var(--muted);
+}
+
+.trophy-latest-row strong {
+  font-size: 15px;
+  color: var(--ink);
+}
+
+.trophy-latest-row small {
+  grid-column: 2;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.trophy-dropdown-hint {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 15px;
+  background: #f8fafc;
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 1000;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.trophy-dropdown-caret {
+  transition: transform 0.18s ease;
+}
+
+.trophy-dropdown-history {
+  display: none;
+  border-top: 1px solid var(--line);
+}
+
+.trophy-award-dropdown-card.is-open .trophy-dropdown-history {
+  display: grid;
+}
+
+.trophy-award-dropdown-card.is-open .trophy-dropdown-caret {
+  transform: rotate(180deg);
+}
