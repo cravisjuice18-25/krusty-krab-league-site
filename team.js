@@ -17,7 +17,7 @@ async function buildTeamPage() {
     const scoHistory = await loadOptionalCSV("data/the-sco.csv");
 
     const teamLegends = await loadOptionalCSV("data/team-legends.csv");
-    const teamPicks = await loadOptionalCSV("data/draft-picks.csv");
+    const draftPicks = await loadOptionalCSV("data/draft-picks.csv");
     const teamDraftCallouts = await loadOptionalCSV("data/team-draft-callouts.csv");
 
     const team = teams.find(row => {
@@ -53,7 +53,6 @@ async function buildTeamPage() {
       .filter(row => cleanText(row.owner_id).toLowerCase() === ownerId.toLowerCase());
 
     const ownerDraftHistory = getOwnerFirstDraftPicks(draftPicks, team, ownerId);
-      .filter(row => cleanText(row.owner_id).toLowerCase() === ownerId.toLowerCase());
 
     const ownerDraftCallouts = teamDraftCallouts
       .filter(row => cleanText(row.owner_id).toLowerCase() === ownerId.toLowerCase());
@@ -662,7 +661,7 @@ function buildFranchiseLegends(ownerLegends) {
 
 /* =========================================================
    DRAFT HISTORY SUMMARY
-   team-draft-history.csv + team-draft-callouts.csv
+   Pulls last 5 franchise first picks from draft-picks.csv
    ========================================================= */
 
 function buildDraftHistory(ownerDraftHistory, ownerDraftCallouts, ownerId) {
@@ -676,12 +675,11 @@ function buildFirstRoundPicks(ownerDraftHistory) {
 
   if (!list) return;
 
-  const firstRoundPicks = (ownerDraftHistory || [])
-    .filter(row => cleanText(row.round) === "1" || cleanText(row.pick_number).startsWith("1."))
+  const recentFirstPicks = [...(ownerDraftHistory || [])]
     .sort((a, b) => Number(b.year) - Number(a.year))
     .slice(0, 5);
 
-  if (firstRoundPicks.length === 0) {
+  if (recentFirstPicks.length === 0) {
     list.innerHTML = `
       <article class="first-round-pick-card">
         <div class="first-round-pick-image">
@@ -699,11 +697,27 @@ function buildFirstRoundPicks(ownerDraftHistory) {
 
   list.innerHTML = "";
 
-  firstRoundPicks.forEach(row => {
-    const player = cleanText(row.player) || "TBD";
+  recentFirstPicks.forEach(row => {
+    const player = cleanText(row.player) || cleanText(row.player_name) || "TBD";
     const year = cleanText(row.year) || "TBD";
-    const pickNumber = cleanText(row.pick_number) || "TBD";
-    const position = cleanText(row.position) || "TBD";
+
+    const pickNumber =
+      cleanText(row.overall_pick) ||
+      cleanText(row.pick) ||
+      cleanText(row.pick_number) ||
+      cleanText(row.no) ||
+      "TBD";
+
+    const round =
+      cleanText(row.round) ||
+      getRoundFromPickNumber(pickNumber) ||
+      "TBD";
+
+    const position =
+      cleanText(row.position) ||
+      cleanText(row.pos) ||
+      "TBD";
+
     const nflTeam = cleanText(row.nfl_team);
     const imagePath = getImagePath(row.image_path, "images/draft-headshots/player-placeholder.png");
 
@@ -716,7 +730,7 @@ function buildFirstRoundPicks(ownerDraftHistory) {
       </div>
 
       <div class="first-round-pick-details">
-        <span>${year} · Pick ${pickNumber}</span>
+        <span>${year} · Round ${round} · Pick ${pickNumber}</span>
         <strong>${player}</strong>
         <small>${position}${nflTeam ? ` · ${nflTeam}` : ""}</small>
       </div>
@@ -725,74 +739,7 @@ function buildFirstRoundPicks(ownerDraftHistory) {
     list.appendChild(item);
   });
 }
-function getOwnerFirstDraftPicks(draftPicks, team, ownerId) {
-  const currentOwnerId = cleanText(ownerId).toLowerCase();
-  const currentOwnerName = cleanText(team.owner).toLowerCase();
-  const currentTeamName = cleanText(team.team_name).toLowerCase();
 
-  const franchisePicks = (draftPicks || []).filter(row => {
-    const rowOwnerId = cleanText(row.owner_id).toLowerCase();
-    const rowDraftingOwner = cleanText(row.drafting_owner).toLowerCase();
-    const rowOwner = cleanText(row.owner).toLowerCase();
-    const rowDraftingTeam = cleanText(row.drafting_team).toLowerCase();
-    const rowTeam = cleanText(row.team).toLowerCase();
-    const rowTeamOwner = cleanText(row.team_owner).toLowerCase();
-
-    return (
-      rowOwnerId === currentOwnerId ||
-      rowDraftingOwner === currentOwnerName ||
-      rowOwner === currentOwnerName ||
-      rowDraftingTeam === currentTeamName ||
-      rowTeam === currentTeamName ||
-      rowTeamOwner === currentOwnerName
-    );
-  });
-
-  const picksByYear = {};
-
-  franchisePicks.forEach(row => {
-    const year = cleanText(row.year);
-
-    if (!year) return;
-
-    if (!picksByYear[year]) {
-      picksByYear[year] = [];
-    }
-
-    picksByYear[year].push(row);
-  });
-
-  return Object.keys(picksByYear).map(year => {
-    return [...picksByYear[year]].sort((a, b) => {
-      return getDraftPickNumber(a) - getDraftPickNumber(b);
-    })[0];
-  });
-}
-function getDraftPickNumber(row) {
-  const pick =
-    cleanText(row.overall_pick) ||
-    cleanText(row.pick) ||
-    cleanText(row.pick_number) ||
-    cleanText(row.no);
-
-  const number = Number(pick);
-
-  if (!Number.isNaN(number)) return number;
-
-  const match = pick.match(/\d+/);
-
-  if (match) return Number(match[0]);
-
-  return 9999;
-}
-
-function getRoundFromPickNumber(pickNumber) {
-  const cleaned = cleanText(pickNumber);
-
-  if (!cleaned.includes(".")) return "";
-
-  return cleaned.split(".")[0];
-}
 function buildDraftCallouts(ownerDraftCallouts) {
   const grid = document.getElementById("team-draft-callout-grid");
 
@@ -917,6 +864,80 @@ function buildRelatedFranchiseLinks(ownerId) {
     <a href="uniforms.html">Uniform Gallery</a>
     <a href="head-to-head.html?owner=${ownerId}">Head-to-Head</a>
   `;
+}
+
+/* =========================================================
+   DRAFT PICK HELPERS
+   ========================================================= */
+
+function getOwnerFirstDraftPicks(draftPicks, team, ownerId) {
+  const currentOwnerId = cleanText(ownerId).toLowerCase();
+  const currentOwnerName = cleanText(team.owner).toLowerCase();
+  const currentTeamName = cleanText(team.team_name).toLowerCase();
+
+  const franchisePicks = (draftPicks || []).filter(row => {
+    const rowOwnerId = cleanText(row.owner_id).toLowerCase();
+    const rowDraftingOwner = cleanText(row.drafting_owner).toLowerCase();
+    const rowOwner = cleanText(row.owner).toLowerCase();
+    const rowDraftingTeam = cleanText(row.drafting_team).toLowerCase();
+    const rowTeam = cleanText(row.team).toLowerCase();
+    const rowTeamOwner = cleanText(row.team_owner).toLowerCase();
+
+    return (
+      rowOwnerId === currentOwnerId ||
+      rowDraftingOwner === currentOwnerName ||
+      rowOwner === currentOwnerName ||
+      rowDraftingTeam === currentTeamName ||
+      rowTeam === currentTeamName ||
+      rowTeamOwner === currentOwnerName
+    );
+  });
+
+  const picksByYear = {};
+
+  franchisePicks.forEach(row => {
+    const year = cleanText(row.year);
+
+    if (!year) return;
+
+    if (!picksByYear[year]) {
+      picksByYear[year] = [];
+    }
+
+    picksByYear[year].push(row);
+  });
+
+  return Object.keys(picksByYear).map(year => {
+    return [...picksByYear[year]].sort((a, b) => {
+      return getDraftPickNumber(a) - getDraftPickNumber(b);
+    })[0];
+  });
+}
+
+function getDraftPickNumber(row) {
+  const pick =
+    cleanText(row.overall_pick) ||
+    cleanText(row.pick) ||
+    cleanText(row.pick_number) ||
+    cleanText(row.no);
+
+  const number = Number(pick);
+
+  if (!Number.isNaN(number)) return number;
+
+  const match = pick.match(/\d+/);
+
+  if (match) return Number(match[0]);
+
+  return 9999;
+}
+
+function getRoundFromPickNumber(pickNumber) {
+  const cleaned = cleanText(pickNumber);
+
+  if (!cleaned.includes(".")) return "";
+
+  return cleaned.split(".")[0];
 }
 
 /* =========================================================
