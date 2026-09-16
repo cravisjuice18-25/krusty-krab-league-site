@@ -5953,3 +5953,17 @@ function buildBasementRecords(scoHistory) {
     grid-template-columns: 1fr;
   }
 }
+/* =========================================================
+   TEAM PROFILE - H2H OWNER COLOR CALLOUTS
+   ========================================================= */
+
+.h2h-callout-card,
+.h2h-callout-card h3,
+.h2h-callout-card span,
+.h2h-callout-card p {
+  color: #ffffff;
+}
+
+.h2h-callout-card .section-label {
+  color: var(--gold);
+}
