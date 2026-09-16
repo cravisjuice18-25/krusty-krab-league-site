@@ -24,7 +24,7 @@ async function buildTeamPage() {
       return cleanText(row.owner_id).toLowerCase() === ownerId.toLowerCase();
     });
 
-    if (!team) {
+    if (!team) {const teamsLookup = buildTeamsLookup(teams);
       showTeamError("Franchise not found", `No franchise was found for owner: ${ownerId}`);
       return;
     }
@@ -63,7 +63,7 @@ async function buildTeamPage() {
     buildBestWorstSeasons(team, ownerStandings, ownerScoRows);
     buildPostseasonResume(team, ownerChampionships);
     buildTopPlayerSeasons(ownerPlayers);
-    buildHeadToHead(ownerH2H);
+    buildHeadToHead(ownerH2H, teamsLookup);
     buildFranchiseLegends(ownerLegends);
     buildDraftHistory(ownerDraftHistory, ownerDraftCallouts, ownerId);
     buildTeamRecords(ownerRecords);
@@ -427,14 +427,14 @@ function buildTopPlayerSeasons(ownerPlayers) {
    team-h2h.csv
    ========================================================= */
 
-function buildHeadToHead(rows) {
+function buildHeadToHead(rows, teamsLookup) {
   const tableBody = document.getElementById("team-h2h-body");
 
   if (!tableBody) return;
 
   const cleanRows = rows || [];
 
-  buildHeadToHeadCallouts(cleanRows);
+  buildHeadToHeadCallouts(cleanRows, teamsLookup);
 
   if (cleanRows.length === 0) {
     tableBody.innerHTML = `
@@ -455,8 +455,8 @@ function buildHeadToHead(rows) {
   setupHeadToHeadSorting(cleanRows);
 }
 
-function buildHeadToHeadCallouts(rows) {
-  const minimumGames = 3;
+function buildHeadToHeadCallouts(rows, teamsLookup) {
+  const minimumGames = 10;
 
   const qualifiedRows = (rows || []).filter(row => {
     const games = Number(cleanText(row.total_games) || cleanText(row.totalGames)) || 0;
@@ -465,9 +465,9 @@ function buildHeadToHeadCallouts(rows) {
 
   if (qualifiedRows.length === 0) {
     setText("team-h2h-nemesis", "TBD");
-    setText("team-h2h-nemesis-detail", "Needs at least 3 games against an opponent.");
+    setText("team-h2h-nemesis-detail", `Needs at least ${minimumGames} games against an opponent.`);
     setText("team-h2h-victim", "TBD");
-    setText("team-h2h-victim-detail", "Needs at least 3 games against an opponent.");
+    setText("team-h2h-victim-detail", `Needs at least ${minimumGames} games against an opponent.`);
     return;
   }
 
@@ -485,6 +485,8 @@ function buildHeadToHeadCallouts(rows) {
       "team-h2h-nemesis-detail",
       `${cleanText(nemesis.record) || "TBD"} · ${cleanText(nemesis.win_pct) || "TBD"} win rate · ${cleanText(nemesis.total_games) || "TBD"} games`
     );
+
+    applyHeadToHeadCardColor("team-h2h-nemesis", nemesis, teamsLookup, "#991b1b");
   }
 
   if (favoriteVictim) {
@@ -493,9 +495,53 @@ function buildHeadToHeadCallouts(rows) {
       "team-h2h-victim-detail",
       `${cleanText(favoriteVictim.record) || "TBD"} · ${cleanText(favoriteVictim.win_pct) || "TBD"} win rate · ${cleanText(favoriteVictim.total_games) || "TBD"} games`
     );
+
+    applyHeadToHeadCardColor("team-h2h-victim", favoriteVictim, teamsLookup, "#065f46");
   }
 }
+function buildTeamsLookup(teams) {
+  const lookup = {};
 
+  (teams || []).forEach(team => {
+    const ownerId = cleanText(team.owner_id).toLowerCase();
+    const ownerName = cleanText(team.owner).toLowerCase();
+    const teamName = cleanText(team.team_name).toLowerCase();
+
+    if (ownerId) lookup[ownerId] = team;
+    if (ownerName) lookup[ownerName] = team;
+    if (teamName) lookup[teamName] = team;
+  });
+
+  return lookup;
+}
+
+function applyHeadToHeadCardColor(textElementId, matchupRow, teamsLookup, fallbackColor) {
+  const textElement = document.getElementById(textElementId);
+
+  if (!textElement) return;
+
+  const card = textElement.closest(".h2h-callout-card");
+
+  if (!card) return;
+
+  const opponentKey =
+    cleanText(matchupRow.opponent_owner_id).toLowerCase() ||
+    cleanText(matchupRow.opponent_id).toLowerCase() ||
+    cleanText(matchupRow.opponent_owner).toLowerCase() ||
+    cleanText(matchupRow.opponent).toLowerCase() ||
+    cleanText(matchupRow.opponent_team).toLowerCase() ||
+    cleanText(matchupRow.opponent_name).toLowerCase();
+
+  const opponentTeam = teamsLookup[opponentKey];
+
+  const primaryColor = cleanColor(opponentTeam?.primary_color, fallbackColor);
+  const secondaryColor = cleanColor(opponentTeam?.secondary_color, "#111827");
+  const decalColor = cleanColor(opponentTeam?.decal_color, "#facc15");
+
+  card.style.background = `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})`;
+  card.style.borderTopColor = decalColor;
+  card.style.color = "#ffffff";
+}
 function renderHeadToHeadRows(rows) {
   const tableBody = document.getElementById("team-h2h-body");
 
