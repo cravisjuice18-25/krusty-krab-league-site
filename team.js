@@ -24,10 +24,12 @@ async function buildTeamPage() {
       return cleanText(row.owner_id).toLowerCase() === ownerId.toLowerCase();
     });
 
-    if (!team) {const teamsLookup = buildTeamsLookup(teams);
+    if (!team) {
       showTeamError("Franchise not found", `No franchise was found for owner: ${ownerId}`);
       return;
     }
+
+    const teamsLookup = buildTeamsLookup(teams);
 
     const ownerStandings = standings
       .filter(row => cleanText(row.owner_id).toLowerCase() === ownerId.toLowerCase())
@@ -161,7 +163,6 @@ function buildTeamIdentity(team) {
 
 /* =========================================================
    FRANCHISE AT-A-GLANCE
-   Keep only non-repetitive top stats
    ========================================================= */
 
 function buildTeamSnapshot(team, ownerStandings) {
@@ -183,7 +184,6 @@ function buildTeamSnapshot(team, ownerStandings) {
 
 /* =========================================================
    SEASON HISTORY
-   standings.csv
    ========================================================= */
 
 function buildSeasonHistory(ownerStandings) {
@@ -227,7 +227,6 @@ function buildSeasonHistory(ownerStandings) {
 
 /* =========================================================
    REGULAR SEASON HIGHS AND LOWS
-   standings.csv + teams.csv fallbacks
    ========================================================= */
 
 function buildBestWorstSeasons(team, ownerStandings, ownerScoRows) {
@@ -325,7 +324,6 @@ function buildBestWorstSeasons(team, ownerStandings, ownerScoRows) {
 
 /* =========================================================
    PLAYOFF PROFILE
-   teams.csv + champions.csv
    ========================================================= */
 
 function buildPostseasonResume(team, ownerChampionships) {
@@ -370,7 +368,6 @@ function buildChampionshipYearBadges(ownerChampionships) {
 
 /* =========================================================
    TOP PLAYER SEASONS
-   team-players.csv
    ========================================================= */
 
 function buildTopPlayerSeasons(ownerPlayers) {
@@ -424,7 +421,7 @@ function buildTopPlayerSeasons(ownerPlayers) {
 
 /* =========================================================
    HEAD TO HEAD
-   team-h2h.csv
+   Minimum 10 games for Nemesis/Favorite Victim
    ========================================================= */
 
 function buildHeadToHead(rows, teamsLookup) {
@@ -457,6 +454,9 @@ function buildHeadToHead(rows, teamsLookup) {
 
 function buildHeadToHeadCallouts(rows, teamsLookup) {
   const minimumGames = 10;
+
+  resetHeadToHeadCardColor("team-h2h-nemesis");
+  resetHeadToHeadCardColor("team-h2h-victim");
 
   const qualifiedRows = (rows || []).filter(row => {
     const games = Number(cleanText(row.total_games) || cleanText(row.totalGames)) || 0;
@@ -499,49 +499,7 @@ function buildHeadToHeadCallouts(rows, teamsLookup) {
     applyHeadToHeadCardColor("team-h2h-victim", favoriteVictim, teamsLookup, "#065f46");
   }
 }
-function buildTeamsLookup(teams) {
-  const lookup = {};
 
-  (teams || []).forEach(team => {
-    const ownerId = cleanText(team.owner_id).toLowerCase();
-    const ownerName = cleanText(team.owner).toLowerCase();
-    const teamName = cleanText(team.team_name).toLowerCase();
-
-    if (ownerId) lookup[ownerId] = team;
-    if (ownerName) lookup[ownerName] = team;
-    if (teamName) lookup[teamName] = team;
-  });
-
-  return lookup;
-}
-
-function applyHeadToHeadCardColor(textElementId, matchupRow, teamsLookup, fallbackColor) {
-  const textElement = document.getElementById(textElementId);
-
-  if (!textElement) return;
-
-  const card = textElement.closest(".h2h-callout-card");
-
-  if (!card) return;
-
-  const opponentKey =
-    cleanText(matchupRow.opponent_owner_id).toLowerCase() ||
-    cleanText(matchupRow.opponent_id).toLowerCase() ||
-    cleanText(matchupRow.opponent_owner).toLowerCase() ||
-    cleanText(matchupRow.opponent).toLowerCase() ||
-    cleanText(matchupRow.opponent_team).toLowerCase() ||
-    cleanText(matchupRow.opponent_name).toLowerCase();
-
-  const opponentTeam = teamsLookup[opponentKey];
-
-  const primaryColor = cleanColor(opponentTeam?.primary_color, fallbackColor);
-  const secondaryColor = cleanColor(opponentTeam?.secondary_color, "#111827");
-  const decalColor = cleanColor(opponentTeam?.decal_color, "#facc15");
-
-  card.style.background = `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})`;
-  card.style.borderTopColor = decalColor;
-  card.style.color = "#ffffff";
-}
 function renderHeadToHeadRows(rows) {
   const tableBody = document.getElementById("team-h2h-body");
 
@@ -655,10 +613,79 @@ function parsePercentOrDecimal(value) {
 }
 
 /* =========================================================
+   HEAD TO HEAD COLOR HELPERS
+   ========================================================= */
+
+function buildTeamsLookup(teams) {
+  const lookup = {};
+
+  (teams || []).forEach(team => {
+    const ownerId = cleanText(team.owner_id).toLowerCase();
+    const ownerName = cleanText(team.owner).toLowerCase();
+    const teamName = cleanText(team.team_name).toLowerCase();
+
+    if (ownerId) lookup[ownerId] = team;
+    if (ownerName) lookup[ownerName] = team;
+    if (teamName) lookup[teamName] = team;
+  });
+
+  return lookup;
+}
+
+function applyHeadToHeadCardColor(textElementId, matchupRow, teamsLookup, fallbackColor) {
+  const textElement = document.getElementById(textElementId);
+
+  if (!textElement) return;
+
+  const card = textElement.closest(".h2h-callout-card");
+
+  if (!card) return;
+
+  const opponentKeys = [
+    cleanText(matchupRow.opponent_owner_id).toLowerCase(),
+    cleanText(matchupRow.opponent_id).toLowerCase(),
+    cleanText(matchupRow.opponent_owner).toLowerCase(),
+    cleanText(matchupRow.opponent).toLowerCase(),
+    cleanText(matchupRow.opponent_team).toLowerCase(),
+    cleanText(matchupRow.opponent_name).toLowerCase()
+  ].filter(Boolean);
+
+  let opponentTeam = null;
+
+  opponentKeys.some(key => {
+    if (teamsLookup[key]) {
+      opponentTeam = teamsLookup[key];
+      return true;
+    }
+
+    return false;
+  });
+
+  const primaryColor = cleanColor(opponentTeam?.primary_color, fallbackColor);
+  const secondaryColor = cleanColor(opponentTeam?.secondary_color, "#111827");
+  const decalColor = cleanColor(opponentTeam?.decal_color, "#facc15");
+
+  card.style.background = `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})`;
+  card.style.borderTopColor = decalColor;
+  card.style.color = "#ffffff";
+}
+
+function resetHeadToHeadCardColor(textElementId) {
+  const textElement = document.getElementById(textElementId);
+
+  if (!textElement) return;
+
+  const card = textElement.closest(".h2h-callout-card");
+
+  if (!card) return;
+
+  card.style.background = "";
+  card.style.borderTopColor = "";
+  card.style.color = "";
+}
+
+/* =========================================================
    FRANCHISE LEGENDS
-   team-legends.csv
-   Fixed display categories:
-   Franchise GOAT, Best Draft Pick, Fan Favorite
    ========================================================= */
 
 function buildFranchiseLegends(ownerLegends) {
@@ -837,7 +864,6 @@ function buildDraftHistoryLink(ownerId) {
 
 /* =========================================================
    RECORDS HELD
-   team-records.csv
    ========================================================= */
 
 function buildTeamRecords(ownerRecords) {
