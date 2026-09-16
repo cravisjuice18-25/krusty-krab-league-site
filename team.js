@@ -17,7 +17,7 @@ async function buildTeamPage() {
     const scoHistory = await loadOptionalCSV("data/the-sco.csv");
 
     const teamLegends = await loadOptionalCSV("data/team-legends.csv");
-    const teamDraftHistory = await loadOptionalCSV("data/team-draft-history.csv");
+    const teamPicks = await loadOptionalCSV("data/draft-picks.csv");
     const teamDraftCallouts = await loadOptionalCSV("data/team-draft-callouts.csv");
 
     const team = teams.find(row => {
@@ -52,7 +52,7 @@ async function buildTeamPage() {
     const ownerLegends = teamLegends
       .filter(row => cleanText(row.owner_id).toLowerCase() === ownerId.toLowerCase());
 
-    const ownerDraftHistory = teamDraftHistory
+    const ownerDraftHistory = getOwnerFirstDraftPicks(draftPicks, team, ownerId);
       .filter(row => cleanText(row.owner_id).toLowerCase() === ownerId.toLowerCase());
 
     const ownerDraftCallouts = teamDraftCallouts
@@ -725,7 +725,74 @@ function buildFirstRoundPicks(ownerDraftHistory) {
     list.appendChild(item);
   });
 }
+function getOwnerFirstDraftPicks(draftPicks, team, ownerId) {
+  const currentOwnerId = cleanText(ownerId).toLowerCase();
+  const currentOwnerName = cleanText(team.owner).toLowerCase();
+  const currentTeamName = cleanText(team.team_name).toLowerCase();
 
+  const franchisePicks = (draftPicks || []).filter(row => {
+    const rowOwnerId = cleanText(row.owner_id).toLowerCase();
+    const rowDraftingOwner = cleanText(row.drafting_owner).toLowerCase();
+    const rowOwner = cleanText(row.owner).toLowerCase();
+    const rowDraftingTeam = cleanText(row.drafting_team).toLowerCase();
+    const rowTeam = cleanText(row.team).toLowerCase();
+    const rowTeamOwner = cleanText(row.team_owner).toLowerCase();
+
+    return (
+      rowOwnerId === currentOwnerId ||
+      rowDraftingOwner === currentOwnerName ||
+      rowOwner === currentOwnerName ||
+      rowDraftingTeam === currentTeamName ||
+      rowTeam === currentTeamName ||
+      rowTeamOwner === currentOwnerName
+    );
+  });
+
+  const picksByYear = {};
+
+  franchisePicks.forEach(row => {
+    const year = cleanText(row.year);
+
+    if (!year) return;
+
+    if (!picksByYear[year]) {
+      picksByYear[year] = [];
+    }
+
+    picksByYear[year].push(row);
+  });
+
+  return Object.keys(picksByYear).map(year => {
+    return [...picksByYear[year]].sort((a, b) => {
+      return getDraftPickNumber(a) - getDraftPickNumber(b);
+    })[0];
+  });
+}
+function getDraftPickNumber(row) {
+  const pick =
+    cleanText(row.overall_pick) ||
+    cleanText(row.pick) ||
+    cleanText(row.pick_number) ||
+    cleanText(row.no);
+
+  const number = Number(pick);
+
+  if (!Number.isNaN(number)) return number;
+
+  const match = pick.match(/\d+/);
+
+  if (match) return Number(match[0]);
+
+  return 9999;
+}
+
+function getRoundFromPickNumber(pickNumber) {
+  const cleaned = cleanText(pickNumber);
+
+  if (!cleaned.includes(".")) return "";
+
+  return cleaned.split(".")[0];
+}
 function buildDraftCallouts(ownerDraftCallouts) {
   const grid = document.getElementById("team-draft-callout-grid");
 
