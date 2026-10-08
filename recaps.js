@@ -1,7 +1,0 @@
-document.addEventListener('DOMContentLoaded',async()=>{
- try{const [games,teams]=await Promise.all([loadCSV('data/game-results.csv'),loadCSV('data/teams.csv')]);const {escape:e,number:n}=KKL;const names=Object.fromEntries(teams.map(x=>[x.owner_id,x.team_name]));
- const weeks=[...new Set(games.map(x=>`${x.year}:${x.week}`))].sort((a,b)=>{const [ay,aw]=a.split(':').map(Number);const [by,bw]=b.split(':').map(Number);return by-ay||bw-aw;});const select=document.getElementById('results-week');select.innerHTML=weeks.map(x=>`<option value="${x}">${x.split(':')[0]} · Week ${x.split(':')[1]}</option>`).join('');
- const render=()=>{const [year,week]=select.value.split(':');const rows=games.filter(x=>x.year===year&&x.week===week);const seen=new Set();const matches=[];for(const x of rows){const key=[x.owner_id,x.opponent_id].sort().join(':');if(seen.has(key))continue;seen.add(key);matches.push(x);}
- document.getElementById('results-grid').innerHTML=matches.map(x=>`<article class="feature-card"><p class="section-label">${e(year)} · Week ${e(week)}</p><h3>${e(names[x.owner_id]||x.owner_id)} vs ${e(names[x.opponent_id]||x.opponent_id)}</h3><p><strong>${n(x.points_for)} — ${n(x.points_against)}</strong></p><p>${n(x.points_for)===n(x.points_against)?'Tie':e(names[n(x.points_for)>n(x.points_against)?x.owner_id:x.opponent_id]||'Winner')+' wins'}</p></article>`).join('')||'<p>No completed games recorded.</p>';};render();select.addEventListener('change',render);
- }catch(err){console.error(err);KKL.error('results-grid');}
-});

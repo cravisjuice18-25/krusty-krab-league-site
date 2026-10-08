@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
  const {escape:e,number:n,record:r,error}=KKL;
  const results=await Promise.allSettled(['current-standings','teams','pickem-weekly'].map(p=>loadCSV(`data/${p}.csv`)));
- if(results[0].status==='fulfilled'){
+ if(document.getElementById('current-table') && results[0].status==='fulfilled'){
   const data=results[0].value;const year=Math.max(...data.map(x=>n(x.year)));const rows=data.filter(x=>n(x.year)===year).sort((a,b)=>n(a.rank)-n(b.rank));
   document.getElementById('current-season-label').textContent=`${year} · Through Week ${Math.max(...rows.map(x=>n(x.through_week)))}`;
   document.getElementById('current-table').innerHTML=rows.map(x=>`<tr><td>${e(x.rank)}</td><td><a href="team.html?owner=${encodeURIComponent(x.owner_id)}">${e(x.team)}</a></td><td>${e(x.record)}</td><td>${n(x.points_for).toLocaleString()}</td><td>${n(x.points_against).toLocaleString()}</td><td>${n(x.rank)<=3?'Direct playoff position':n(x.rank)<=5?'Play-in position':'Outside playoff positions'}</td></tr>`).join('')||'<tr><td colspan="6">No current standings recorded.</td></tr>';

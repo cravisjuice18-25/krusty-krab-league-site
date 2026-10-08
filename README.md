@@ -1,6 +1,6 @@
 # Krusty Krab League
 
-Static league website for https://krustykrableague.com. HTML, CSS and browser JavaScript; no production build or package installation required.
+Static league website for https://krustykrableague.com. HTML, CSS, browser JavaScript and a small Cloudflare Worker for the official NFL news feed; no production build or package installation required.
 
 ## Local preview
 
@@ -12,9 +12,7 @@ Pages read the existing `data/*.csv` files through `data-loader.js`. The hourly 
 
 - Standings: current playoff positions, lifetime franchise records, current pick’em totals.
 - Head-to-Head: franchise selector and recorded series totals.
-- Weekly Results: season/week selector and one scoreboard card per matchup.
 - Hall of Fame: editorial moments supplied by the existing CSV.
-- League Alumni: former owners and franchise history.
 - Rules: established league format and the official ESPN settings link.
 
 Shared navigation, accessibility, active-page indication and unavailable-artwork fallback live in `site.js`. Editorial legends and unavailable historical facts should be supplied in the data rather than guessed in code. Hall of Fame deliberately displays text rather than owner photos.
@@ -23,4 +21,6 @@ Cloudflare hosting remains configured by `wrangler.jsonc`; no hosting migration 
 
 ## Checks
 
-Run `python3 scripts/check_site.py` and `node --test tests/data-loader.test.cjs`. A separate DOM smoke check verified rendering of 17 page variants, current standings, active/alumni filtering, head-to-head selection, weekly scoreboards, and dropdown interactions. Full browser layout verification still needs a reachable preview or deployment.
+Run `python3 scripts/check_site.py` and `node --test tests/data-loader.test.cjs`. A separate DOM smoke check verified rendering of 17 page variants, current standings, active/alumni filtering, head-to-head selection, homepage playoff standings, and dropdown interactions. Full browser layout verification still needs a reachable preview or deployment.
+
+The homepage playoff race uses current standings. The Insider Feed reads ESPN’s official NFL RSS feed through `/api/nfl-news` on Cloudflare, cached for five minutes, with direct ESPN/X fallback links. Local Python preview does not provide the news API; the Worker must run for live headlines.

@@ -483,7 +483,7 @@ function buildHeadToHeadCallouts(rows, teamsLookup) {
     setText("team-h2h-nemesis", getOpponentName(nemesis));
     setText(
       "team-h2h-nemesis-detail",
-      `${cleanText(nemesis.record) || "TBD"} · ${cleanText(nemesis.win_pct) || "TBD"} win rate · ${cleanText(nemesis.total_games) || "TBD"} games`
+      `${cleanText(nemesis.record) || "TBD"} · ${formatMatchupWinPct(nemesis.win_pct)} win rate · ${cleanText(nemesis.total_games) || "TBD"} games`
     );
 
     applyHeadToHeadCardColor("team-h2h-nemesis", nemesis, teamsLookup, "#991b1b");
@@ -493,7 +493,7 @@ function buildHeadToHeadCallouts(rows, teamsLookup) {
     setText("team-h2h-victim", getOpponentName(favoriteVictim));
     setText(
       "team-h2h-victim-detail",
-      `${cleanText(favoriteVictim.record) || "TBD"} · ${cleanText(favoriteVictim.win_pct) || "TBD"} win rate · ${cleanText(favoriteVictim.total_games) || "TBD"} games`
+      `${cleanText(favoriteVictim.record) || "TBD"} · ${formatMatchupWinPct(favoriteVictim.win_pct)} win rate · ${cleanText(favoriteVictim.total_games) || "TBD"} games`
     );
 
     applyHeadToHeadCardColor("team-h2h-victim", favoriteVictim, teamsLookup, "#065f46");
@@ -515,7 +515,7 @@ function renderHeadToHeadRows(rows) {
       <td><strong>${opponent}</strong></td>
       <td>${cleanText(row.total_games) || cleanText(row.totalGames) || "TBD"}</td>
       <td>${cleanText(row.record) || "TBD"}</td>
-      <td>${cleanText(row.win_pct) || "TBD"}</td>
+      <td>${formatMatchupWinPct(row.win_pct)}</td>
       <td>${cleanText(row.points_for) || "TBD"}</td>
       <td>${cleanText(row.points_against) || "TBD"}</td>
       <td>${cleanText(row.margin) || "TBD"}</td>
@@ -1312,3 +1312,8 @@ function ordinal(value) {
 }
 
 buildTeamPage();
+
+function formatMatchupWinPct(value) {
+  if (!cleanText(value)) return "—";
+  return parsePercentOrDecimal(value).toFixed(3);
+}

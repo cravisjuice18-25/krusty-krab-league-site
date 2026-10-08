@@ -68,7 +68,7 @@ async function buildHomePage() {
   buildTeamsCount(teams);
   buildLatestSeasonSnapshot(standings);
   buildFeaturedEvent(featuredEvent);
-  buildFeaturedRecords(featuredRecords);
+  buildFeaturedRecordsSummary(featuredRecords);
   buildHomeFranchiseCards(teams);
   buildArchiveFeature(archiveFeature);
   buildAllTimePlayerCards(allTimePlayers);
@@ -730,3 +730,8 @@ function ordinal(value) {
 }
 
 buildHomePage();
+
+function buildFeaturedRecordsSummary(rows) {
+  const el = document.getElementById("home-record-book-summary");
+  if (el) el.textContent = "League records, milestones, and all-time leaders.";
+}

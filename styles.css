@@ -5983,3 +5983,10 @@ select { max-width:100%;padding:10px 14px;margin:12px 0;border-radius:8px;backgr
  .nav-group:last-child .nav-dropdown { left:auto;right:0; }
 }
 .archive-image-fallback { object-fit:contain; }
+.home-playoff-race-card .race-direct td:first-child { border-left:3px solid #79cedc; }
+.home-playoff-race-card .race-playin td:first-child { border-left:3px solid #d5a458; }
+.insider-headlines { max-height:440px;overflow-y:auto; }
+.insider-headline { padding:16px 0;border-bottom:1px solid rgba(255,255,255,.15); }
+.insider-headline a { display:block;color:inherit;font-weight:600;line-height:1.5; }
+.insider-headline time { display:block;margin-top:8px;font-size:.8rem;opacity:.7; }
+.insider-feed-links { display:flex;flex-wrap:wrap;gap:16px;margin-top:18px;font-size:.85rem; }
