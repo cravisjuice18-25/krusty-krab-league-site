@@ -1,13 +1,25 @@
 owner_id,record_name,value,year,notes
-bard,Best Career Win Percentage,64.03%,2014-2026,Completed games through 2026 Week 3; ties count as half a win
-bard,Most Career Wins,125,2014-2026,Completed games through 2026 Week 3
-bard,Most Playoff Appearances,12,2014-Present,TBD
-bard,Most Championship Game Appearances,TBD,TBD,TBD
-jake,Most Championships,3,2016 2019 2023,TBD
-jake,Best Championship Record,3-0,,TBD
-muffin,Team Record Held,TBD,TBD,TBD
-miner,Team Record Held,TBD,TBD,TBD
-kyle,Team Record Held,TBD,TBD,TBD
-hunter,Team Record Held,TBD,TBD,TBD
-gary,Team Record Held,TBD,TBD,TBD
-sco,Team Record Held,TBD,TBD,TBD
+bard,Career Win Percentage,64.21%,2014–2026,All official completed games; ties count as half a win
+bard,Highest Single-Game Score,201,2020 W5,Original recorded score
+charlie,Career Win Percentage,30.21%,2014–2016,All official completed games; ties count as half a win
+charlie,Highest Single-Game Score,142,2015 W2,Original recorded score
+eric,Career Win Percentage,49.22%,2014–2017,All official completed games; ties count as half a win
+eric,Highest Single-Game Score,158,2017 W12,Original recorded score
+gary,Career Win Percentage,41.61%,2017–2026,All official completed games; ties count as half a win
+gary,Highest Single-Game Score,203,2024 W14,Original recorded score
+hunter,Career Win Percentage,44.19%,2014–2026,All official completed games; ties count as half a win
+hunter,Highest Single-Game Score,199,2021 W5,Original recorded score
+jake,Career Win Percentage,52.47%,2015–2026,All official completed games; ties count as half a win
+jake,Highest Single-Game Score,216,2019 W12,Original recorded score
+kyle,Career Win Percentage,43.18%,2018–2026,All official completed games; ties count as half a win
+kyle,Highest Single-Game Score,190,2021 W1,Original recorded score
+miller,Career Win Percentage,50.00%,2014–2014,All official completed games; ties count as half a win
+miller,Highest Single-Game Score,145,2014 W8,Original recorded score
+miner,Career Win Percentage,43.37%,2014–2026,All official completed games; ties count as half a win
+miner,Highest Single-Game Score,202,2019 W8,Original recorded score
+muffin,Career Win Percentage,53.05%,2014–2026,All official completed games; ties count as half a win
+muffin,Highest Single-Game Score,193,2020 W1,Original recorded score
+sabella,Career Win Percentage,59.38%,2014–2017,All official completed games; ties count as half a win
+sabella,Highest Single-Game Score,161,2017 W13,Original recorded score
+sco,Career Win Percentage,58.65%,2018–2026,All official completed games; ties count as half a win
+sco,Highest Single-Game Score,207,2020 W2,Original recorded score

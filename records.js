@@ -1,11 +1,76 @@
 async function buildRecordsPage() {
   try {
+    const records = await loadCSV("data/records.csv");
+    buildSyncedRecords(records);
+  } catch (error) {
+    console.warn("Record sync data unavailable; retaining the page's existing records.", error);
+  }
+  try {
     const hallOfFame = await loadCSV("data/hall-of-fame.csv");
     buildHallOfFame(hallOfFame);
   } catch (error) {
     console.warn("Hall of Fame data did not load. Hiding section.", error);
     hideHallOfFameSection();
   }
+}
+
+function recordElement(tag, value, className) {
+  const element = document.createElement(tag);
+  element.textContent = value;
+  if (className) element.className = className;
+  return element;
+}
+
+function buildSyncedRecords(records) {
+  for (const id of ["regular-season", "mini-games", "play-in", "playoffs", "championships", "power-rating", "points-moves", "league-scoring"]) {
+    const section = document.getElementById(id);
+    const rows = records.filter(row => row.category === id);
+    if (!section || !rows.length) continue;
+    const body = section.querySelector("tbody");
+    const grid = section.querySelector(".record-card-grid");
+    const list = section.querySelector(".records-list");
+    const container = body || grid || list;
+    if (!container) continue;
+    container.replaceChildren();
+    rows.forEach(row => {
+      if (body) {
+        const tr = document.createElement("tr");
+        [row.record, row.value, row.holder, row.year].forEach(value => tr.appendChild(recordElement("td", value)));
+        body.appendChild(tr);
+      } else if (grid) {
+        const card = recordElement("div", "", "record-stat-card");
+        card.append(recordElement("span", row.record), recordElement("strong", row.value), recordElement("p", `${row.holder} · ${row.year}`));
+        grid.appendChild(card);
+      } else {
+        const item = recordElement("div", "", "record-item");
+        item.append(recordElement("strong", row.record), recordElement("span", `${row.holder} · ${row.value} · ${row.year}`));
+        list.appendChild(item);
+      }
+    });
+  }
+  for (const [id, kind] of [["player-records", "(season)"], ["player-game-records", "(single game)"]]) {
+    const body = document.querySelector(`#${id} tbody`);
+    const rows = records.filter(row => row.category === "player-records" && row.record.includes(kind));
+    if (!body || !rows.length) continue;
+    body.replaceChildren();
+    rows.forEach(row => {
+      const tr = document.createElement("tr");
+      [row.record.split(",")[0], row.value, row.holder, row.notes, row.year].forEach(value => tr.appendChild(recordElement("td", value)));
+      body.appendChild(tr);
+    });
+  }
+  const features = [
+    records.find(row => row.category === "regular-season" && row.record.startsWith("Best Winning Percentage, Career")),
+    records.find(row => row.category === "regular-season" && row.record === "Most Wins (Career)"),
+    records.find(row => row.record === "Highest Single-Game PF"),
+    records.find(row => row.record === "Most Official Championships")
+  ];
+  document.querySelectorAll(".record-feature-card").forEach((card, index) => {
+    const row = features[index];
+    if (!row) return;
+    card.querySelector("strong").textContent = row.value;
+    card.querySelector("span").textContent = `${row.holder} · ${row.year}`;
+  });
 }
 
 function buildHallOfFame(hallOfFame) {

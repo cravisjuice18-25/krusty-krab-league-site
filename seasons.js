@@ -3,6 +3,9 @@ async function buildSeasonsPage() {
     const standings = await loadCSV("data/standings.csv");
     const teams = await loadOptionalCSV("data/teams.csv");
     const playInResults = await loadOptionalCSV("data/play-in.csv");
+    const currentStandings = await loadOptionalCSV("data/current-standings.csv");
+    const archivedYears = new Set(standings.map(row => row.year));
+    currentStandings.filter(row => !archivedYears.has(row.year)).forEach(row => standings.push(row));
 
     const standingsByYear = groupStandingsByYear(standings);
     const years = Object.keys(standingsByYear).sort((a, b) => Number(b) - Number(a));
@@ -148,6 +151,12 @@ function renderSelectedSeason(year, standingsByYear, teamsByOwner, playInByYear)
   const playInResult = playInByYear[year];
 
   renderFeatureCards(year, regularSeasonChampion, pointsLeader, powerRatingLeader, playInResult, teamsByOwner);
+  const provisional = standings.some(row => row.status === "in_progress");
+  const ratingCard = document.getElementById("power-rating-leader-card");
+  if (ratingCard) ratingCard.style.display = provisional ? "none" : "";
+  if (provisional) {
+    setText("season-feature-winner-details", `Standings Leader · ${regularSeasonChampion.record} · Through Week ${regularSeasonChampion.through_week}`);
+  }
   renderStandingsTable(year, standings);
 }
 
@@ -294,6 +303,9 @@ function getFallbackCardColor(cardType) {
 function renderStandingsTable(year, standings) {
   setText("selected-season-label", `${year} Season`);
   setText("selected-season-title", `${year} Final Standings`);
+  if (standings.some(row => row.status === "in_progress")) {
+    setText("selected-season-title", `${year} Standings · Through Week ${standings[0].through_week}`);
+  }
 
   const tableBody = document.getElementById("season-standings-body");
 

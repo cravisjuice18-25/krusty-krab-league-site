@@ -1,33 +1,49 @@
 owner_id,position,player,nfl_team,points,year
+gary,QB,Patrick Mahomes,KC,518,2022
 bard,QB,Patrick Mahomes,KC,484,2020
-bard,RB,Exekiel Elliott,DAL,271,2019
-bard,WR,Ja'Marr Chase,CIN,252,2024
-bard,TE,Travis Kelce,KC,305,2020
+sco,QB,Josh Allen,BUF,465,2021
+hunter,QB,Tom Brady,TB,465,2021
+muffin,QB,Russell Wilson,SEA,446,2020
 jake,QB,Josh Allen,BUF,440,2023
 jake,RB,Christian McCaffrey,CAR,434,2019
-jake,WR,CeeDee Lamb,DAL,236,2022
-jake,TE,Trey McBride,ARI,225,2024
-sco,QB,Josh Allen,BUF,465,2021
-sco,RB,Alvin Kamara,NO,364,2020
-sco,WR,Davante Adams,LV,317,2022
-sco,TE,Travis Kelce,KC,211,2023
-gary,QB,Patrick Mahomes,KC,518,2022
-gary,RB,Christian McCaffrey,SF,332,2023
-gary,WR,Stefon Diggs,BUF,241,2023
-gary,TE,T.J. Hockenson,MIN,199,2023
-hunter,QB,Tom Brady,TB,465,2021
-hunter,RB,Austin Ekeler,LAC,329,2022
-hunter,WR,Jaxon Smith-Nijgba,SEA,335,2025
-hunter,TE,Zach Ertz,PHI,210,2019
-muffin,QB,Russell Wilson,SEA,446,2020
-muffin,RB,Christian McCaffrey,SF,389,2025
-muffin,WR,Cooper Kupp,LAR,371,2025
-muffin,TE,Travis Kelce,KC,278,2022
+kyle,QB,Kyler Murray,AZ,423,2020
 miner,QB,Josh Allen,BUF,406,2024
-miner,RB,Austin Ekeler,LAC,296,2021
+muffin,RB,Christian McCaffrey,SF,389,2025
+muffin,WR,Cooper Kupp,LAR,371,2021
+sco,RB,Alvin Kamara,NO,364,2020
 miner,WR,Michael Thomas,NO,361,2019
-miner,TE,Darren Waller,LV,217,2020
-kyle,QB,Kyler Murray,ARI,423,2020
-kyle,RB,Jonathan Taylor,IND,302,2025
+bard,WR,Ja'Marr Chase,CIN,353,2024
 kyle,WR,Tyreek Hill,MIA,349,2023
+hunter,WR,Jaxon Smith-Njigba,SEA,335,2025
+gary,RB,Christian McCaffrey,SF,332,2023
+hunter,RB,Austin Ekeler,LAC,329,2022
+sco,WR,Davante Adams,LV,317,2022
+bard,TE,Travis Kelce,KC,305,2020
+kyle,RB,Jonathan Taylor,IND,302,2025
+miner,RB,Austin Ekeler,LAC,296,2021
+muffin,TE,Travis Kelce,KC,278,2022
+bard,RB,Ezekiel Elliott,DAL,271,2019
 kyle,TE,Trey McBride,ARI,258,2025
+gary,WR,Stefon Diggs,BUF,241,2023
+jake,WR,CeeDee Lamb,DAL,236,2022
+bard,D/ST,Patriots,NE,229,2019
+jake,TE,Trey McBride,ARI,225,2024
+miner,TE,Darren Waller,LV,217,2020
+sco,TE,Travis Kelce,KC,211,2023
+hunter,TE,Zach Ertz,PHI,210,2019
+gary,TE,T.J. Hockenson,MIN,199,2023
+bard,K,Brandon Aubrey,DAL,149,2025
+jake,K,Wil Lutz,NO,135,2019
+kyle,D/ST,Vikings,MIN,135,2019
+kyle,K,Justin Tucker,BAL,129,2023
+gary,K,Ka'imi Fairbairn,HOU,126,2024
+gary,D/ST,Steelers,PIT,125,2024
+miner,K,Harrison Butker,KC,123,2023
+sco,K,Greg Zuerlein,DAL,121,2020
+muffin,K,Daniel Carlson,LV,115,2022
+jake,D/ST,Broncos,DEN,103,2024
+miner,D/ST,Patriots,NE,96,2025
+hunter,D/ST,Cowboys,DAL,94,2022
+sco,D/ST,Bills,BUF,93,2023
+hunter,K,Daniel Carlson,LV,72,2020
+muffin,D/ST,Saints,NO,58,2023

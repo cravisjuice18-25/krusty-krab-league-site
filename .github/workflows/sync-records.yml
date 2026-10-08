@@ -1,0 +1,41 @@
+name: Sync Hall of Records
+
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - scripts/sync_records.py
+      - .github/workflows/sync-records.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: hall-of-records-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+      - name: Validate and sync sheet data
+        run: python3 scripts/sync_records.py
+      - name: Commit changed website data
+        run: |
+          git config user.name "KKL Records Sync"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/*.csv data/sync-status.json
+          if git diff --cached --quiet; then
+            echo "Hall of Records is already current."
+            exit 0
+          fi
+          git commit -m "Sync Hall of Records website data"
+          git push origin HEAD:main

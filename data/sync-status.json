@@ -1,0 +1,14 @@
+{
+  "source": "https://docs.google.com/spreadsheets/d/1J26qCT9Ip0fya2hHAsM8NNaz1G0ZFLWIzKjiPaOOhrc/edit",
+  "updated_at": "2026-10-08T13:50:12.471778+00:00",
+  "heartbeat_month": "2026-10",
+  "year": 2026,
+  "through_week": 4,
+  "completed_game_rows": 1576,
+  "warnings": [
+    "2020 W16: kyle/miner reciprocal scores disagree; historical H2H pair preserved.",
+    "2021 W17: gary/miner reciprocal scores disagree; historical H2H pair preserved.",
+    "2023 W4: kyle/miner reciprocal scores disagree; historical H2H pair preserved.",
+    "2014: archive team label 'Ben there raped that' mapped to Eric by exact season PF."
+  ]
+}
