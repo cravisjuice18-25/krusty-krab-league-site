@@ -21,3 +21,24 @@ document.querySelectorAll('.top-nav a').forEach(a=>{if(a.getAttribute('href')===
 function useArchiveFallback(img){if(img.dataset.fallbackApplied)return;img.dataset.fallbackApplied='true';img.onerror=null;img.classList.add('archive-image-fallback');img.src='images/archive-fallback.svg';}
 document.addEventListener('error',event=>{if(event.target.tagName==='IMG')useArchiveFallback(event.target);},true);
 document.querySelectorAll('img').forEach(img=>{if(img.complete&&!img.naturalWidth)useArchiveFallback(img);});
+
+// Small franchise markers use CSV branding; table backgrounds stay neutral.
+async function addFranchiseAccents(){
+ if(typeof loadCSV!=='function')return;
+ try{
+  const teams=await loadCSV('data/teams.csv');
+  const lookup=new Map(teams.map(team=>[team.owner_id.toLowerCase(),team]));
+  const hex=(value,fallback)=>/^#[0-9a-f]{6}$/i.test(value||'')?value:fallback;
+  const apply=()=>document.querySelectorAll('.table-wrap a[href*="team.html?owner="]').forEach(link=>{
+   const owner=new URL(link.href,location.href).searchParams.get('owner');
+   const team=lookup.get((owner||'').toLowerCase());if(!team)return;
+   link.classList.add('franchise-accent-link');
+   link.style.setProperty('--franchise-primary',hex(team.primary_color,'#79cedc'));
+   link.style.setProperty('--franchise-secondary',hex(team.secondary_color,'#d5a458'));
+  });
+  apply();
+  const observer=new MutationObserver(apply);
+  document.querySelectorAll('.table-wrap').forEach(el=>observer.observe(el,{childList:true,subtree:true}));
+ }catch(error){console.warn('Franchise accents could not load',error);}
+}
+addFranchiseAccents();

@@ -5990,3 +5990,8 @@ select { max-width:100%;padding:10px 14px;margin:12px 0;border-radius:8px;backgr
 .insider-headline a { display:block;color:inherit;font-weight:600;line-height:1.5; }
 .insider-headline time { display:block;margin-top:8px;font-size:.8rem;opacity:.7; }
 .insider-feed-links { display:flex;flex-wrap:wrap;gap:16px;margin-top:18px;font-size:.85rem; }
+/* Restrained CSV-driven branding: small markers and two profile accents. */
+.franchise-accent-link::before { content:"";display:inline-block;width:8px;height:8px;margin-right:10px;border-radius:50%;background:var(--franchise-primary);box-shadow:0 0 0 2px var(--franchise-secondary);vertical-align:middle; }
+.franchise-profile .team-story-card { border-top:3px solid var(--secondary-color); }
+.franchise-profile .championship-year-badges > * { border-color:var(--decal-color); }
+.franchise-profile .team-hero .team-location-kicker { border-left:3px solid var(--decal-color);padding-left:10px; }

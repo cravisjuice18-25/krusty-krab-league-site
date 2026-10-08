@@ -134,6 +134,7 @@ function buildTeamIdentity(team) {
     hero.style.setProperty("--decal-color", decalColor);
   }
 
+  document.body.classList.add("franchise-profile");
   document.documentElement.style.setProperty("--team-color", primaryColor);
   document.documentElement.style.setProperty("--primary-color", primaryColor);
   document.documentElement.style.setProperty("--secondary-color", secondaryColor);

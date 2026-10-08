@@ -260,10 +260,10 @@ function buildLatestSeasonSnapshot(standings) {
    ========================================================= */
 
 function buildFeaturedEvent(featuredEvent) {
-  const event = featuredEvent && featuredEvent.length > 0 ? featuredEvent[0] : null;
+  const event = (featuredEvent || []).find(row => cleanText(row.event_label).toLowerCase() === "play-in") || null;
 
   const eventLabel = event ? cleanText(event.event_label) || "Featured League Event" : "Featured League Event";
-  const eventTitle = event ? cleanText(event.event_title) || "Opening Night" : "Opening Night";
+  const eventTitle = event ? cleanText(event.event_title) || "Play-In Week" : "Play-In Week";
   const eventSubtitle = event ? cleanText(event.event_subtitle) || "TBD" : "TBD";
   const eventDate = event ? cleanText(event.event_date) : "";
   const eventLink = event ? cleanText(event.event_link) || "seasons.html" : "seasons.html";
