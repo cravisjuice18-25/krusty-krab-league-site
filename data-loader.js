@@ -10,6 +10,8 @@ async function loadCSV(path) {
 }
 
 function parseCSV(text) {
+  text = String(text || "").replace(/^\uFEFF/, "");
+  if (!text.trim()) return [];
   const rows = [];
   let currentRow = [];
   let currentValue = "";
@@ -48,6 +50,8 @@ function parseCSV(text) {
     rows.push(currentRow);
   }
 
+  if (!rows.length) return [];
+  if (insideQuotes) throw new Error("CSV contains an unclosed quoted field");
   const headers = rows[0].map(header => header.trim());
 
   return rows.slice(1)

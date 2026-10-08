@@ -232,7 +232,7 @@ function renderPlayInCard(year, playInResult) {
 
   if (!playInResult) {
     setText("season-feature-play-in-team", "TBD");
-    setText("season-feature-play-in-details", "Play-in winner will load from data/play-in.csv.");
+    setText("season-feature-play-in-details", "No play-in result recorded yet.");
     return;
   }
 

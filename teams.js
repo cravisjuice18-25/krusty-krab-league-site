@@ -71,7 +71,7 @@ function renderTeamsGrid(teams, possibleIds, showButton) {
     const playoffApps = cleanText(team.playoff_appearances) || "TBD";
     const tagline = cleanText(team.tagline);
     const logo = cleanText(team.primary_logo);
-    const teamPage = cleanText(team.team_page) || `team.html?owner=${ownerId}`;
+    const teamPage = `team.html?owner=${encodeURIComponent(ownerId)}`;
 
     const primaryColor = cleanColor(team.primary_color, "#061629");
     const rawSecondaryColor = cleanColor(team.secondary_color, "#1e293b");

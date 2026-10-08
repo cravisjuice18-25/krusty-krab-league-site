@@ -56,6 +56,12 @@ async function buildHomePage() {
     console.warn("home-archive-feature.csv did not load:", error);
   }
 
+  try {
+    const current = await loadCSV("data/current-standings.csv");
+    const archivedYears = new Set(standings.map(row => row.year));
+    standings.push(...current.filter(row => !archivedYears.has(row.year)));
+  } catch (error) { console.warn("Current standings did not load:", error); }
+
   buildHomeIntro();
   buildLatestChampion(champions, teams);
   buildLatestSco(scoHistory, teams);
@@ -200,7 +206,8 @@ function buildLatestSeasonSnapshot(standings) {
     return Number(b.points_for) - Number(a.points_for);
   })[0];
 
-  const powerRatingLeader = [...latestStandings].sort((a, b) => {
+  const provisional = latestStandings.some(row => row.status === "in_progress");
+  const powerRatingLeader = [...latestStandings].filter(row => cleanText(row.team_rating)).sort((a, b) => {
     return Number(b.team_rating) - Number(a.team_rating);
   })[0];
 
@@ -212,11 +219,11 @@ function buildLatestSeasonSnapshot(standings) {
     setText("home-season-title", `${latestYear} Season Snapshot`);
     setText(
       "home-season-details",
-      `Latest season: ${cleanText(standingsLeader.team) || "TBD"} finished 1st`
+      provisional ? `${standingsLeader.team} leads through Week ${standingsLeader.through_week}` : `Latest season: ${cleanText(standingsLeader.team) || "TBD"} finished 1st`
     );
     setText(
       "home-season-details-expanded",
-      `${cleanText(standingsLeader.team) || "TBD"} · ${cleanText(standingsLeader.record) || "TBD"} · 1st Place`
+      `${cleanText(standingsLeader.team) || "TBD"} · ${cleanText(standingsLeader.record) || "TBD"} · ${provisional ? "Through Week " + standingsLeader.through_week : "1st Place"}`
     );
   }
 
@@ -227,6 +234,11 @@ function buildLatestSeasonSnapshot(standings) {
     );
   }
 
+  const ratingElement = document.getElementById("home-power-rating-leader");
+  if (ratingElement) {
+    ratingElement.parentElement.hidden = !powerRatingLeader;
+    if (!powerRatingLeader) ratingElement.textContent = "No rating recorded";
+  }
   if (powerRatingLeader) {
     setText(
       "home-power-rating-leader",
