@@ -12,6 +12,7 @@ on:
 
 permissions:
   contents: write
+  issues: write
 
 concurrency:
   group: hall-of-records-sync
@@ -39,3 +40,23 @@ jobs:
           fi
           git commit -m "Sync Hall of Records website data"
           git push origin HEAD:main
+      - name: Open or update sync failure alert
+        if: ${{ failure() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          existing=$(gh issue list --state open --search 'KKL automatic records sync failed in:title' --json number --jq '.[0].number // empty')
+          details="The scheduled Hall of Records sync failed. Check the [workflow run](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}) and fix the source or validation problem. Do not assume the website is current."
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "$details"
+          else
+            gh issue create --title 'KKL automatic records sync failed' --body "$details"
+          fi
+      - name: Resolve sync failure alert after success
+        if: ${{ success() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue list --state open --search 'KKL automatic records sync failed in:title' --json number --jq '.[].number' | while read -r issue; do
+            gh issue close "$issue" --comment 'The records sync workflow completed successfully. Verify data freshness in data/sync-status.json.'
+          done
