@@ -1,9 +1,9 @@
 year,through_week,rank,owner_id,team,record,win_pct,points_for,points_against,avg_for,avg_against,point_margin,status
-2026,4,1,jake,Cincinnati Harambes,3-1,0.75,598,496,149.50,124.00,102,in_progress
-2026,4,2,bard,The Commish,3-1,0.75,570,504,142.50,126.00,66,in_progress
-2026,4,3,kyle,Life Sucks Then You Die,3-1,0.75,487,468,121.75,117.00,19,in_progress
-2026,4,4,muffin,Committed Not Addicted,2-2,0.5,509,470,127.25,117.50,39,in_progress
-2026,4,5,sco,Trin Coll Pest Control,2-2,0.5,487,514,121.75,128.50,-27,in_progress
-2026,4,6,gary,The Fantasy Football Team,1-3,0.25,498,566,124.50,141.50,-68,in_progress
-2026,4,7,miner,Jakes Brothers and Sisters,1-3,0.25,469,487,117.25,121.75,-18,in_progress
-2026,4,8,hunter,Most Valuable Potheads,1-3,0.25,436,549,109.00,137.25,-113,in_progress
+2026,5,1,kyle,Life Sucks Then You Die,4-1,0.8,673,587,134.60,117.40,86,in_progress
+2026,5,2,jake,Cincinnati Harambes,3-2,0.6,717,682,143.40,136.40,35,in_progress
+2026,5,3,bard,The Commish,3-2,0.6,706,661,141.20,132.20,45,in_progress
+2026,5,4,muffin,Committed Not Addicted,3-2,0.6,644,604,128.80,120.80,40,in_progress
+2026,5,5,miner,Jakes Brothers and Sisters,2-3,0.4,626,623,125.20,124.60,3,in_progress
+2026,5,6,sco,Trin Coll Pest Control,2-3,0.4,621,649,124.20,129.80,-28,in_progress
+2026,5,7,hunter,Most Valuable Potheads,2-3,0.4,596,681,119.20,136.20,-85,in_progress
+2026,5,8,gary,The Fantasy Football Team,1-4,0.2,630,726,126.00,145.20,-96,in_progress

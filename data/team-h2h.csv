@@ -6,7 +6,7 @@ bard,hunter,Hunter,25,20-5,0.8,3224,2783,441
 bard,jake,Jake,25,15-10,0.6,3308,3039,269
 bard,kyle,Kyle,19,11-8,0.5789473684,2572,2388,184
 bard,miller,Miller,2,1-1,0.5,196,182,14
-bard,miner,Miner,27,20-7,0.7407407407,3458,3185,273
+bard,miner,Miner,28,20-8,0.7142857143,3594,3342,252
 bard,muffin,Muffin,31,18-13,0.5806451613,3956,3859,97
 bard,sabella,Sabella,9,5-4,0.5555555556,1060,948,112
 bard,sco,Sco,20,10-10,0.5,2623,2595,28
@@ -29,7 +29,7 @@ eric,muffin,Muffin,9,3-6,0.3333333333,811,892,-81
 eric,sabella,Sabella,10,5-5,0.5,920,971,-51
 gary,bard,Bard,23,7-16,0.3043478261,2886,3197,-311
 gary,eric,Eric,2,0-2,0,241,273,-32
-gary,hunter,Hunter,20,11-9,0.55,2429,2385,44
+gary,hunter,Hunter,21,11-10,0.5238095238,2561,2545,16
 gary,jake,Jake,23,10-13,0.4347826087,2823,2929,-106
 gary,kyle,Kyle,19,13-6,0.6842105263,2488,2246,242
 Gary,Miner,Jakes Brothers and Sisters,20,7-13,0.35,2361,2628,-267
@@ -39,7 +39,7 @@ gary,sco,Sco,16,6-10,0.375,2016,2103,-87
 hunter,bard,Bard,25,5-20,0.2,2783,3224,-441
 hunter,charlie,Charlie,8,6-2,0.75,810,614,196
 hunter,eric,Eric,9,5-4,0.5555555556,734,831,-97
-hunter,gary,Gary,20,9-11,0.45,2385,2429,-44
+hunter,gary,Gary,21,10-11,0.4761904762,2545,2561,-16
 hunter,jake,Jake,27,15-12,0.5555555556,3160,3307,-147
 hunter,kyle,Kyle,23,11-12,0.4782608696,2826,2851,-25
 hunter,miller,Miller,3,1-2,0.3333333333,237,321,-84
@@ -52,7 +52,7 @@ jake,charlie,Charlie,4,3-0-1,0.875,390,308,82
 jake,eric,Eric,7,3-4,0.4285714286,686,744,-58
 jake,gary,Gary,23,13-10,0.5652173913,2929,2823,106
 jake,hunter,Hunter,27,12-15,0.4444444444,3307,3160,147
-jake,kyle,Kyle,17,11-6,0.6470588235,2297,2092,205
+jake,kyle,Kyle,18,11-7,0.6111111111,2416,2278,138
 jake,miner,Miner,26,15-11,0.5769230769,3250,3158,92
 jake,muffin,Muffin,29,17-12,0.5862068966,3734,3499,235
 jake,sabella,Sabella,6,5-1,0.8333333333,754,666,88
@@ -60,7 +60,7 @@ jake,sco,Sco,18,6-12,0.3333333333,2059,2318,-259
 kyle,bard,Bard,19,8-11,0.4210526316,2388,2572,-184
 kyle,gary,Gary,19,6-13,0.3157894737,2246,2488,-242
 kyle,hunter,Hunter,23,12-11,0.5217391304,2851,2826,25
-kyle,jake,Jake,17,6-11,0.3529411765,2092,2297,-205
+kyle,jake,Jake,18,7-11,0.3888888889,2278,2416,-138
 Kyle,Miner,Jakes Brothers and Sisters,18,9-9,0.5,2160,2297,-137
 kyle,muffin,Muffin,16,7-9,0.4375,1860,2020,-160
 kyle,sco,Sco,19,8-11,0.4210526316,2278,2382,-104
@@ -71,7 +71,7 @@ miller,hunter,Hunter,3,2-1,0.6666666667,321,237,84
 miller,miner,Miner,3,2-1,0.6666666667,344,272,72
 miller,muffin,Muffin,2,0-2,0,156,191,-35
 miller,sabella,Sabella,2,1-1,0.5,181,206,-25
-miner,bard,Bard,27,7-20,0.2592592593,3185,3458,-273
+miner,bard,Bard,28,8-20,0.2857142857,3342,3594,-252
 miner,charlie,Charlie,8,4-4,0.5,749,698,51
 miner,eric,Eric,8,3-5,0.375,771,886,-115
 Miner,Gary,The Fantasy Football Team ,20,13-7,0.65,2628,2361,267
@@ -92,7 +92,7 @@ muffin,kyle,Kyle,16,9-7,0.5625,2020,1860,160
 muffin,miller,Miller,2,2-0,1,191,156,35
 muffin,miner,Miner,24,13-11,0.5416666667,2926,2931,-5
 muffin,sabella,Sabella,9,4-5,0.4444444444,971,874,97
-muffin,sco,Sco,19,8-11,0.4210526316,2457,2472,-15
+muffin,sco,Sco,20,9-11,0.45,2592,2606,-14
 sabella,bard,Bard,9,4-5,0.4444444444,948,1060,-112
 sabella,charlie,Charlie,6,6-0,1,573,387,186
 sabella,eric,Eric,10,5-5,0.5,971,920,51
@@ -108,4 +108,4 @@ sco,hunter,Hunter,18,10-8,0.5555555556,2259,2305,-46
 sco,jake,Jake,18,12-6,0.6666666667,2318,2059,259
 sco,kyle,Kyle,19,11-8,0.5789473684,2382,2278,104
 sco,miner,Miner,23,14-9,0.6086956522,2913,2759,154
-sco,muffin,Muffin,19,11-8,0.5789473684,2472,2457,15
+sco,muffin,Muffin,20,11-9,0.55,2606,2592,14
