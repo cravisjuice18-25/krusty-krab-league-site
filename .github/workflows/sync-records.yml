@@ -1,4 +1,5 @@
 name: Sync Hall of Records
+run-name: Hall of Records sync (${{ github.event_name }})
 
 on:
   schedule:
