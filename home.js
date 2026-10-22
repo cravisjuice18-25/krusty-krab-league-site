@@ -56,8 +56,10 @@ async function buildHomePage() {
     console.warn("home-archive-feature.csv did not load:", error);
   }
 
+  const archivedStandings = [...standings];
+  let current = [];
   try {
-    const current = await loadCSV("data/current-standings.csv");
+    current = await loadCSV("data/current-standings.csv");
     const archivedYears = new Set(standings.map(row => row.year));
     standings.push(...current.filter(row => !archivedYears.has(row.year)));
   } catch (error) { console.warn("Current standings did not load:", error); }
@@ -71,6 +73,7 @@ async function buildHomePage() {
   buildFeaturedRecordsSummary(featuredRecords);
   buildHomeFranchiseCards(teams);
   buildArchiveFeature(archiveFeature);
+  buildPreviousSeasonArchive(archivedStandings, champions, scoHistory, teams, current);
   buildAllTimePlayerCards(allTimePlayers);
 }
 
@@ -446,6 +449,37 @@ function buildHomeFranchiseCards(teams) {
    FROM THE ARCHIVES
    home-archive-feature.csv
    ========================================================= */
+
+function buildPreviousSeasonArchive(standings, champions, scoHistory, teams, current) {
+  const currentYear = Math.max(new Date().getFullYear(), ...current.map(row => Number(row.year) || 0));
+  const year = Math.max(...standings
+    .filter(row => Number(row.year) < currentYear && row.status !== "in_progress")
+    .map(row => Number(row.year)));
+  if (!Number.isFinite(year)) {
+    setText("home-archive-season-title", "Last Season Results");
+    ["standings-leader", "points-leader", "last-place", "champion"].forEach(id =>
+      setText(`home-archive-${id}`, "Not recorded"));
+    return;
+  }
+
+  const rows = standings.filter(row => Number(row.year) === year)
+    .sort((a, b) => Number(a.rank) - Number(b.rank));
+  const leader = rows[0];
+  const points = [...rows].filter(row => cleanText(row.points_for))
+    .sort((a, b) => Number(b.points_for) - Number(a.points_for))[0];
+  const sco = scoHistory.find(row => Number(row.year) === year);
+  const last = sco || rows[rows.length - 1];
+  const champion = champions.find(row => Number(row.year) === year);
+  const championTeam = champion ? findTeamByOwnerId(teams, cleanText(champion.champion_owner_id)) : {};
+
+  setText("home-archive-season-title", `${year} Season Results`);
+  setText("home-archive-standings-leader", `${leader.team} · ${leader.record} · 1st Place`);
+  setText("home-archive-points-leader", points ? `${points.team} · ${formatNumber(points.points_for)} points` : "Not recorded");
+  setText("home-archive-last-place", last ? `${last.team} · ${sco ? "The Sco" : ordinal(last.rank) + " Place"}` : "Not recorded");
+  setText("home-archive-champion", champion
+    ? `${cleanText(championTeam.team_name) || champion.champion} · ${champion.champion} · ${champion.final_score}`
+    : "Not recorded");
+}
 
 function buildArchiveFeature(archiveFeature) {
   const feature = archiveFeature && archiveFeature.length > 0 ? archiveFeature[0] : null;

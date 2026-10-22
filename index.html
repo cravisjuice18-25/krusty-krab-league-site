@@ -15,10 +15,11 @@
 
   <header class="site-hero home-hero">
     <div class="hero-overlay">
-      <img class="home-kkl-logo" id="home-kkl-logo" src="images/league/kkl-logo.png" alt="KKL logo">
-
       <p class="eyebrow">Fantasy Football League Archive</p>
-      <h1 id="home-league-name">Krusty Krab League</h1>
+      <div class="home-title-row">
+        <h1 id="home-league-name">Krusty Krab League</h1>
+        <img class="home-kkl-logo" id="home-kkl-logo" src="images/league/kkl-logo.png" alt="KKL logo">
+      </div>
       <p class="hero-subtitle" id="home-league-tagline">
         The official home for the Krusty Krab League.
       </p>
@@ -100,12 +101,12 @@
 
       <div class="home-season-snapshot-grid">
         <div>
-          <span>Standings Leader</span>
+          <span>Standings Leader (Current)</span>
           <strong id="home-season-details-expanded">Loading...</strong>
         </div>
 
         <div>
-          <span>Points Leader</span>
+          <span>Points Leader (Current)</span>
           <strong id="home-season-points-leader">Loading...</strong>
         </div>
 
@@ -115,7 +116,7 @@
         </div>
 
         <div>
-          <span>Last Place</span>
+          <span>Last Place (Current)</span>
           <strong id="home-current-sco">Loading...</strong>
         </div>
       </div>
@@ -158,6 +159,14 @@
         <p id="home-archive-description">
           Archive feature will load here.
         </p>
+
+        <h3 id="home-archive-season-title">Last Season Results</h3>
+        <dl class="home-archive-results">
+          <div><dt>Standings Leader</dt><dd id="home-archive-standings-leader">Loading...</dd></div>
+          <div><dt>Points Leader</dt><dd id="home-archive-points-leader">Loading...</dd></div>
+          <div><dt>Last-Place Finisher</dt><dd id="home-archive-last-place">Loading...</dd></div>
+          <div><dt>Champion</dt><dd id="home-archive-champion">Loading...</dd></div>
+        </dl>
 
         <a class="text-link" id="home-archive-link" href="hall-of-fame.html">View Archive</a>
       </div>

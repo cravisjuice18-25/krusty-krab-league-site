@@ -214,6 +214,25 @@ img {
   background-position: center;
 }
 
+.home-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(16px, 4vw, 44px);
+}
+
+.home-title-row h1 { min-width: 0; }
+.home-title-row .home-kkl-logo {
+  width: clamp(84px, 18vw, 180px);
+  flex: 0 0 auto;
+  object-fit: contain;
+}
+
+@media (max-width: 560px) {
+  .home-hero .home-title-row h1 { font-size: clamp(28px, 8vw, 44px); }
+  .home-title-row .home-kkl-logo { width: 80px; }
+}
+
 .hero-overlay {
   max-width: 950px;
 }
@@ -4723,7 +4742,7 @@ function buildBasementRecords(scoHistory) {
   border-radius: 18px;
   background: white;
   border: 1px solid var(--line);
-  border-top: 6px solid var(--decal-color, var(--gold));
+  border-top: 12px solid var(--decal-color, var(--gold));
   text-decoration: none;
   color: var(--ink);
   box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
@@ -4752,10 +4771,12 @@ function buildBasementRecords(scoHistory) {
 }
 
 .home-franchise-card-body {
-  padding: 13px 14px 14px;
+  padding: 18px 18px 20px;
   background:
-    linear-gradient(135deg, rgba(255,255,255,0.96), rgba(249,250,251,0.96));
-  border-top: 1px solid var(--line);
+    linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+    linear-gradient(135deg, var(--primary-color, #001f3f), var(--secondary-color, #111827));
+  color: white;
+  border-top: 6px solid var(--decal-color, var(--gold));
 }
 
 .home-franchise-card-body strong {
@@ -4767,12 +4788,17 @@ function buildBasementRecords(scoHistory) {
 
 .home-franchise-card-body span {
   display: block;
-  color: var(--muted);
+  color: #ffffff;
   font-size: 12px;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
+
+.home-archive-results { display: grid; gap: 12px; margin: 18px 0 24px; }
+.home-archive-results > div { padding: 12px 14px; background: var(--soft); border-left: 4px solid var(--gold); border-radius: 8px; }
+.home-archive-results dt { font-size: 12px; font-weight: 800; color: #4b5563; margin-bottom: 5px; }
+.home-archive-results dd { margin: 0; font-size: 15px; font-weight: 700; line-height: 1.5; }
 
 @media (max-width: 980px) {
   .home-franchise-card-grid {
