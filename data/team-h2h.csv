@@ -2,7 +2,7 @@ owner_id,opponent_id,opponent_name,total_games,record,win_pct,points_for,points_
 bard,charlie,Charlie,6,5-1,0.8333333333,542,461,81
 bard,eric,Eric,10,5-4-1,0.55,1142,999,143
 bard,gary,Gary,23,16-7,0.6956521739,3197,2886,311
-bard,hunter,Hunter,25,20-5,0.8,3224,2783,441
+bard,hunter,Hunter,26,20-6,0.7692307692,3299,2880,419
 bard,jake,Jake,25,15-10,0.6,3308,3039,269
 bard,kyle,Kyle,19,11-8,0.5789473684,2572,2388,184
 bard,miller,Miller,2,1-1,0.5,196,182,14
@@ -35,8 +35,8 @@ gary,kyle,Kyle,19,13-6,0.6842105263,2488,2246,242
 Gary,Miner,Jakes Brothers and Sisters,20,7-13,0.35,2361,2628,-267
 gary,muffin,Muffin,22,6-16,0.2727272727,2659,2906,-247
 gary,sabella,Sabella,3,1-2,0.3333333333,350,371,-21
-gary,sco,Sco,16,6-10,0.375,2016,2103,-87
-hunter,bard,Bard,25,5-20,0.2,2783,3224,-441
+gary,sco,Sco,17,6-11,0.3529411765,2113,2218,-105
+hunter,bard,Bard,26,6-20,0.2307692308,2880,3299,-419
 hunter,charlie,Charlie,8,6-2,0.75,810,614,196
 hunter,eric,Eric,9,5-4,0.5555555556,734,831,-97
 hunter,gary,Gary,21,10-11,0.4761904762,2545,2561,-16
@@ -53,7 +53,7 @@ jake,eric,Eric,7,3-4,0.4285714286,686,744,-58
 jake,gary,Gary,23,13-10,0.5652173913,2929,2823,106
 jake,hunter,Hunter,27,12-15,0.4444444444,3307,3160,147
 jake,kyle,Kyle,18,11-7,0.6111111111,2416,2278,138
-jake,miner,Miner,26,15-11,0.5769230769,3250,3158,92
+jake,miner,Miner,27,16-11,0.5925925926,3397,3283,114
 jake,muffin,Muffin,29,17-12,0.5862068966,3734,3499,235
 jake,sabella,Sabella,6,5-1,0.8333333333,754,666,88
 jake,sco,Sco,18,6-12,0.3333333333,2059,2318,-259
@@ -62,7 +62,7 @@ kyle,gary,Gary,19,6-13,0.3157894737,2246,2488,-242
 kyle,hunter,Hunter,23,12-11,0.5217391304,2851,2826,25
 kyle,jake,Jake,18,7-11,0.3888888889,2278,2416,-138
 Kyle,Miner,Jakes Brothers and Sisters,18,9-9,0.5,2160,2297,-137
-kyle,muffin,Muffin,16,7-9,0.4375,1860,2020,-160
+kyle,muffin,Muffin,17,8-9,0.4705882353,1997,2120,-123
 kyle,sco,Sco,19,8-11,0.4210526316,2278,2382,-104
 miller,bard,Bard,2,1-1,0.5,182,196,-14
 miller,charlie,Charlie,2,1-1,0.5,191,210,-19
@@ -76,7 +76,7 @@ miner,charlie,Charlie,8,4-4,0.5,749,698,51
 miner,eric,Eric,8,3-5,0.375,771,886,-115
 Miner,Gary,The Fantasy Football Team ,20,13-7,0.65,2628,2361,267
 miner,hunter,Hunter,27,15-12,0.5555555556,3156,3285,-129
-miner,jake,Jake,26,11-15,0.4230769231,3158,3250,-92
+miner,jake,Jake,27,11-16,0.4074074074,3283,3397,-114
 Miner,Kyle,Life Sucks then You Die,18,9-9,0.5,2297,2160,137
 miner,miller,Miller,3,1-2,0.3333333333,272,344,-72
 miner,muffin,Muffin,24,11-13,0.4583333333,2931,2926,5
@@ -88,7 +88,7 @@ muffin,eric,Eric,9,6-3,0.6666666667,892,811,81
 muffin,gary,Gary,22,16-6,0.7272727273,2906,2659,247
 muffin,hunter,Hunter,29,16-12-1,0.5689655172,3525,3456,69
 muffin,jake,Jake,29,12-17,0.4137931034,3499,3734,-235
-muffin,kyle,Kyle,16,9-7,0.5625,2020,1860,160
+muffin,kyle,Kyle,17,9-8,0.5294117647,2120,1997,123
 muffin,miller,Miller,2,2-0,1,191,156,35
 muffin,miner,Miner,24,13-11,0.5416666667,2926,2931,-5
 muffin,sabella,Sabella,9,4-5,0.4444444444,971,874,97
@@ -103,7 +103,7 @@ sabella,miller,Miller,2,1-1,0.5,206,181,25
 sabella,miner,Miner,10,8-2,0.8,1199,978,221
 sabella,muffin,Muffin,9,5-4,0.5555555556,874,971,-97
 sco,bard,Bard,20,10-10,0.5,2595,2623,-28
-sco,gary,Gary,16,10-6,0.625,2103,2016,87
+sco,gary,Gary,17,11-6,0.6470588235,2218,2113,105
 sco,hunter,Hunter,18,10-8,0.5555555556,2259,2305,-46
 sco,jake,Jake,18,12-6,0.6666666667,2318,2059,259
 sco,kyle,Kyle,19,11-8,0.5789473684,2382,2278,104
