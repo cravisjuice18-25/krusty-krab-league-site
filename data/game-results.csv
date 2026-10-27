@@ -47,3 +47,11 @@ year,week,owner_id,points_for,opponent_id,points_against,game_type,result,weekly
 2026,6,sco,115.0,gary,97.0,R,W,4,4,3,0
 2026,6,kyle,137.0,muffin,100.0,R,W,2,6,1,0
 2026,6,muffin,100.0,kyle,137.0,R,L,5,3,4,0
+2026,7,bard,95.0,jake,137.0,R,L,5,3,4,0
+2026,7,jake,137.0,bard,95.0,R,W,3,5,2,0
+2026,7,sco,170.0,hunter,91.0,R,W,1,7,0,0
+2026,7,hunter,91.0,sco,170.0,R,L,6,2,5,0
+2026,7,muffin,124.0,miner,139.0,R,L,4,4,3,0
+2026,7,miner,139.0,muffin,124.0,R,W,2,6,1,0
+2026,7,kyle,82.0,gary,84.0,R,L,8,0,7,0
+2026,7,gary,84.0,kyle,82.0,R,W,7,1,6,0
