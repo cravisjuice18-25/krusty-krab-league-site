@@ -1,10 +1,10 @@
 {
   "source": "https://docs.google.com/spreadsheets/d/1J26qCT9Ip0fya2hHAsM8NNaz1G0ZFLWIzKjiPaOOhrc/edit",
-  "updated_at": "2026-11-09T17:34:01.215118+00:00",
+  "updated_at": "2026-11-10T17:05:43.504977+00:00",
   "heartbeat_month": "2026-11",
   "year": 2026,
-  "through_week": 8,
-  "completed_game_rows": 1608,
+  "through_week": 9,
+  "completed_game_rows": 1616,
   "warnings": [
     "2020 W16: kyle/miner reciprocal scores disagree; historical H2H pair preserved.",
     "2021 W17: gary/miner reciprocal scores disagree; historical H2H pair preserved.",

@@ -1,12 +1,12 @@
 category,record,value,holder,year,notes
-regular-season,"Best Winning Percentage, Career (MIN 48)",0.634,Bard,Career,
+regular-season,"Best Winning Percentage, Career (MIN 48)",0.636,Bard,Career,
 regular-season,Best Average Finish,2.6,Bard,Career,
 regular-season,Worst Average Finish,5.7,GARY,Career,
 regular-season,"Most Wins, Regular Season",12,Not all Boys (Bard),2018,
 regular-season,"Most Wins, Reg. Season + Playoffs",12,Chalupa Batman (Bard) / Cincinnati Harambes (Jake) / Jakes Brothers and Sisters (Miner) / Bard Top Hunter Bottom (Sco),"2014, 2017, 2018 / 2016 / 2018 / 2019, 2020",
 regular-season,"Best Winning Pct., Single Season (Regular Season)",0.857,Not all Boys (Bard),2018,
 regular-season,"Best Winning Pct., Single Season (Regular Season + Playoffs)",0.800,Legarrette Blount Rides (Jake),2016,
-regular-season,Most Wins (Career),127,BARD,Career,
+regular-season,Most Wins (Career),128,BARD,Career,
 regular-season,Most 10-Win Regular Seasons,7,BARD,Career,
 regular-season,Most Consecutive 10-Win Regular Seasons,3,SCO,2018-2021,
 regular-season,Longest Winning Streak,9,Bad Hombres (Bard),2017,
@@ -140,4 +140,4 @@ calculated,Longest Winning Streak,9.00,Bard,All official completed games,Crosses
 calculated,Longest Losing Streak,10.00,"Gary, Hunter, Kyle",All official completed games,Crosses seasons; ties break runs; includes postseason and consolation.
 calculated,Highest Single-Game PF,216.00,Jake (2019 W12),All official completed games,Original weekly score; future games and voided 2022 final excluded.
 calculated,Most Official Championships,3.00,Jake,Official titles through 2025,2022 has no official champion.
-calculated,Most Regular-Season Wins,116.00,Bard,Completed regular-season games,Includes completed weeks in provisional seasons.
+calculated,Most Regular-Season Wins,117.00,Bard,Completed regular-season games,Includes completed weeks in provisional seasons.
