@@ -79,3 +79,11 @@ year,week,owner_id,points_for,opponent_id,points_against,game_type,result,weekly
 2026,10,miner,144.0,sco,117.0,R,W,3,5,2,0
 2026,10,jake,167.0,hunter,134.0,R,W,2,6,1,0
 2026,10,hunter,134.0,jake,167.0,R,L,6,2,5,0
+2026,11,bard,163.0,gary,74.0,R,W,1,7,0,0
+2026,11,gary,74.0,bard,163.0,R,L,8,0,7,0
+2026,11,miner,103.0,kyle,99.0,R,W,5,3,4,0
+2026,11,kyle,99.0,miner,103.0,R,L,6,2,5,0
+2026,11,hunter,93.0,muffin,119.0,R,L,7,1,6,0
+2026,11,muffin,119.0,hunter,93.0,R,W,4,4,3,0
+2026,11,jake,125.0,sco,145.0,R,L,3,5,2,0
+2026,11,sco,145.0,jake,125.0,R,W,2,6,1,0
